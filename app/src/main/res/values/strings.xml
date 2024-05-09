@@ -3,6 +3,7 @@
     <string name="main_menu">Main Menu</string>
     <string name="profile">My Profile</string>
     <string name="dinein">Dine-In</string>
+    <string name="individual">Food Item</string>
 
     <string-array name="Languages">
         <item>Java</item>

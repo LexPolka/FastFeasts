@@ -42,16 +42,19 @@ import androidx.compose.material3.Divider
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.Wrap
+import androidx.lifecycle.ViewModel
+import androidx.navigation.NavHostController
+import com.example.a1.FastFeastsScreen
 
 
 @Composable
-fun MainPage(){
+fun MainPage(viewModel: FFViewModel, navController: NavHostController){
     Column {
         ImageSlider()
         LazyColumn (
             userScrollEnabled = true) {
             items(1) {
-                MainPageBody()
+                MainPageBody(viewModel, navController)
                 Footer()
             }
         }
@@ -128,7 +131,7 @@ fun ImageSlider()
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun MainPageBody()
+fun MainPageBody(viewModel: FFViewModel, navController: NavHostController)
 {
     val isDarkTheme = isSystemInDarkTheme()
 
@@ -158,10 +161,8 @@ fun MainPageBody()
             horizontalArrangement = Arrangement.Center,
             verticalArrangement = Arrangement.Center,
             modifier = Modifier.fillMaxWidth()) {
-            FoodItem(R.drawable.fries, text = "Are Fries?")
-            FoodItem(R.drawable.icecream, text = "Ice Cream")
-            FoodItem(R.drawable.fries, text = "Are Fries?")
-            FoodItem(R.drawable.icecream, text = "Ice Cream")
+            IndividualFoodItem(R.drawable.fries, "Are Fries?", "5.90", viewModel, navController)
+            IndividualFoodItem(R.drawable.icecream, "Ice Cream", "2.50", viewModel, navController)
         }
     }
 
@@ -196,7 +197,7 @@ fun CustomItem(image : Int, text: String, onClickAction : () -> Unit = {}) {
 }
 
 @Composable
-fun FoodItem(image : Int, text: String, onClickAction : () -> Unit = {}) {
+fun IndividualFoodItem(image : Int, name: String, price : String, viewModel: FFViewModel, navController: NavHostController) {
     val isDarkTheme = isSystemInDarkTheme()
 
     Card(
@@ -204,19 +205,22 @@ fun FoodItem(image : Int, text: String, onClickAction : () -> Unit = {}) {
         border = BorderStroke(2.dp, Color.Black),
         modifier = Modifier
             .padding(8.dp)
-            .clickable { onClickAction() }
+            .clickable {
+                viewModel.setDisplayIndividualFood(image, name, price)
+                navController.navigate(FastFeastsScreen.IndividualFood.name)
+            }
             .fillMaxWidth(0.45f)
     ) {
         Column {
             Image(
-                painter = painterResource(image), contentDescription = text,
+                painter = painterResource(image), contentDescription = name,
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(115.dp),
                 contentScale = ContentScale.Crop
             )
             Text(
-                text = text,
+                text = name,
                 color = (if (isDarkTheme) Color.White else Color.Black),
                 modifier = Modifier.padding(8.dp)
             )

@@ -44,7 +44,6 @@ import androidx.compose.material3.TextField
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.draw.clip
-import com.example.a1.data.OrderUiState
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
@@ -70,6 +69,7 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.graphics.Outline
 import androidx.compose.ui.text.input.KeyboardType
+import com.example.a1.data.Profile
 import kotlinx.coroutines.delay
 
 
@@ -410,7 +410,7 @@ fun ProfilePage(
 
 @Composable
 fun ProfileHeader(
-    uiState: OrderUiState,
+    uiState: Profile,
     onProfilePictureSelected: (Uri) -> Unit
 ) {
     val startColor = Color(0xFFFF9D7E)

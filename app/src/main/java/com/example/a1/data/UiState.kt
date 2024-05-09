@@ -30,7 +30,7 @@ data class Profile(
 )
 
 data class Food(
-    val profilePictureUri: Uri?,
+    val image: Int = 0,
     val name : String = "",
     val price : String = "", //use string cuz for int, just do .toInt()
 )

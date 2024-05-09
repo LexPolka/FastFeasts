@@ -74,12 +74,14 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import androidx.appcompat.app.AppCompatDelegate
+import com.example.a1.ui.InvidiualFoodPage
 
 //enum classes for navigation
 enum class FastFeastsScreen(@StringRes val title: Int) {
     MainPage(title = R.string.main_menu),
     Profile(title = R.string.profile),
-    Payment(title=R.string.dinein)
+    Payment(title=R.string.dinein),
+    IndividualFood(title= R.string.individual)
 }
 
 @Composable
@@ -209,18 +211,23 @@ fun FastFeastsApp(
                 HeaderBar(scope, drawerState)
             }
         ) { innerPadding ->
+            val uiState by viewModel.uiState.collectAsState()
+            val foodState by viewModel.foodState.collectAsState()
+
             NavHost(
                 navController = navController,
                 startDestination = FastFeastsScreen.MainPage.name,
                 modifier = Modifier.padding(innerPadding)
             ) {
                 composable(route = FastFeastsScreen.MainPage.name) {
-                    MainPage()
+                    MainPage(viewModel, navController)
                 }
                 composable(route = FastFeastsScreen.Profile.name) {
                     ProfilePage(viewModel)
                 }
-
+                composable(route = FastFeastsScreen.IndividualFood.name) {
+                    InvidiualFoodPage(viewModel, navController)
+                }
 
             }
         }
@@ -388,21 +395,21 @@ fun Footer()
                 Row (verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.Center,
                     modifier = Modifier
-                        .clickable {  }
+                        .clickable { }
                         .padding(bottom = buttonPadding)) {
                     Text(text = "Terms and Conditions", color = Color.White, fontSize = smallTextSize)
                 }
                 Row (verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.Center,
                     modifier = Modifier
-                        .clickable {  }
+                        .clickable { }
                         .padding(bottom = buttonPadding)) {
                     Text(text = "About Us", color = Color.White, fontSize = smallTextSize)
                 }
                 Row (verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.Center,
                     modifier = Modifier
-                        .clickable {  }
+                        .clickable { }
                         .padding(bottom = buttonPadding)) {
                     Text(text = "Feedback", color = Color.White, fontSize = smallTextSize)
                 }
