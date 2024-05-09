@@ -3,15 +3,15 @@ package com.example.a1.ui
 import android.net.Uri
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.lifecycle.ViewModel
-import com.example.a1.data.OrderUiState
+import com.example.a1.data.Profile
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
 class FFViewModel : ViewModel() {
-    private val _uiState = MutableStateFlow(OrderUiState(profilePictureUri = null))
-    val uiState: StateFlow<OrderUiState> = _uiState.asStateFlow()
+    private val _uiState = MutableStateFlow(Profile(profilePictureUri = null))
+    val uiState: StateFlow<Profile> = _uiState.asStateFlow()
 
     //Setters
     fun setProfilePictureUri(uri: Uri?) {

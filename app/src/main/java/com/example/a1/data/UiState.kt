@@ -16,9 +16,8 @@
 package com.example.a1.data
 
 import android.net.Uri
-import androidx.compose.foundation.isSystemInDarkTheme
 
-data class OrderUiState(
+data class Profile(
     //restaurant location to order from
     val restaurantLocation : String = "",
     //profile picture
