@@ -81,6 +81,7 @@ enum class FastFeastsScreen(@StringRes val title: Int) {
     MainPage(title = R.string.main_menu),
     Profile(title = R.string.profile),
     Payment(title=R.string.dinein),
+    Cart(title=R.string.cart),
     IndividualFood(title= R.string.individual)
 }
 
@@ -121,10 +122,10 @@ fun FastFeastsApp(
                     Row( modifier = Modifier
                         .padding(bottom = 8.dp)
                         .clickable {
-                            navController.navigate(FastFeastsScreen.MainPage.name)
                             scope.launch {
                                 if (drawerState.isOpen) drawerState.close() else drawerState.open()
                             }
+                            navController.navigate(FastFeastsScreen.MainPage.name)
                         }
                         .background(
                             if (currentScreen == FastFeastsScreen.MainPage) Color.Gray
@@ -149,10 +150,10 @@ fun FastFeastsApp(
                     Row( modifier = Modifier
                         .padding(bottom = 8.dp)
                         .clickable {
-                            navController.navigate(FastFeastsScreen.Profile.name)
                             scope.launch {
                                 if (drawerState.isOpen) drawerState.close() else drawerState.open()
                             }
+                            navController.navigate(FastFeastsScreen.Profile.name)
                         }
                         .background(
                             if (currentScreen == FastFeastsScreen.Profile) Color.Gray
@@ -163,6 +164,34 @@ fun FastFeastsApp(
                     ) {
                         Image(
                             painter = painterResource(R.drawable.profile),
+                            contentDescription = "Profile",
+                            Modifier
+                                .size(36.dp)
+                                .padding(6.dp)
+                                .clip(shape = CircleShape)
+                                .background(Color.White)
+                        )
+                        Text(text = "Profile", fontSize = 28.sp)
+                    }
+                    Divider()
+                    //3 LE CART
+                    Row( modifier = Modifier
+                        .padding(bottom = 8.dp)
+                        .clickable {
+                            scope.launch {
+                                if (drawerState.isOpen) drawerState.close() else drawerState.open()
+                            }
+                            navController.navigate(FastFeastsScreen.Cart.name)
+                        }
+                        .background(
+                            if (currentScreen == FastFeastsScreen.Cart) Color.Gray
+                            else
+                                Color.Transparent
+                        )
+                        .fillMaxWidth()
+                    ) {
+                        Image(
+                            painter = painterResource(R.drawable.cart),
                             contentDescription = "Profile",
                             Modifier
                                 .size(36.dp)
@@ -224,6 +253,9 @@ fun FastFeastsApp(
                 }
                 composable(route = FastFeastsScreen.Profile.name) {
                     ProfilePage(viewModel)
+                }
+                composable(route = FastFeastsScreen.Cart.name) {
+
                 }
                 composable(route = FastFeastsScreen.IndividualFood.name) {
                     InvidiualFoodPage(viewModel, navController)

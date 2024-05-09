@@ -4,6 +4,7 @@
     <string name="profile">My Profile</string>
     <string name="dinein">Dine-In</string>
     <string name="individual">Food Item</string>
+    <string name="cart">Cart</string>
 
     <string-array name="Languages">
         <item>Java</item>

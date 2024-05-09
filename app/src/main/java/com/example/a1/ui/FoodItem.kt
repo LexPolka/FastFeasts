@@ -18,11 +18,10 @@ fun InvidiualFoodPage(viewModel: FFViewModel, navController: NavHostController) 
     val image = foodState.image
     val price = foodState.price
 
-    Button(onClick = { navController.popBackStack() }) {
-        Text("Back")
-    }
-
     Column {
+        Button(onClick = { navController.popBackStack() }) {
+            Text("Back")
+        }
         Text(name)
         Image(painter = painterResource(image), contentDescription = "Test")
         Text(price)
