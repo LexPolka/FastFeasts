@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">Fast Feasts</string>
+    <string name="main_menu">Main Menu</string>
+    <string name="profile">My Profile</string>
+    <string name="dinein">Dine-In</string>
+
+    <string-array name="Languages">
+        <item>Java</item>
+        <item>Kotlin</item>
+        <item>Swift</item>
+        <item>Python</item>
+        <item>Scala</item>
+        <item>Perl</item>
+    </string-array>
+</resources>
