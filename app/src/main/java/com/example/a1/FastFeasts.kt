@@ -192,7 +192,7 @@ fun FastFeastsApp(
                     ) {
                         Image(
                             painter = painterResource(R.drawable.cart),
-                            contentDescription = "Profile",
+                            contentDescription = "Cart",
                             Modifier
                                 .size(36.dp)
                                 .padding(6.dp)
