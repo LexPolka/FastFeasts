@@ -29,3 +29,33 @@ data class OrderUiState(
     val year : String = "",
     val phoneNumber : String = "",
 )
+
+data class Food(
+    val profilePictureUri: Uri?,
+    val name : String = "",
+    val price : String = "", //use string cuz for int, just do .toInt()
+)
+//for khoo, idk how to implement yet
+class Cart {
+    private val items: MutableList<Food> = mutableListOf()
+
+    fun addToCart(foodItem: Food) {
+        items.add(foodItem)
+    }
+
+    fun removeFromCart(foodItem: Food) {
+        items.remove(foodItem)
+    }
+
+    fun getCartItems(): List<Food> {
+        return items.toList()
+    }
+
+    fun getTotalPrice(): Double {
+        return items.sumByDouble { it.price.toDoubleOrNull() ?: 0.0 }
+    }
+
+    fun clearCart() {
+        items.clear()
+    }
+}
