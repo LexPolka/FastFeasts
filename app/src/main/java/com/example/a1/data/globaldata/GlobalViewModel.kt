@@ -1,6 +1,7 @@
 package com.example.a1.data.profiledata
 
 import androidx.lifecycle.ViewModel
+import com.example.a1.data.globaldata.Food
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
