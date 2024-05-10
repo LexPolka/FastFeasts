@@ -13,21 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.example.a1.data
+package com.example.a1.data.globaldata
 
 import android.net.Uri
-
-data class Profile(
-    //restaurant location to order from
-    val restaurantLocation : String = "",
-    //profile picture
-    val profilePictureUri: Uri?,
-    val name: String = "",
-    val day : String = "",
-    val month : String = "",
-    val year : String = "",
-    val phoneNumber : String = "",
-)
 
 data class Food(
     val image: Int = 0,

@@ -13,21 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.example.cupcake.ui.theme
+package com.example.a1.data.profiledata
 
-import androidx.compose.material3.Typography
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.sp
+import android.net.Uri
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 
-// Set of Material typography styles to start with
-val Typography = Typography(
-    bodyLarge = TextStyle(
-        fontFamily = FontFamily.Default,
-        fontWeight = FontWeight.Normal,
-        fontSize = 16.sp,
-        lineHeight = 24.sp,
-        letterSpacing = 0.5.sp
-    )
+@Entity(tableName = "profiles")
+data class ProfileEntity(
+    //restaurant location to order from
+    val restaurantLocation : String = "",
+    //profile picture
+    val profilePictureUri: Uri?,
+    val name: String = "",
+    val password: String = "",
+    val day : String = "",
+    val month : String = "",
+    val year : String = "",
+    val phoneNumber : String = "",
+
+    @PrimaryKey(autoGenerate = true)
+    val id : Int = 0
 )

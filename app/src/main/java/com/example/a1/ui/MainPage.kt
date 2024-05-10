@@ -41,14 +41,13 @@ import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.material3.Divider
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
-import androidx.constraintlayout.compose.Wrap
-import androidx.lifecycle.ViewModel
 import androidx.navigation.NavHostController
 import com.example.a1.FastFeastsScreen
+import com.example.a1.data.profiledata.GlobalViewModel
 
 
 @Composable
-fun MainPage(viewModel: FFViewModel, navController: NavHostController){
+fun MainPage(viewModel : GlobalViewModel, navController: NavHostController){
     Column {
         ImageSlider()
         LazyColumn (
@@ -131,7 +130,7 @@ fun ImageSlider()
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun MainPageBody(viewModel: FFViewModel, navController: NavHostController)
+fun MainPageBody(viewModel : GlobalViewModel, navController: NavHostController)
 {
     val isDarkTheme = isSystemInDarkTheme()
 
@@ -161,8 +160,8 @@ fun MainPageBody(viewModel: FFViewModel, navController: NavHostController)
             horizontalArrangement = Arrangement.Center,
             verticalArrangement = Arrangement.Center,
             modifier = Modifier.fillMaxWidth()) {
-            IndividualFoodItem(R.drawable.fries, "Are Fries?", "5.90", viewModel, navController)
-            IndividualFoodItem(R.drawable.icecream, "Ice Cream", "2.50", viewModel, navController)
+            IndividualFoodItem(R.drawable.fries, "Are Fries?", "5.90", navController, viewModel)
+            IndividualFoodItem(R.drawable.icecream, "Ice Cream", "2.50", navController, viewModel)
         }
     }
 
@@ -197,7 +196,7 @@ fun CustomItem(image : Int, text: String, onClickAction : () -> Unit = {}) {
 }
 
 @Composable
-fun IndividualFoodItem(image : Int, name: String, price : String, viewModel: FFViewModel, navController: NavHostController) {
+fun IndividualFoodItem(image : Int, name: String, price : String, navController: NavHostController, viewModel : GlobalViewModel) {
     val isDarkTheme = isSystemInDarkTheme()
 
     Card(

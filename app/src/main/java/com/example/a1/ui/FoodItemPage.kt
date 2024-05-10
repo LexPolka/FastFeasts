@@ -8,11 +8,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.res.painterResource
-import androidx.lifecycle.ViewModel
 import androidx.navigation.NavHostController
+import com.example.a1.data.profiledata.GlobalViewModel
 
 @Composable
-fun InvidiualFoodPage(viewModel: FFViewModel, navController: NavHostController) {
+fun InvididualFoodPage(viewModel: GlobalViewModel, navController: NavHostController) {
     val foodState by viewModel.foodState.collectAsState()
     val name = foodState.name
     val image = foodState.image
