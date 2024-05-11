@@ -2,17 +2,11 @@ import com.example.a1.data.profiledata.ProfileDao
 import com.example.a1.data.profiledata.ProfileEntity
 import kotlinx.coroutines.flow.Flow
 
-class ProfileRepository(private val profileDao: ProfileDao) {
+interface ProfileRepository {
 
-    fun getProfile(name: String, password: String): Flow<ProfileEntity?> {
-        return profileDao.getProfile(name, password)
-    }
+    fun getProfile(email: String, password: String): Flow<ProfileEntity?>
 
-    suspend fun insertProfile(profile: ProfileEntity) {
-        profileDao.insertProfile(profile)
-    }
+    suspend fun insertProfile(profile: ProfileEntity)
 
-    suspend fun deleteProfile(profile: ProfileEntity) {
-        profileDao.deleteProfiles(profile)
-    }
+    suspend fun deleteProfile(profile: ProfileEntity)
 }

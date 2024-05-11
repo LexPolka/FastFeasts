@@ -50,13 +50,7 @@ import com.example.a1.data.profiledata.GlobalViewModel
 fun MainPage(viewModel : GlobalViewModel, navController: NavHostController){
     Column {
         ImageSlider()
-        LazyColumn (
-            userScrollEnabled = true) {
-            items(1) {
-                MainPageBody(viewModel, navController)
-                Footer()
-            }
-        }
+        MainPageBody(viewModel, navController)
     }
 }
 @Composable
@@ -134,37 +128,47 @@ fun MainPageBody(viewModel : GlobalViewModel, navController: NavHostController)
 {
     val isDarkTheme = isSystemInDarkTheme()
 
-    Column(Modifier.fillMaxWidth()) {
-        //CUSTOM ITEMS
-        Row(modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp)){
-            Text(text = "Custom", color = Color(0xFFFDA6900), fontSize = 24.sp, fontWeight = FontWeight.Bold, modifier = Modifier.padding(2.dp))
-            Text(text = "Your", color =  if (isDarkTheme) Color.White else Color.Black, fontSize = 24.sp, fontWeight = FontWeight.Bold, modifier = Modifier.padding(2.dp))
-            Text(text = "Order", color = Color(0xFFFDA6900), fontSize = 24.sp, fontWeight = FontWeight.Bold, modifier = Modifier.padding(2.dp))
-        }
-        Row (modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp)){
-            Text(text = "Served the way you like it.", color =  if (isDarkTheme) Color.White else Color.Black, fontSize = 15.sp, modifier = Modifier.padding(2.dp))
-        }
-        CustomItem(R.drawable.burger, text = "Burger Maker")
-        CustomItem(R.drawable.pizza, text = "Pizza Maker")
+    LazyColumn (
+        userScrollEnabled = true) {
+        items(1) {
+            Column(Modifier.fillMaxWidth()) {
+                //CUSTOM ITEMS
+                Row(modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 8.dp)){
+                    Text(text = "Custom", color = Color(0xFFFDA6900), fontSize = 24.sp, fontWeight = FontWeight.Bold, modifier = Modifier.padding(2.dp))
+                    Text(text = "Your", color =  if (isDarkTheme) Color.White else Color.Black, fontSize = 24.sp, fontWeight = FontWeight.Bold, modifier = Modifier.padding(2.dp))
+                    Text(text = "Order", color = Color(0xFFFDA6900), fontSize = 24.sp, fontWeight = FontWeight.Bold, modifier = Modifier.padding(2.dp))
+                }
+                Row (modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 8.dp)){
+                    Text(text = "Served the way you like it.", color =  if (isDarkTheme) Color.White else Color.Black, fontSize = 15.sp, modifier = Modifier.padding(2.dp))
+                }
+                CustomItem(R.drawable.burger, text = "Burger Maker")
+                CustomItem(R.drawable.pizza, text = "Pizza Maker")
 
-        Divider(thickness = 2.dp, modifier = Modifier.padding(4.dp))
+                Divider(thickness = 2.dp, modifier = Modifier.padding(4.dp))
 
-        //INDIVIDUAL ITEMS
-        Row(modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp)){
-            Text(text = "Find", color = Color(0xFFFDA6900), fontSize = 22.sp, fontWeight = FontWeight.Bold, modifier = Modifier.padding(2.dp))
-            Text(text = "A", color =  if (isDarkTheme) Color.White else Color.Black, fontSize = 22.sp, fontWeight = FontWeight.Bold, modifier = Modifier.padding(2.dp))
-            Text(text = "Combo", color = Color(0xFFFDA6900), fontSize = 22.sp, fontWeight = FontWeight.Bold, modifier = Modifier.padding(2.dp))
-            Text(text = "...", color =  if (isDarkTheme) Color.White else Color.Black, fontSize = 22.sp, fontWeight = FontWeight.Bold, modifier = Modifier.padding(2.dp))
-        }
-        FlowRow (maxItemsInEachRow = 2,
-            horizontalArrangement = Arrangement.Center,
-            verticalArrangement = Arrangement.Center,
-            modifier = Modifier.fillMaxWidth()) {
-            IndividualFoodItem(R.drawable.fries, "Are Fries?", "5.90", navController, viewModel)
-            IndividualFoodItem(R.drawable.icecream, "Ice Cream", "2.50", navController, viewModel)
+                //INDIVIDUAL ITEMS
+                Row(modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 8.dp)){
+                    Text(text = "Find", color = Color(0xFFFDA6900), fontSize = 22.sp, fontWeight = FontWeight.Bold, modifier = Modifier.padding(2.dp))
+                    Text(text = "A", color =  if (isDarkTheme) Color.White else Color.Black, fontSize = 22.sp, fontWeight = FontWeight.Bold, modifier = Modifier.padding(2.dp))
+                    Text(text = "Combo", color = Color(0xFFFDA6900), fontSize = 22.sp, fontWeight = FontWeight.Bold, modifier = Modifier.padding(2.dp))
+                    Text(text = "...", color =  if (isDarkTheme) Color.White else Color.Black, fontSize = 22.sp, fontWeight = FontWeight.Bold, modifier = Modifier.padding(2.dp))
+                }
+                FlowRow (maxItemsInEachRow = 2,
+                    horizontalArrangement = Arrangement.Center,
+                    verticalArrangement = Arrangement.Center,
+                    modifier = Modifier.fillMaxWidth()) {
+                    IndividualFoodItem(R.drawable.fries, "Are Fries?", "5.90", navController, viewModel)
+                    IndividualFoodItem(R.drawable.icecream, "Ice Cream", "2.50", navController, viewModel)
+                }
+            }
         }
     }
-
 }
 
 @Composable

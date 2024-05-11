@@ -2,8 +2,10 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
 import com.example.a1.data.profiledata.ProfileDao
 import com.example.a1.data.profiledata.ProfileEntity
+
 
 @Database(entities = [ProfileEntity::class], version = 1, exportSchema = false)
 abstract class ProfileDatabase : RoomDatabase() {

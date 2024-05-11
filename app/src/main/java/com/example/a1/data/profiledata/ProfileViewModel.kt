@@ -39,8 +39,8 @@ class ProfileViewModel(private val repository: ProfileRepository) : ViewModel() 
     }
 
     //Repository
-    fun getProfile(name: String, password: String): Flow<ProfileEntity?> {
-        return repository.getProfile(name, password)
+    fun getProfile(email: String, password: String): Flow<ProfileEntity?> {
+        return repository.getProfile(email, password)
     }
 
     fun insertProfile(profile: ProfileEntity) {
@@ -62,6 +62,7 @@ data class Profile(
     //profile picture
     val profilePictureUri: Uri?,
     val name: String = "",
+    val email: String ="",
     val password: String = "",
     val day : String = "",
     val month : String = "",

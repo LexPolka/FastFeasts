@@ -64,6 +64,7 @@ import kotlinx.coroutines.launch
 import androidx.appcompat.app.AppCompatDelegate
 import com.example.a1.data.profiledata.GlobalViewModel
 import com.example.a1.ui.InvididualFoodPage
+import com.example.inventory.ui.AppViewModelProvider
 
 //enum classes for navigation
 enum class FastFeastsScreen(@StringRes val title: Int) {
@@ -76,7 +77,7 @@ enum class FastFeastsScreen(@StringRes val title: Int) {
 
 @Composable
 fun FastFeastsApp(
-    profileViewModel: ProfileViewModel = viewModel(),
+    profileViewModel: ProfileViewModel = viewModel(factory = AppViewModelProvider.Factory),
     globalViewModel: GlobalViewModel = viewModel(),
     navController: NavHostController = rememberNavController()
 ) {
@@ -228,6 +229,9 @@ fun FastFeastsApp(
         Scaffold(
             topBar = {
                 HeaderBar(scope, drawerState)
+            },
+            bottomBar = {
+                Footer()
             }
         ) { innerPadding ->
             val uiState by profileViewModel.uiState.collectAsState()
@@ -242,7 +246,7 @@ fun FastFeastsApp(
                     MainPage(globalViewModel, navController)
                 }
                 composable(route = FastFeastsScreen.Profile.name) {
-                    ProfilePage(profileViewModel)
+                    ProfilePage()
                 }
                 composable(route = FastFeastsScreen.Cart.name) {
 

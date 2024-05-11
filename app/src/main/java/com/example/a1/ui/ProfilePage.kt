@@ -56,14 +56,19 @@ import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.a1.data.profiledata.ProfileViewModel
 import com.example.a1.data.profiledata.Profile
+import com.example.a1.data.profiledata.ProfileDao
+import com.example.a1.data.profiledata.ProfileEntity
+import com.example.inventory.ui.AppViewModelProvider
 import kotlinx.coroutines.delay
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ProfilePage(viewModel: ProfileViewModel)
+fun ProfilePage(viewModel: ProfileViewModel = viewModel(factory = AppViewModelProvider.Factory))
 {
     val context = LocalContext.current
     var isToastVisible by remember { mutableStateOf(false) }
@@ -374,6 +379,21 @@ fun ProfilePage(viewModel: ProfileViewModel)
                                 viewModel.setName(newName)
                                 viewModel.setDate(newDay, newMonth, newYear)
                                 viewModel.setPhone(newNumber)
+
+                                //DATABASE insert new profile
+                                val profile = ProfileEntity(
+                                    profilePictureUri = uiState.profilePictureUri.toString(),
+                                    name = uiState.name,
+                                    email = uiState.email,
+                                    password = uiState.password,
+                                    day = uiState.day,
+                                    month = uiState.month,
+                                    year = uiState.year,
+                                    phoneNumber = uiState.phoneNumber
+                                )
+
+                                viewModel.insertProfile(profile)
+
                                 if (!isToastVisible) {
                                     Toast.makeText(context, "Changes have been Applied.", Toast.LENGTH_SHORT).show()
                                     isToastVisible = true
