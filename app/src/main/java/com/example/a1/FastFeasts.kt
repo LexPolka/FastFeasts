@@ -229,9 +229,6 @@ fun FastFeastsApp(
         Scaffold(
             topBar = {
                 HeaderBar(scope, drawerState)
-            },
-            bottomBar = {
-                Footer()
             }
         ) { innerPadding ->
             val uiState by profileViewModel.uiState.collectAsState()

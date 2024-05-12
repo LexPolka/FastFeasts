@@ -58,6 +58,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.a1.Footer
 import com.example.a1.data.profiledata.ProfileViewModel
 import com.example.a1.data.profiledata.Profile
 import com.example.a1.data.profiledata.ProfileDao
@@ -110,7 +111,6 @@ fun ProfilePage(
             horizontalAlignment = Alignment.CenterHorizontally,
             userScrollEnabled = true,
             modifier = Modifier
-                .padding(20.dp)
                 .fillMaxWidth()
         ) {
             items(1) {
@@ -401,6 +401,7 @@ fun ProfilePage(
                     }
                 }
 
+                Footer()
             }
         }
     }

@@ -36,33 +36,57 @@ import com.example.a1.Footer
 import com.example.a1.R
 import kotlinx.coroutines.delay
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.KeyboardArrowLeft
+import androidx.compose.material.icons.filled.KeyboardArrowRight
+import androidx.compose.material.icons.filled.List
+import androidx.compose.material.icons.outlined.KeyboardArrowLeft
+import androidx.compose.material.icons.outlined.KeyboardArrowRight
+import androidx.compose.material3.Button
 import androidx.compose.material3.Divider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.a1.FastFeastsScreen
 import com.example.a1.data.profiledata.GlobalViewModel
-
+import kotlinx.coroutines.launch
 
 @Composable
 fun MainPage(viewModel : GlobalViewModel, navController: NavHostController){
-    Column {
-        ImageSlider()
-        MainPageBody(viewModel, navController)
-    }
+    LazyColumn (
+        userScrollEnabled = true) {
+        items(1) {
+            ImageSlider()
+            Divider(thickness = 2.dp, modifier = Modifier.padding(4.dp))
+            MainPageBody(viewModel, navController)
+            Divider(thickness = 2.dp, modifier = Modifier.padding(4.dp))
+            Footer()
+            }
+        }
 }
+
 @Composable
 fun ImageSlider()
 {
     val isDarkTheme = isSystemInDarkTheme()
 
-    val interval by remember { mutableStateOf(20000L) }
+    //Screen settings
+    val configuration = LocalConfiguration.current
+    val screenWidth = configuration.screenWidthDp.dp
+    val bannerHeight = screenWidth * 70/100
+
+    val interval by remember { mutableStateOf(5000L) }
     val images = listOf(R.drawable.banner1, R.drawable.banner2, R.drawable.banner3)
     var currentIndex by remember { mutableStateOf(0) }
-
-    var offsetX = remember { Animatable(initialValue = 1000f) }
 
     //greg here, this is a coroutine... yeah... ==================
     LaunchedEffect(currentIndex) {
@@ -71,30 +95,51 @@ fun ImageSlider()
             currentIndex = (currentIndex + 1) % images.size
         }
     }
-    LaunchedEffect(currentIndex) {
-        offsetX.animateTo(
-            targetValue = 0f,
-            animationSpec = tween(durationMillis = 1000, easing = LinearOutSlowInEasing)
-        )
-    }
 
-    Column(
-        modifier = Modifier
-            .height(300.dp)
-            .fillMaxWidth()
-            .background(if (isDarkTheme) Color.DarkGray else Color.LightGray)
-    ) {
-        //THE BANNER ==================
+    //THE BANNER ==================
+    Box (modifier = Modifier
+        .fillMaxWidth()
+        .height(bannerHeight)
+        .background(if (isDarkTheme) Color.DarkGray else Color.LightGray))
+    {
         Image(
             painter = painterResource(id = images[currentIndex]),
-            contentDescription = null,
+            contentDescription = "Banner",
             contentScale = ContentScale.Crop,
             modifier = Modifier
                 .fillMaxWidth()
-                //animation here
-                .offset(x = offsetX.value.dp)
-                .weight(1f)
+                .matchParentSize()
         )
+        IconButton(
+            onClick = { if (currentIndex == (images.size - 1)) currentIndex = 0 else currentIndex += 1},
+            modifier = Modifier
+                .align(Alignment.CenterEnd)
+                .background(Color.LightGray.copy(alpha = 0.2f), shape = CircleShape)
+                .fillMaxHeight(0.9f)
+                .padding(1.dp)
+        ) {
+            Icon(
+                imageVector = Icons.Outlined.KeyboardArrowRight,
+                contentDescription = "Go Right",
+                tint = Color.White,
+                modifier = Modifier.matchParentSize()
+            )
+        }
+        IconButton(
+            onClick = { if (currentIndex == 0) currentIndex = (images.size - 1) else currentIndex -= 1 },
+            modifier = Modifier
+                .align(Alignment.CenterStart)
+                .background(Color.LightGray.copy(alpha = 0.2f), shape = CircleShape)
+                .fillMaxHeight(0.9f)
+                .padding(1.dp)
+        ) {
+            Icon(
+                imageVector = Icons.Outlined.KeyboardArrowLeft,
+                contentDescription = "Go Left",
+                tint = Color.White,
+                modifier = Modifier.matchParentSize()
+            )
+        }
 
         //BUTTONS ==================
         Row(
@@ -102,6 +147,7 @@ fun ImageSlider()
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = 8.dp)
+                .align(Alignment.BottomCenter)
         ) {
             // for every image we use in the images array, a button is made for it...
             // THIS TOOK FOREVER TO FIGURE OUT RAAAAAAAAAAAAAAAAAAAAAAAAAAAA I HATE MYSELF I HATE MYSELF I HATE THIS SUBJECT
@@ -118,7 +164,6 @@ fun ImageSlider()
                 ) {}
             }
         }
-
     }
 }
 
@@ -128,45 +173,40 @@ fun MainPageBody(viewModel : GlobalViewModel, navController: NavHostController)
 {
     val isDarkTheme = isSystemInDarkTheme()
 
-    LazyColumn (
-        userScrollEnabled = true) {
-        items(1) {
-            Column(Modifier.fillMaxWidth()) {
-                //CUSTOM ITEMS
-                Row(modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 8.dp)){
-                    Text(text = "Custom", color = Color(0xFFFDA6900), fontSize = 24.sp, fontWeight = FontWeight.Bold, modifier = Modifier.padding(2.dp))
-                    Text(text = "Your", color =  if (isDarkTheme) Color.White else Color.Black, fontSize = 24.sp, fontWeight = FontWeight.Bold, modifier = Modifier.padding(2.dp))
-                    Text(text = "Order", color = Color(0xFFFDA6900), fontSize = 24.sp, fontWeight = FontWeight.Bold, modifier = Modifier.padding(2.dp))
-                }
-                Row (modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 8.dp)){
-                    Text(text = "Served the way you like it.", color =  if (isDarkTheme) Color.White else Color.Black, fontSize = 15.sp, modifier = Modifier.padding(2.dp))
-                }
-                CustomItem(R.drawable.burger, text = "Burger Maker")
-                CustomItem(R.drawable.pizza, text = "Pizza Maker")
+    Column(Modifier.fillMaxWidth()) {
+        //CUSTOM ITEMS
+        Row(modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 8.dp)){
+            Text(text = "Custom", color = Color(0xFFFDA6900), fontSize = 24.sp, fontWeight = FontWeight.Bold, modifier = Modifier.padding(2.dp))
+            Text(text = "Your", color =  if (isDarkTheme) Color.White else Color.Black, fontSize = 24.sp, fontWeight = FontWeight.Bold, modifier = Modifier.padding(2.dp))
+            Text(text = "Order", color = Color(0xFFFDA6900), fontSize = 24.sp, fontWeight = FontWeight.Bold, modifier = Modifier.padding(2.dp))
+        }
+        Row (modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 8.dp)){
+            Text(text = "Served the way you like it.", color =  if (isDarkTheme) Color.White else Color.Black, fontSize = 15.sp, modifier = Modifier.padding(2.dp))
+        }
+        CustomItem(R.drawable.burger, text = "Burger Maker")
+        CustomItem(R.drawable.pizza, text = "Pizza Maker")
 
-                Divider(thickness = 2.dp, modifier = Modifier.padding(4.dp))
+        Divider(thickness = 2.dp, modifier = Modifier.padding(4.dp))
 
-                //INDIVIDUAL ITEMS
-                Row(modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 8.dp)){
-                    Text(text = "Find", color = Color(0xFFFDA6900), fontSize = 22.sp, fontWeight = FontWeight.Bold, modifier = Modifier.padding(2.dp))
-                    Text(text = "A", color =  if (isDarkTheme) Color.White else Color.Black, fontSize = 22.sp, fontWeight = FontWeight.Bold, modifier = Modifier.padding(2.dp))
-                    Text(text = "Combo", color = Color(0xFFFDA6900), fontSize = 22.sp, fontWeight = FontWeight.Bold, modifier = Modifier.padding(2.dp))
-                    Text(text = "...", color =  if (isDarkTheme) Color.White else Color.Black, fontSize = 22.sp, fontWeight = FontWeight.Bold, modifier = Modifier.padding(2.dp))
-                }
-                FlowRow (maxItemsInEachRow = 2,
-                    horizontalArrangement = Arrangement.Center,
-                    verticalArrangement = Arrangement.Center,
-                    modifier = Modifier.fillMaxWidth()) {
-                    IndividualFoodItem(R.drawable.fries, "Are Fries?", "5.90", navController, viewModel)
-                    IndividualFoodItem(R.drawable.icecream, "Ice Cream", "2.50", navController, viewModel)
-                }
-            }
+        //INDIVIDUAL ITEMS
+        Row(modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 8.dp)){
+            Text(text = "Find", color = Color(0xFFFDA6900), fontSize = 22.sp, fontWeight = FontWeight.Bold, modifier = Modifier.padding(2.dp))
+            Text(text = "A", color =  if (isDarkTheme) Color.White else Color.Black, fontSize = 22.sp, fontWeight = FontWeight.Bold, modifier = Modifier.padding(2.dp))
+            Text(text = "Combo", color = Color(0xFFFDA6900), fontSize = 22.sp, fontWeight = FontWeight.Bold, modifier = Modifier.padding(2.dp))
+            Text(text = "...", color =  if (isDarkTheme) Color.White else Color.Black, fontSize = 22.sp, fontWeight = FontWeight.Bold, modifier = Modifier.padding(2.dp))
+        }
+        FlowRow (maxItemsInEachRow = 2,
+            horizontalArrangement = Arrangement.Center,
+            verticalArrangement = Arrangement.Center,
+            modifier = Modifier.fillMaxWidth()) {
+            IndividualFoodItem(R.drawable.fries, "Are Fries?", "5.90", navController, viewModel)
+            IndividualFoodItem(R.drawable.icecream, "Ice Cream", "2.50", navController, viewModel)
         }
     }
 }

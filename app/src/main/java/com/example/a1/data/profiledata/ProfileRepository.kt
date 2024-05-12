@@ -4,7 +4,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface ProfileRepository {
 
-    fun getProfile(email: String, password: String): Flow<ProfileEntity?>
+    fun getProfile(email: String): Flow<ProfileEntity?>
 
     suspend fun insertProfile(profile: ProfileEntity)
 
