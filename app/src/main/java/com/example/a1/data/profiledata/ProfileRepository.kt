@@ -1,5 +1,5 @@
-import com.example.a1.data.profiledata.ProfileDao
-import com.example.a1.data.profiledata.ProfileEntity
+package com.example.a1.data.profiledata
+
 import kotlinx.coroutines.flow.Flow
 
 interface ProfileRepository {

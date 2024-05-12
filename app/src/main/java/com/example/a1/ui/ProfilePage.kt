@@ -68,8 +68,9 @@ import kotlinx.coroutines.delay
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ProfilePage(viewModel: ProfileViewModel = viewModel(factory = AppViewModelProvider.Factory))
-{
+fun ProfilePage(
+    viewModel: ProfileViewModel = viewModel(factory = AppViewModelProvider.Factory)
+) {
     val context = LocalContext.current
     var isToastVisible by remember { mutableStateOf(false) }
     if (isToastVisible) {
@@ -376,23 +377,13 @@ fun ProfilePage(viewModel: ProfileViewModel = viewModel(factory = AppViewModelPr
                             }
                             else
                             {
+                                //UISTATE
                                 viewModel.setName(newName)
                                 viewModel.setDate(newDay, newMonth, newYear)
                                 viewModel.setPhone(newNumber)
 
-                                //DATABASE insert new profile
-                                val profile = ProfileEntity(
-                                    profilePictureUri = uiState.profilePictureUri.toString(),
-                                    name = uiState.name,
-                                    email = uiState.email,
-                                    password = uiState.password,
-                                    day = uiState.day,
-                                    month = uiState.month,
-                                    year = uiState.year,
-                                    phoneNumber = uiState.phoneNumber
-                                )
-
-                                viewModel.insertProfile(profile)
+                                //DATABASE
+                                viewModel.saveProfile()
 
                                 if (!isToastVisible) {
                                     Toast.makeText(context, "Changes have been Applied.", Toast.LENGTH_SHORT).show()
@@ -462,7 +453,7 @@ fun ProfileHeader(
 
 @Composable
 fun ProfileIcon(
-    profilePictureUri: Uri?
+    profilePictureUri: String
 ) {
     val painter: Painter = rememberImagePainter(
         data = profilePictureUri,
@@ -471,7 +462,7 @@ fun ProfileIcon(
         }
     )
 
-    if (profilePictureUri != null) {
+    if (!profilePictureUri.isBlank()) {
         Image(
             painter = painter,
             contentDescription = "Profile Picture",

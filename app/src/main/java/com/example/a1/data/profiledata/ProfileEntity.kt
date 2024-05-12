@@ -1,6 +1,5 @@
 package com.example.a1.data.profiledata
 
-import android.net.Uri
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 

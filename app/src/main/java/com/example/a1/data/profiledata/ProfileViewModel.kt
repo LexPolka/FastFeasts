@@ -1,6 +1,5 @@
 package com.example.a1.data.profiledata
 
-import ProfileRepository
 import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -12,13 +11,13 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class ProfileViewModel(private val repository: ProfileRepository) : ViewModel() {
-    private val _uiState = MutableStateFlow(Profile(profilePictureUri = null))
+    private val _uiState = MutableStateFlow(Profile())
     val uiState: StateFlow<Profile> = _uiState.asStateFlow()
 
     //Setters
     fun setProfilePictureUri(uri: Uri?) {
         _uiState.update{currentState ->
-            currentState.copy(profilePictureUri = uri)
+            currentState.copy(profilePictureUri = uri.toString())
         }
     }
     fun setName(name : String){
@@ -38,20 +37,26 @@ class ProfileViewModel(private val repository: ProfileRepository) : ViewModel() 
         }
     }
 
-    //Repository
-    fun getProfile(email: String, password: String): Flow<ProfileEntity?> {
-        return repository.getProfile(email, password)
-    }
+    // Function to save profile data
+    fun saveProfile() {
+        val profile = ProfileEntity(
+            profilePictureUri = _uiState.value.profilePictureUri,
+            name = _uiState.value.name,
+            email = _uiState.value.email,
+            password = _uiState.value.password,
+            day = _uiState.value.day,
+            month = _uiState.value.month,
+            year = _uiState.value.year,
+            phoneNumber = _uiState.value.phoneNumber
+        )
 
-    fun insertProfile(profile: ProfileEntity) {
         viewModelScope.launch {
-            repository.insertProfile(profile)
-        }
-    }
-
-    fun deleteProfile(profile: ProfileEntity) {
-        viewModelScope.launch {
-            repository.deleteProfile(profile)
+            try {
+                repository.insertProfile(profile)
+                // Update UI or show success message if needed
+            } catch (e: Exception) {
+                // Handle error (e.g., log, show error message)
+            }
         }
     }
 }
@@ -60,7 +65,7 @@ data class Profile(
     //restaurant location to order from
     val restaurantLocation : String = "",
     //profile picture
-    val profilePictureUri: Uri?,
+    val profilePictureUri: String = "",
     val name: String = "",
     val email: String ="",
     val password: String = "",

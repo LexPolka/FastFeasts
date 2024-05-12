@@ -246,7 +246,7 @@ fun FastFeastsApp(
                     MainPage(globalViewModel, navController)
                 }
                 composable(route = FastFeastsScreen.Profile.name) {
-                    ProfilePage()
+                    ProfilePage(profileViewModel)
                 }
                 composable(route = FastFeastsScreen.Cart.name) {
 
