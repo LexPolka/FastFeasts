@@ -64,7 +64,7 @@ import com.example.a1.data.profiledata.ProfileViewModel
 import com.example.a1.data.profiledata.Profile
 import com.example.a1.data.profiledata.ProfileDao
 import com.example.a1.data.profiledata.ProfileEntity
-import com.example.inventory.ui.AppViewModelProvider
+import com.example.a1.data.profiledata.AppViewModelProvider
 import kotlinx.coroutines.delay
 
 
@@ -112,6 +112,7 @@ fun ProfilePage(
 
         LazyColumn(
             horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center,
             userScrollEnabled = true,
             modifier = Modifier
                 .fillMaxWidth()

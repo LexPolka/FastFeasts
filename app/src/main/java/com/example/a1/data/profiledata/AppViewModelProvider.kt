@@ -1,4 +1,4 @@
-package com.example.inventory.ui
+package com.example.a1.data.profiledata
 
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory
 import androidx.lifecycle.viewmodel.CreationExtras

@@ -62,11 +62,18 @@ import com.example.a1.ui.ProfilePage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.navigation.NavController
+import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.navigation
 import com.example.a1.data.cartData.CartViewModel
+import com.example.a1.data.profiledata.AppViewModelProvider
 import com.example.a1.data.profiledata.GlobalViewModel
 import com.example.a1.ui.CartUi
 import com.example.a1.ui.InvididualFoodPage
-import com.example.inventory.ui.AppViewModelProvider
+import com.example.a1.ui.login.LoginScreen
+import com.example.a1.ui.login.SignUpScreen
+import com.example.a1.ui.login.PrivacyScreen
+import com.example.a1.ui.login.PolicyScreen
 
 //enum classes for navigation
 enum class FastFeastsScreen(@StringRes val title: Int) {
@@ -74,7 +81,12 @@ enum class FastFeastsScreen(@StringRes val title: Int) {
     Profile(title = R.string.profile),
     Payment(title=R.string.dinein),
     Cart(title=R.string.cart),
-    IndividualFood(title= R.string.individual)
+    IndividualFood(title= R.string.individual),
+
+    LoginScreen(title = R.string.Login),
+    SignUpScreen(title = R.string.Register),
+    PrivacyScreen(title = R.string.Privacy),
+    PolicyScreen(title = R.string.Terms),
 }
 
 @Composable
@@ -240,6 +252,7 @@ fun FastFeastsApp(
             val uiState by profileViewModel.uiState.collectAsState()
             val globalVariables by globalViewModel.foodState.collectAsState()
 
+            //NAV HOST IS HERE =============================
             NavHost(
                 navController = navController,
                 startDestination = FastFeastsScreen.MainPage.name,
@@ -257,9 +270,74 @@ fun FastFeastsApp(
                 composable(route = FastFeastsScreen.IndividualFood.name) {
                     InvididualFoodPage(cartViewModel, globalViewModel, navController)
                 }
+
+                navigation(startDestination = FastFeastsScreen.LoginScreen.name , route = "login_flow" ) {
+                    composable(route = FastFeastsScreen.LoginScreen.name) {
+                        LoginScreen(
+                            onLoginClick = {
+                                navController.navigate(
+                                    FastFeastsScreen.MainPage.name
+                                ){
+                                    popUpTo(route = "login_flow")
+                                }
+                            },
+                            onSignUpClick = {
+                                navController.navigateToSingleTop(
+                                    FastFeastsScreen.SignUpScreen.name
+                                )
+                            }
+                        )
+                    }
+                    composable(route = FastFeastsScreen.SignUpScreen.name) {
+                        SignUpScreen(
+                            onSignUpClick = {
+                                navController.navigate(
+                                    FastFeastsScreen.MainPage.name
+                                ){
+                                    popUpTo("login_flow")
+                                }
+                            },
+                            onLoginClick = {
+                                navController.navigateToSingleTop(
+                                    FastFeastsScreen.LoginScreen.name
+                                )
+                            },
+                            onPrivacyClick = {
+                                navController.navigate(
+                                    FastFeastsScreen.PrivacyScreen.name
+                                ){
+                                    launchSingleTop = true
+                                }
+                            },
+                            onPolicyClick = {
+                                navController.navigate(
+                                    FastFeastsScreen.PolicyScreen.name
+                                ){
+                                    launchSingleTop = true
+                                }
+                            }
+                        )
+                    }
+                    composable(route = FastFeastsScreen.PrivacyScreen.name) {
+                        PolicyScreen( {navController.navigateUp()} )
+                    }
+                    composable(route = FastFeastsScreen.PolicyScreen.name) {
+                        PrivacyScreen ({ navController.navigateUp()})
+                    }
+                }
             }
         }
 
+    }
+}
+
+fun NavController.navigateToSingleTop(route:String){
+    navigate(route){
+        popUpTo(graph.findStartDestination().id){
+            saveState = true
+        }
+        launchSingleTop = true
+        restoreState = true
     }
 }
 
