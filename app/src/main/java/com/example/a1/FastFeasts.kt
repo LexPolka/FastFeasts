@@ -100,6 +100,9 @@ fun FastFeastsApp(
     val configuration = LocalConfiguration.current
     val screenWidth = configuration.screenWidthDp.dp
 
+    val imageSize = 36.dp
+    val imagePadding = 6.dp
+
     //NAVIGATION DRAWER NEEDS TO BE IN EVERY PAGE!!!!
     ModalNavigationDrawer(
         drawerState = drawerState,
@@ -132,8 +135,8 @@ fun FastFeastsApp(
                             painter = painterResource(R.drawable.baseline_home_24),
                             contentDescription = "Home",
                             Modifier
-                                .size(36.dp)
-                                .padding(6.dp)
+                                .size(imageSize)
+                                .padding(imagePadding)
                                 .clip(shape = CircleShape)
                                 .background(Color.White)
                         )
@@ -160,8 +163,8 @@ fun FastFeastsApp(
                             painter = painterResource(R.drawable.profile),
                             contentDescription = "Profile",
                             Modifier
-                                .size(36.dp)
-                                .padding(6.dp)
+                                .size(imageSize)
+                                .padding(imagePadding)
                                 .clip(shape = CircleShape)
                                 .background(Color.White)
                         )
@@ -188,12 +191,12 @@ fun FastFeastsApp(
                             painter = painterResource(R.drawable.cart),
                             contentDescription = "Cart",
                             Modifier
-                                .size(36.dp)
-                                .padding(6.dp)
+                                .size(imageSize)
+                                .padding(imagePadding)
                                 .clip(shape = CircleShape)
                                 .background(Color.White)
                         )
-                        Text(text = "Profile", fontSize = 28.sp)
+                        Text(text = "Cart", fontSize = 28.sp)
                     }
 
                     Spacer(Modifier.weight(0.9f))
@@ -249,7 +252,7 @@ fun FastFeastsApp(
                     ProfilePage(profileViewModel)
                 }
                 composable(route = FastFeastsScreen.Cart.name) {
-                    CartUi(cartViewModel)
+                    CartUi(cartViewModel, navController)
                 }
                 composable(route = FastFeastsScreen.IndividualFood.name) {
                     InvididualFoodPage(cartViewModel, globalViewModel, navController)

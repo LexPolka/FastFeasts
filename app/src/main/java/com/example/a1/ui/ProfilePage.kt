@@ -45,6 +45,7 @@ import coil.transform.CircleCropTransformation
 import com.example.a1.R
 import android.widget.Toast
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -73,6 +74,8 @@ fun ProfilePage(
     viewModel: ProfileViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
     val context = LocalContext.current
+
+    //toast handler
     var isToastVisible by remember { mutableStateOf(false) }
     if (isToastVisible) {
         LaunchedEffect(Unit) {
@@ -116,6 +119,7 @@ fun ProfilePage(
             items(1) {
                 //Name
                 Row (verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center,
                     modifier = Modifier.height(componentHeight)
                 ) {
                     Image(painter = painterResource(R.drawable.profile), contentDescription = "Name",
@@ -148,6 +152,7 @@ fun ProfilePage(
 
                 //EMAIL
                 Row (verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center,
                     modifier = Modifier.height(componentHeight)
                 ) {
                     Image(painter = painterResource(R.drawable.baseline_email_24), contentDescription = "Email",
@@ -165,6 +170,7 @@ fun ProfilePage(
 
                 //BIRTHDAY
                 Row (verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center,
                     modifier = Modifier.height(componentHeight)
                 ) {
                     Image(painter = painterResource(R.drawable.baseline_date_range_24), contentDescription = "Birthday",
@@ -290,6 +296,7 @@ fun ProfilePage(
 
                 //PHONE
                 Row (verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center,
                     modifier = Modifier.height(componentHeight)
                 ) {
                     Image(painter = painterResource(R.drawable.phone), contentDescription = "Phone Number",
@@ -336,6 +343,7 @@ fun ProfilePage(
 
                 //APPLY / CANCEL
                 Row (verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center,
                     modifier = Modifier.height(componentHeight)
                 ) {
                     IconButton(

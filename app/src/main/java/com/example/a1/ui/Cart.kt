@@ -27,13 +27,14 @@ import androidx.compose.ui.text.font.FontWeight.Companion.Bold
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
 import com.example.a1.data.cartData.CartViewModel
 import com.example.a1.data.cartData.Food
 import java.util.Locale
 
 
 @Composable
-fun CartUi(viewModel: CartViewModel, modifier: Modifier = Modifier){
+fun CartUi(viewModel: CartViewModel, navController : NavHostController, modifier: Modifier = Modifier){
 // this is the page itself, including the buttons and cart label
     //Colours
 
@@ -44,17 +45,14 @@ fun CartUi(viewModel: CartViewModel, modifier: Modifier = Modifier){
 
     Column(
         modifier.fillMaxSize(),
-
         ){
         Row {
-            Button(
-                onClick = { /*TODO*/ },
-                elevation = ButtonDefaults.buttonElevation(
 
+            Button(
+                onClick = { navController.popBackStack() },
+                elevation = ButtonDefaults.buttonElevation(
                     defaultElevation = 10.dp,
                     pressedElevation = 6.dp
-
-
                 ),
                 colors = ButtonDefaults.buttonColors(lightOrange)
             ) {
@@ -62,11 +60,8 @@ fun CartUi(viewModel: CartViewModel, modifier: Modifier = Modifier){
                     text = "< Not finished ? Keep Ordering",
                     fontSize = 20.sp,
                     fontFamily = SansSerif
-
                 )
-
             }
-
         }
 
         Spacer(modifier = Modifier.height(20.dp))
