@@ -57,14 +57,11 @@ import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.a1.Footer
 import com.example.a1.data.profiledata.ProfileViewModel
 import com.example.a1.data.profiledata.Profile
-import com.example.a1.data.profiledata.ProfileDao
-import com.example.a1.data.profiledata.ProfileEntity
-import com.example.a1.data.profiledata.AppViewModelProvider
+import com.example.a1.data.AppViewModelProvider
 import kotlinx.coroutines.delay
 
 

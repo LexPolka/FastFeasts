@@ -66,7 +66,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.navigation
 import com.example.a1.data.cartData.CartViewModel
-import com.example.a1.data.profiledata.AppViewModelProvider
+import com.example.a1.data.AppViewModelProvider
 import com.example.a1.data.profiledata.GlobalViewModel
 import com.example.a1.ui.CartUi
 import com.example.a1.ui.InvididualFoodPage

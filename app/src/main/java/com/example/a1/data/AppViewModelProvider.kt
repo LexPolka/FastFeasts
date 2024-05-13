@@ -1,10 +1,9 @@
-package com.example.a1.data.profiledata
+package com.example.a1.data
 
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory
 import androidx.lifecycle.viewmodel.CreationExtras
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
-import com.example.a1.data.profiledata.ProfileApplication
 import com.example.a1.data.profiledata.ProfileViewModel
 
 /**
@@ -20,5 +19,5 @@ object AppViewModelProvider {
     }
 }
 
-fun CreationExtras.profileApplication(): ProfileApplication =
-    (this[AndroidViewModelFactory.APPLICATION_KEY] as ProfileApplication)
+fun CreationExtras.profileApplication(): Application =
+    (this[AndroidViewModelFactory.APPLICATION_KEY] as Application)

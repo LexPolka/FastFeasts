@@ -1,8 +1,8 @@
-package com.example.a1.data.profiledata
+package com.example.a1.data
 
 import android.app.Application
 
-class ProfileApplication : Application() {
+class Application : Application() {
 
     /**
      * AppContainer instance used by the rest of classes to obtain dependencies
