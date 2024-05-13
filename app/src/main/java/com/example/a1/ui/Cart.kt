@@ -1,6 +1,7 @@
 package com.example.a1.ui
 
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -20,11 +21,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily.Companion.SansSerif
 import androidx.compose.ui.text.font.FontWeight.Companion.Bold
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.a1.data.cartData.CartViewModel
+import com.example.a1.data.cartData.Food
 import java.util.Locale
 
 
@@ -35,12 +39,6 @@ fun CartUi(viewModel: CartViewModel, modifier: Modifier = Modifier){
 
     val lightOrange = Color(0xFFFF9D7E)
     val darkOrange = Color(0xFF975743)
-
-
-//get dummy data from viewmodel
-
-    viewModel.addToCart(Food(1,"Fries", "5.00"))
-    viewModel.addToCart(Food(2,"Burger", "7.00"))
 
     val cartItems = listOf( viewModel.getCartItems() )
 
@@ -219,10 +217,8 @@ fun CartItem(viewModel: CartViewModel, food: Food, modifier: Modifier = Modifier
                     fontSize = 30.sp
                 )
 
-                Text(
-                    text = "${food.image}"
+                Image(painter = painterResource(food.image), contentDescription = "Image of Food")
 
-                )
             }
 
             Spacer(modifier = Modifier.width(70.dp))

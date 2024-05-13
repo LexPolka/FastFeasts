@@ -62,7 +62,9 @@ import com.example.a1.ui.ProfilePage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import androidx.appcompat.app.AppCompatDelegate
+import com.example.a1.data.cartData.CartViewModel
 import com.example.a1.data.profiledata.GlobalViewModel
+import com.example.a1.ui.CartUi
 import com.example.a1.ui.InvididualFoodPage
 import com.example.inventory.ui.AppViewModelProvider
 
@@ -79,6 +81,7 @@ enum class FastFeastsScreen(@StringRes val title: Int) {
 fun FastFeastsApp(
     profileViewModel: ProfileViewModel = viewModel(factory = AppViewModelProvider.Factory),
     globalViewModel: GlobalViewModel = viewModel(),
+    cartViewModel : CartViewModel = viewModel(),
     navController: NavHostController = rememberNavController()
 ) {
     //Navigation variables
@@ -246,12 +249,11 @@ fun FastFeastsApp(
                     ProfilePage(profileViewModel)
                 }
                 composable(route = FastFeastsScreen.Cart.name) {
-
+                    CartUi(cartViewModel)
                 }
                 composable(route = FastFeastsScreen.IndividualFood.name) {
-                    InvididualFoodPage(globalViewModel, navController)
+                    InvididualFoodPage(cartViewModel, globalViewModel, navController)
                 }
-
             }
         }
 
