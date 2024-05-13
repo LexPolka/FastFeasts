@@ -3,10 +3,12 @@ package com.example.a1.data.profiledata
 import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.a1.data.cartData.Food
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
@@ -14,23 +16,27 @@ class ProfileViewModel(private val repository: ProfileRepository) : ViewModel() 
     private val _uiState = MutableStateFlow(Profile())
     val uiState: StateFlow<Profile> = _uiState.asStateFlow()
 
+    var profileList: List<ProfileEntity?> = mutableListOf()
+
     //Setters
     fun setProfilePictureUri(uri: Uri?) {
-        _uiState.update{currentState ->
+        _uiState.update { currentState ->
             currentState.copy(profilePictureUri = uri.toString())
         }
     }
-    fun setName(name : String){
-        _uiState.update {currentState ->
+
+    fun setName(name: String) {
+        _uiState.update { currentState ->
             currentState.copy(name = name)
         }
     }
-    fun setDate(day: String, month: String, year: String)
-    {
-        _uiState.update {currentState ->
+
+    fun setDate(day: String, month: String, year: String) {
+        _uiState.update { currentState ->
             currentState.copy(day = day, month = month, year = year)
         }
     }
+
     fun setPhone(number: String) {
         _uiState.update { currentState ->
             currentState.copy(phoneNumber = number)
@@ -59,11 +65,12 @@ class ProfileViewModel(private val repository: ProfileRepository) : ViewModel() 
             }
         }
     }
+    fun getAllProfiles() : List<ProfileEntity?> {
+        return repository.getAllProfiles()
+    }
 }
 
 data class Profile(
-    //restaurant location to order from
-    val restaurantLocation : String = "",
     //profile picture
     val profilePictureUri: String = "",
     val name: String = "",

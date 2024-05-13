@@ -5,18 +5,15 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "profiles")
 data class ProfileEntity(
-    //restaurant location to order from
-    val restaurantLocation : String = "",
     //profile picture
     val profilePictureUri: String = "",
     val name: String = "",
-    val email: String = "",
     val password: String = "",
     val day : String = "",
     val month : String = "",
     val year : String = "",
     val phoneNumber : String = "",
 
-    @PrimaryKey(autoGenerate = true)
-    val id : Int = 0
+    @PrimaryKey(autoGenerate = false)
+    val email: String = "",
 )

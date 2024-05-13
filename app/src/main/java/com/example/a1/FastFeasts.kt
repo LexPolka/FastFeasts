@@ -103,6 +103,7 @@ fun FastFeastsApp(
     )
 
     val isDarkTheme = isSystemInDarkTheme()
+    var darkMode by remember { mutableStateOf( isDarkTheme )}
 
     //Side bar variables
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
@@ -112,8 +113,8 @@ fun FastFeastsApp(
     val configuration = LocalConfiguration.current
     val screenWidth = configuration.screenWidthDp.dp
 
-    val imageSize = 36.dp
-    val imagePadding = 6.dp
+    val imageSize = 40.dp
+    val imagePadding = 4.dp
 
     //NAVIGATION DRAWER NEEDS TO BE IN EVERY PAGE!!!!
     ModalNavigationDrawer(
@@ -140,6 +141,7 @@ fun FastFeastsApp(
                             if (currentScreen == FastFeastsScreen.MainPage) Color.Gray
                             else
                                 Color.Transparent
+                            , shape = RoundedCornerShape(5.dp)
                         )
                         .fillMaxWidth()
                     ) {
@@ -168,6 +170,7 @@ fun FastFeastsApp(
                             if (currentScreen == FastFeastsScreen.Profile) Color.Gray
                             else
                                 Color.Transparent
+                            , shape = RoundedCornerShape(5.dp)
                         )
                         .fillMaxWidth()
                     ) {
@@ -196,6 +199,7 @@ fun FastFeastsApp(
                             if (currentScreen == FastFeastsScreen.Cart) Color.Gray
                             else
                                 Color.Transparent
+                            , shape = RoundedCornerShape(5.dp)
                         )
                         .fillMaxWidth()
                     ) {
@@ -218,12 +222,14 @@ fun FastFeastsApp(
                     Row( modifier = Modifier
                         .padding(bottom = 8.dp)
                         .clickable {
-                            toggleDarkMode(isDarkTheme)
+                            toggleDarkMode(darkMode)
+                            darkMode = !darkMode
                         }
                         .background(
                             if (isDarkTheme) Color.Gray
                             else
                                 Color.Transparent
+                            , shape = RoundedCornerShape(5.dp)
                         )
                         .fillMaxWidth()
                     ) {
@@ -319,10 +325,10 @@ fun FastFeastsApp(
                         )
                     }
                     composable(route = FastFeastsScreen.PrivacyScreen.name) {
-                        PolicyScreen( {navController.navigateUp()} )
+                        PolicyScreen( {navController.navigateUp() })
                     }
                     composable(route = FastFeastsScreen.PolicyScreen.name) {
-                        PrivacyScreen ({ navController.navigateUp()})
+                        PrivacyScreen ({ navController.navigateUp() })
                     }
                 }
             }
@@ -480,7 +486,7 @@ fun Footer()
     Surface(
         color = Color.Transparent,
         modifier = Modifier
-            .height(150.dp)
+            .height(200.dp)
             .fillMaxWidth()
             .background(
                 brush = Brush.horizontalGradient(
@@ -488,7 +494,7 @@ fun Footer()
                 )
             )
     ) {
-        Row(verticalAlignment = Alignment.CenterVertically,
+        Row(verticalAlignment = Alignment.Top,
             horizontalArrangement = Arrangement.Center,
             modifier = Modifier.fillMaxSize()
         ) {
@@ -598,12 +604,11 @@ private fun openInstagramProfile(context: Context) {
     context.startActivity(intent)
 }
 
-fun toggleDarkMode(isDarkTheme : Boolean) {
-    AppCompatDelegate.setDefaultNightMode(
-        if (isDarkTheme) {
-            AppCompatDelegate.MODE_NIGHT_NO // Enable light mode
-        } else {
-            AppCompatDelegate.MODE_NIGHT_YES // Enable dark mode
-        }
-    )
+fun toggleDarkMode(isDarkTheme: Boolean) {
+    val mode = if (isDarkTheme) {
+        AppCompatDelegate.MODE_NIGHT_NO // Enable light mode
+    } else {
+        AppCompatDelegate.MODE_NIGHT_YES // Enable dark mode
+    }
+    AppCompatDelegate.setDefaultNightMode(mode)
 }

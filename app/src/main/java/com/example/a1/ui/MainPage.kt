@@ -1,11 +1,13 @@
 package com.example.a1.ui
 
+import android.widget.Space
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -39,8 +41,11 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.KeyboardArrowRight
@@ -63,16 +68,55 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun MainPage(viewModel : GlobalViewModel, navController: NavHostController){
-    LazyColumn (
-        userScrollEnabled = true) {
-        items(1) {
-            ImageSlider()
-            Divider(thickness = 2.dp, modifier = Modifier.padding(4.dp))
-            MainPageBody(viewModel, navController)
-            Divider(thickness = 2.dp, modifier = Modifier.padding(4.dp))
-            Footer()
+    val isDarkTheme = isSystemInDarkTheme()
+
+    //Screen settings
+    val configuration = LocalConfiguration.current
+    val screenWidth = configuration.screenWidthDp.dp
+    val viewCartWidth = screenWidth * 45/100
+
+    Box {
+        LazyColumn (
+            userScrollEnabled = true) {
+            items(1) {
+                ImageSlider()
+                Divider(thickness = 2.dp, color = if (isDarkTheme) Color.White else Color.Black)
+                MainPageBody(viewModel, navController)
+                Divider(thickness = 2.dp, color = if (isDarkTheme) Color.White else Color.Black)
+                Footer()
             }
         }
+
+        // VIEW CART BUTTON
+        IconButton(
+            onClick = { navController.navigate(FastFeastsScreen.Cart.name) },
+            modifier = Modifier
+                .padding(20.dp)
+                .width(viewCartWidth)
+                .align(Alignment.BottomEnd)
+                .background(Color(0xFFFF9D7E), shape = RoundedCornerShape(20.dp))
+                .border(
+                    3.5.dp,
+                    color = if (isDarkTheme) Color.White else Color(0xFFFDA6900),
+                    shape = RoundedCornerShape(20.dp)
+                )
+        ) {
+            Row(horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically) {
+                Spacer(Modifier.weight(0.3f))
+                Icon(
+                    painter = painterResource(R.drawable.cart),
+                    contentDescription = "View Cart",
+                    tint = Color.White,
+                )
+                Spacer(Modifier.weight(0.3f))
+                Text(text = "View Cart", color =  if (isDarkTheme) Color.White else Color.Black, fontSize = 18.sp, fontWeight = FontWeight.Bold, modifier = Modifier.padding(2.dp))
+                Spacer(Modifier.weight(0.3f))
+            }
+
+        }
+    }
+
 }
 
 @Composable
