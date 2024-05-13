@@ -1,5 +1,6 @@
 package com.example.a1.data.cartData
 
+import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
 
 
@@ -13,12 +14,14 @@ data class Food(
 class CartViewModel : ViewModel() {
     private val items: MutableList<Food> = mutableListOf()
 
+    private val cartItems = mutableStateListOf<Food>()
+
     fun addToCart(foodItem: Food) {
         items.add(foodItem)
     }
 
-    fun removeFromCart(foodItem: Food) {
-        items.remove(foodItem)
+    fun removeFromCart(food: Food) {
+        cartItems.remove(food)
     }
 
     fun getCartItems(): List<Food> {
@@ -30,8 +33,8 @@ class CartViewModel : ViewModel() {
     }
 
 
-    fun clearCart() {
-        items.clear()
+    fun clearCart(cart: List<Food>) {
+        cartItems.clear()
     }
 
 

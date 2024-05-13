@@ -18,6 +18,9 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -26,7 +29,6 @@ import androidx.compose.ui.text.font.FontFamily.Companion.SansSerif
 import androidx.compose.ui.text.font.FontWeight.Companion.Bold
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.a1.data.cartData.CartViewModel
 import com.example.a1.data.cartData.Food
@@ -41,7 +43,14 @@ fun CartUi(viewModel: CartViewModel, navController : NavHostController, modifier
     val lightOrange = Color(0xFFFF9D7E)
     val darkOrange = Color(0xFF975743)
 
-    val cartItems = listOf( viewModel.getCartItems() )
+
+    //overall cart variable
+    val cart by remember {
+        mutableStateOf(viewModel.getCartItems())
+    }
+
+    val cartItems = remember { mutableListOf(cart) }
+
 
     Column(
         modifier.fillMaxSize(),
@@ -76,7 +85,7 @@ fun CartUi(viewModel: CartViewModel, navController : NavHostController, modifier
 
             Spacer(modifier = Modifier.weight(1f))
 
-            Button(onClick = { viewModel.clearCart() },elevation = ButtonDefaults.buttonElevation(
+            Button(onClick = { viewModel.clearCart(cart) },elevation = ButtonDefaults.buttonElevation(
 
                 defaultElevation = 10.dp,
                 pressedElevation = 6.dp
@@ -120,10 +129,10 @@ fun CartUi(viewModel: CartViewModel, navController : NavHostController, modifier
         //pass the list of food details ( also a list )
         CartList(viewModel = viewModel, cartItems = cartItems, modifier = Modifier )
 
-        val totalPrice: Double = cartItems.flatten().sumOf { item ->
+//        val totalPrice: Double = cartItems.flatten().sumOf { item ->
             // Convert the price string to double
-            item.price.toDoubleOrNull() ?: 0.0
-        }
+//            item.price.toDoubleOrNull() ?: 0.0
+//        }
 
         Spacer(modifier = Modifier.weight(1f))
 
@@ -139,7 +148,8 @@ fun CartUi(viewModel: CartViewModel, navController : NavHostController, modifier
                 Spacer(modifier = Modifier.weight(1f))
 
                 Text(
-                    text = String.format(Locale.getDefault(), "%.2f", totalPrice),
+                    //String.format = "%.2f" to format the ,totalPrice to be displayed by the text
+                    text = String.format(Locale.getDefault(), "%.2f", viewModel.getTotalPrice()),
                     fontSize = 30.sp,
                     fontWeight = Bold
                 )
@@ -185,7 +195,7 @@ fun CartList(viewModel: CartViewModel, cartItems: List<List<Food>>, modifier: Mo
         items(cartItems) { foodList ->
             Column {
                 foodList.forEach{
-                        food -> CartItem(viewModel = viewModel, food = food)
+                        food -> CartItem(cartViewModel = viewModel, food = food)
                 }
             }
         }
@@ -194,9 +204,11 @@ fun CartList(viewModel: CartViewModel, cartItems: List<List<Food>>, modifier: Mo
 
 
 @Composable
-fun CartItem(viewModel: CartViewModel, food: Food, modifier: Modifier = Modifier ){
+fun CartItem( cartViewModel: CartViewModel, food: Food, modifier: Modifier = Modifier ){
 //the card that displays individual items in the cart, will be called by the cart list(lazy col func)
     val darkOrange = Color(0xFF975743)
+
+
     Card(
         modifier.size(width = 400.dp, height = 100.dp)
 
@@ -226,7 +238,7 @@ fun CartItem(viewModel: CartViewModel, food: Food, modifier: Modifier = Modifier
                 )
 
                 Button(
-                    onClick = { viewModel.removeFromCart(food) },
+                    onClick = { cartViewModel.removeFromCart(food) },
                     elevation = ButtonDefaults.buttonElevation(
 
                         defaultElevation = 10.dp,
