@@ -73,6 +73,7 @@ import com.example.a1.ui.CustomizationScreen
 import com.example.a1.ui.DiningOptions
 import com.example.a1.ui.InvididualFoodPage
 import com.example.a1.ui.PaymentOptions
+import com.example.a1.ui.StaffPage
 import com.example.a1.ui.login.LoginScreen
 import com.example.a1.ui.login.SignUpScreen
 import com.example.a1.ui.login.PrivacyScreen
@@ -93,9 +94,9 @@ enum class FastFeastsScreen(@StringRes val title: Int) {
     PolicyScreen(title = R.string.Terms),
 
     DiningOptions(title = R.string.dining_options),
-    PaymentOptions(title=R.string.payment_options)
+    PaymentOptions(title=R.string.payment_options),
 
-
+    Staff(title = R.string.staff)
 }
 
 @Composable
@@ -268,7 +269,7 @@ fun FastFeastsApp(
             //NAV HOST IS HERE =============================
             NavHost(
                 navController = navController,
-                startDestination = FastFeastsScreen.MainPage.name,
+                startDestination = FastFeastsScreen.MainPage.name, //replace login_flow with FastFeastsScreen.MainPage.name
                 modifier = Modifier.padding(innerPadding)
             ) {
                 composable(route = FastFeastsScreen.MainPage.name) {
@@ -289,8 +290,11 @@ fun FastFeastsApp(
                 composable(route = FastFeastsScreen.PaymentOptions.name) {
                     PaymentOptions(navController)
                 }
-                composable(route = FastFeastsScreen.CustomizeFood.name){
+                composable(route = FastFeastsScreen.CustomizeFood.name) {
                     CustomizationScreen(navController)
+                }
+                composable(route = FastFeastsScreen.Staff.name) {
+                    StaffPage(navController)
                 }
 
                 //depending on userInput from paymentOptions , to be implemented

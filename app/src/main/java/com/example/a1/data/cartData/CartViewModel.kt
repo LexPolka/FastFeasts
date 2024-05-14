@@ -15,13 +15,11 @@ data class Food(
     val image: Int = 0,
     val name : String = "",
     val price : String = "", //use string cuz for int, just do .toInt()
-
 )
 
 class CartViewModel : ViewModel() {
     private val items: MutableList<Food> = mutableListOf()
     val cartItems: MutableList<Food> = items
-
 
     fun addToCart(foodItem: Food) {
         items.add(foodItem)
