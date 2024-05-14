@@ -1,6 +1,7 @@
 package com.example.a1.ui
 
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -20,7 +21,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableDoubleStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -32,6 +33,8 @@ import androidx.compose.ui.text.font.FontFamily.Companion.SansSerif
 import androidx.compose.ui.text.font.FontWeight.Companion.Bold
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import androidx.navigation.NavHostController
 import com.example.a1.FastFeastsScreen
 import com.example.a1.data.cartData.CartViewModel
@@ -39,6 +42,7 @@ import com.example.a1.data.cartData.Food
 import java.util.Locale
 
 
+@SuppressLint("MutableCollectionMutableState")
 @Composable
 fun CartUi(viewModel: CartViewModel, navController : NavHostController, modifier: Modifier = Modifier){
 // this is the page itself, including the buttons and cart label
@@ -50,7 +54,7 @@ fun CartUi(viewModel: CartViewModel, navController : NavHostController, modifier
 
     //overall cart variable
     val cart by remember {
-        mutableStateOf(viewModel.getCartItems())
+        mutableStateOf(viewModel.cartItems)
     }
 
     val cartItems by remember {
@@ -108,7 +112,7 @@ fun CartUi(viewModel: CartViewModel, navController : NavHostController, modifier
             }
         }
 
-        var amountOfItemsInCart by remember { mutableIntStateOf(0) }
+        var amountOfItemsInCart = 0
 
         for (x in cartItems){
             amountOfItemsInCart++
@@ -136,7 +140,7 @@ fun CartUi(viewModel: CartViewModel, navController : NavHostController, modifier
 
 
         }
-
+        Spacer(modifier = modifier.height(20.dp))
 
         //pass the list of food details ( also a list )
         CartList(viewModel = viewModel, cartItems = cartItems, modifier = Modifier )
@@ -154,9 +158,11 @@ fun CartUi(viewModel: CartViewModel, navController : NavHostController, modifier
 
                 Spacer(modifier = Modifier.weight(1f))
 
+                val totalPrice by remember { mutableDoubleStateOf(viewModel.getTotalPrice()) }
+
                 Text(
                     //String.format = "%.2f" to format the ,totalPrice to be displayed by the text
-                    text = String.format(Locale.getDefault(), "%.2f", viewModel.getTotalPrice()),
+                    text = String.format(Locale.getDefault(), "%.2f", totalPrice ),
                     fontSize = 30.sp,
                     fontWeight = Bold
                 )
@@ -242,7 +248,7 @@ fun CartItem( cartViewModel: CartViewModel, food: Food, modifier: Modifier = Mod
                 )
 
                 Button(
-                    onClick = { cartViewModel.removeFromCart(food) },
+                    onClick = { cartConfirmRemoveItemDialog(viewModel = cartViewModel, ) },
                     elevation = ButtonDefaults.buttonElevation(
 
                         defaultElevation = 10.dp,
@@ -274,14 +280,39 @@ fun CartItem( cartViewModel: CartViewModel, food: Food, modifier: Modifier = Mod
 
 }
 
-
-
-/*@Preview(showBackground = true)
 @Composable
-fun GreetingPreview() {
-    Test2Theme {
-        CartUi(
-            Modifier.fillMaxSize()
-        )
+fun cartConfirmRemoveItemDialog(
+    viewModel: CartViewModel,
+    onDismiss:()-> Unit,
+    onConfirm:()-> Unit
+
+){
+
+    Dialog(
+        onDismissRequest = { onDismiss() },
+        properties = DialogProperties(usePlatformDefaultWidth = false)
+
+    ) {
+        Card {
+            Column {
+                Row {
+                    Text(text = "Warning !")
+                }
+                Row {
+                    Text(text = "Do you really wish to remove this item from your cart?")
+                }
+                Row {
+                    Button(onClick = { onDismiss() }) {
+                        Text(text = "Confirm")
+                    }
+                    Button(onClick = { onConfirm() }) {
+                        Text(text = "Cancel")
+                    }
+                }
+
+            }
+        }
     }
-}*/
+
+
+}

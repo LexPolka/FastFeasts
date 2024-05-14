@@ -8,6 +8,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import coil.compose.rememberImagePainter
+import kotlinx.coroutines.flow.StateFlow
 
 
 data class Food(
@@ -19,6 +20,7 @@ data class Food(
 
 class CartViewModel : ViewModel() {
     private val items: MutableList<Food> = mutableListOf()
+    val cartItems: MutableList<Food> = items
 
 
     fun addToCart(foodItem: Food) {
@@ -29,16 +31,34 @@ class CartViewModel : ViewModel() {
         items.remove(food)
     }
 
-    fun getCartItems(): List<Food> {
-        return items.toList()
-    }
-
     fun getTotalPrice(): Double {
         return items.sumOf { it.price.toDoubleOrNull() ?: 0.0 }
     }
 
     fun clearCart() {
         items.clear()
+    }
+
+    var isRemoveDialogShown by mutableStateOf(false)
+        private set
+
+    fun onRemoveFromCartClick(){
+        isRemoveDialogShown = true
+    }
+
+    fun onRemoveFromCartDismissClick(){
+        isRemoveDialogShown = false
+    }
+
+    var isClearCartDialogShown by mutableStateOf(false)
+        private set
+
+    fun onClearCartClick(){
+        isRemoveDialogShown = true
+    }
+
+    fun onClearCartDismissClick(){
+        isRemoveDialogShown = false
     }
 
 
