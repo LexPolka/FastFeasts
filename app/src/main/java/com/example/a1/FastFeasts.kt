@@ -281,12 +281,22 @@ fun FastFeastsApp(
                 composable(route = FastFeastsScreen.IndividualFood.name) {
                     InvididualFoodPage(cartViewModel, globalViewModel, navController)
                 }
-                composable(route = FastFeastsScreen.PaymentOptions.name) {
-                    PaymentOptions(navController)
-                }
                 composable(route = FastFeastsScreen.DiningOptions.name) {
                     DiningOptions(navController)
                 }
+                composable(route = FastFeastsScreen.PaymentOptions.name) {
+                    PaymentOptions(navController)
+                }
+
+                //depending on userInput from paymentOptions , to be implemented
+                //composable(route = FastFeastsScreen.PaymentOptions.name) {
+                //    PaymentOptions(navController)
+                //}
+                //composable(route = FastFeastsScreen.PaymentOptions.name) {
+                //    PaymentOptions(navController)
+                //}
+
+
 
 
                 navigation(startDestination = FastFeastsScreen.LoginScreen.name , route = "login_flow" ) {

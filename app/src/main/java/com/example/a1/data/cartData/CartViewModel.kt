@@ -1,8 +1,13 @@
 package com.example.a1.data.cartData
 
 import androidx.compose.foundation.lazy.layout.LazyLayoutPinnedItemList
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import coil.compose.rememberImagePainter
 
 
 data class Food(
@@ -35,8 +40,6 @@ class CartViewModel : ViewModel() {
     fun clearCart() {
         items.clear()
     }
-
-
 
 
 }

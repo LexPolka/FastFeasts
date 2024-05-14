@@ -20,6 +20,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -107,14 +108,21 @@ fun CartUi(viewModel: CartViewModel, navController : NavHostController, modifier
             }
         }
 
+        var amountOfItemsInCart by remember { mutableIntStateOf(0) }
+
+        for (x in cartItems){
+            amountOfItemsInCart++
+        }
+
+
         Card {
 
             Row {
                 Column(
                     modifier = Modifier.weight(1f)
-
+                    
                 ) {
-
+                    Text(text = "Items in Cart: $amountOfItemsInCart ")
                 }
                 Column{
                     Text(text = "Price",
