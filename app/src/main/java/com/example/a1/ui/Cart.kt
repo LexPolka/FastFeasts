@@ -1,7 +1,6 @@
 package com.example.a1.ui
 
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -41,7 +40,7 @@ import com.example.a1.data.cartData.Food
 import java.util.Locale
 
 
-@SuppressLint("MutableCollectionMutableState")
+
 @Composable
 fun CartUi(viewModel: CartViewModel, navController : NavHostController, modifier: Modifier = Modifier){
 // this is the page itself, including the buttons and cart label
