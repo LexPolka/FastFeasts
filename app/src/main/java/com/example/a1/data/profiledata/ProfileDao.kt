@@ -15,7 +15,7 @@ interface ProfileDao {
 
     //gets all profiles when user opens ProfilePage
     @Query("SELECT * FROM profiles")
-    fun getAllProfiles(): List<ProfileEntity?>
+    suspend fun getAllProfiles(): List<ProfileEntity?>
 
     //use insertProfile when registering
     @Insert(onConflict = OnConflictStrategy.REPLACE)

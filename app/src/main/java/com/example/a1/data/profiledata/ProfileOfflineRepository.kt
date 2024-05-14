@@ -6,7 +6,7 @@ class ProfileOfflineRepository(private val profileDao: ProfileDao) : ProfileRepo
 
     override fun getProfile(email: String): List<ProfileEntity?> = profileDao.getProfile(email)
 
-    override fun getAllProfiles(): List<ProfileEntity?> = profileDao.getAllProfiles()
+    override suspend fun getAllProfiles(): List<ProfileEntity?> = profileDao.getAllProfiles()
 
     override suspend fun insertProfile(profile: ProfileEntity) = profileDao.insertProfile(profile)
 

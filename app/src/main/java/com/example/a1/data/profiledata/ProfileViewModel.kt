@@ -1,6 +1,11 @@
 package com.example.a1.data.profiledata
 
 import android.net.Uri
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.a1.data.cartData.Food
@@ -11,6 +16,8 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 
 class ProfileViewModel(private val repository: ProfileRepository) : ViewModel() {
     private val _uiState = MutableStateFlow(Profile())
@@ -65,10 +72,18 @@ class ProfileViewModel(private val repository: ProfileRepository) : ViewModel() 
             }
         }
     }
-    fun getAllProfiles() : List<ProfileEntity?> {
-        return repository.getAllProfiles()
+
+    fun getAllProfiles(): List<ProfileEntity?> {
+        var profiles : List<ProfileEntity?> = emptyList()
+        viewModelScope.launch{
+            profiles = repository.getAllProfiles()
+        }
+        return profiles
     }
+
 }
+
+
 
 data class Profile(
     //profile picture
