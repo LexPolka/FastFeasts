@@ -59,6 +59,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.a1.Footer
@@ -67,6 +68,7 @@ import com.example.a1.data.profiledata.Profile
 import com.example.a1.data.AppViewModelProvider
 import com.example.a1.data.profiledata.ProfileEntity
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -74,15 +76,11 @@ import kotlinx.coroutines.delay
 fun ProfilePage(
     viewModel: ProfileViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
-    val profilesToLoad = listOf( viewModel.getAllProfiles() )
+    var profilesToLoad : List<ProfileEntity?> = viewModel.getAllProfiles()
 
     LazyColumn() {
-        items(profilesToLoad) { profileList ->
-            Column {
-                profileList.forEach{
-                        profile -> ProfileToLoad(viewModel = viewModel, profile = profile)
-                }
-            }
+        items(profilesToLoad) { profile ->
+            ProfileToLoad(viewModel = viewModel, profile = profile)
         }
     }
 

@@ -7,7 +7,7 @@ interface ProfileRepository {
     fun getProfile(email: String): List<ProfileEntity?>
 
     // Function to get all profiles from the database
-    fun getAllProfiles(): List<ProfileEntity?>
+    suspend fun getAllProfiles(): List<ProfileEntity?>
 
     suspend fun insertProfile(profile: ProfileEntity)
 
