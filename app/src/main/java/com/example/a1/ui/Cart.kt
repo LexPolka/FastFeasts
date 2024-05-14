@@ -24,7 +24,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableDoubleStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -213,6 +212,8 @@ fun CartList(viewModel: CartViewModel, cartItems: List<Food>, modifier: Modifier
 }
 
 
+
+
 @Composable
 fun CartItem( cartViewModel: CartViewModel, food: Food, modifier: Modifier = Modifier ){
 //the card that displays individual items in the cart, will be called by the cart list(lazy col func)
@@ -247,44 +248,47 @@ fun CartItem( cartViewModel: CartViewModel, food: Food, modifier: Modifier = Mod
                     fontSize = 30.sp
                 )
 
-//                Button(
-//                    onClick = { cartConfirmRemoveItemDialog(viewModel = cartViewModel, ) },
-//                    elevation = ButtonDefaults.buttonElevation(
-//
-//                        defaultElevation = 10.dp,
-//                        pressedElevation = 6.dp
-//
-//
-//                    ),
-//                    shape = CircleShape,
-//                    colors = ButtonDefaults.buttonColors(darkOrange),
-//                    modifier = Modifier
-//                        .align(Alignment.End)
-//                        .padding(16.dp)
-//                        .size(35.dp)
-//                ) { Text(text = "-") }
+                val isRemoveDialogShown = cartViewModel.isRemoveDialogShown
 
+                Button(
+                    onClick = {
+                        cartViewModel.onRemoveFromCartClick()
+                    },
+                    elevation = ButtonDefaults.buttonElevation(
+                        defaultElevation = 10.dp,
+                        pressedElevation = 6.dp
+                    ),
+                    shape = CircleShape,
+                    colors = ButtonDefaults.buttonColors(darkOrange),
+                    modifier = Modifier
+                        .align(Alignment.End)
+                        .padding(16.dp)
+                        .size(35.dp)
+                ) { Text(text = "-") }
+
+                if (isRemoveDialogShown){
+                    CartConfirmRemoveItemDialog(
+                        onDismiss = { cartViewModel.onRemoveFromCartDismissClick() },
+                        onConfirm =
+                        {confirmed ->
+                            if (confirmed) {
+                                cartViewModel.removeFromCart(food)
+                            }
+                            cartViewModel.onRemoveFromCartDismissClick()
+                        }
+                    )
+                }
 
             }
-
-
         }
-
-
-
-
-
     }
-
     Spacer(modifier = Modifier.height(10.dp))
-
 }
 
 @Composable
-fun cartConfirmRemoveItemDialog(
-    viewModel: CartViewModel,
-    onDismiss:()-> Unit,
-    onConfirm:()-> Unit
+fun CartConfirmRemoveItemDialog(
+    onDismiss: () -> Unit,
+    onConfirm: (Boolean) -> Unit
 
 ){
 
@@ -302,10 +306,10 @@ fun cartConfirmRemoveItemDialog(
                     Text(text = "Do you really wish to remove this item from your cart?")
                 }
                 Row {
-                    Button(onClick = { onDismiss() }) {
+                    Button(onClick = { onConfirm(true) }) {
                         Text(text = "Confirm")
                     }
-                    Button(onClick = { onConfirm() }) {
+                    Button(onClick = { onDismiss() }) {
                         Text(text = "Cancel")
                     }
                 }

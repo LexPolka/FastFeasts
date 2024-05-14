@@ -42,11 +42,11 @@ class CartViewModel : ViewModel() {
     var isRemoveDialogShown by mutableStateOf(false)
         private set
 
-    fun onRemoveFromCartClick(){
+    fun onRemoveFromCartClick() {
         isRemoveDialogShown = true
     }
 
-    fun onRemoveFromCartDismissClick(){
+    fun onRemoveFromCartDismissClick() {
         isRemoveDialogShown = false
     }
 
