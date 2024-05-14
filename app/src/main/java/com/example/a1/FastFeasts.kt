@@ -69,6 +69,7 @@ import com.example.a1.data.cartData.CartViewModel
 import com.example.a1.data.AppViewModelProvider
 import com.example.a1.data.profiledata.GlobalViewModel
 import com.example.a1.ui.CartUi
+import com.example.a1.ui.CustomizationScreen
 import com.example.a1.ui.DiningOptions
 import com.example.a1.ui.InvididualFoodPage
 import com.example.a1.ui.PaymentOptions
@@ -80,6 +81,7 @@ import com.example.a1.ui.login.PolicyScreen
 //enum classes for navigation
 enum class FastFeastsScreen(@StringRes val title: Int) {
     MainPage(title = R.string.main_menu),
+    CustomizeFood(title = R.string.CustomizeBurger),
     Profile(title = R.string.profile),
     Payment(title=R.string.dinein),
     Cart(title=R.string.cart),
@@ -266,7 +268,7 @@ fun FastFeastsApp(
             //NAV HOST IS HERE =============================
             NavHost(
                 navController = navController,
-                startDestination = "login_flow",
+                startDestination = FastFeastsScreen.MainPage.name,
                 modifier = Modifier.padding(innerPadding)
             ) {
                 composable(route = FastFeastsScreen.MainPage.name) {
@@ -286,6 +288,9 @@ fun FastFeastsApp(
                 }
                 composable(route = FastFeastsScreen.PaymentOptions.name) {
                     PaymentOptions(navController)
+                }
+                composable(route = FastFeastsScreen.CustomizeFood.name){
+                    CustomizationScreen(navController)
                 }
 
                 //depending on userInput from paymentOptions , to be implemented

@@ -232,8 +232,7 @@ fun MainPageBody(viewModel : GlobalViewModel, navController: NavHostController)
             .padding(horizontal = 8.dp)){
             Text(text = "Served the way you like it.", color =  if (isDarkTheme) Color.White else Color.Black, fontSize = 15.sp, modifier = Modifier.padding(2.dp))
         }
-        CustomItem(R.drawable.burger, text = "Burger Maker")
-        CustomItem(R.drawable.pizza, text = "Pizza Maker")
+        CustomItem(R.drawable.burger, text = "Burger Maker", navController)
 
         Divider(thickness = 2.dp, modifier = Modifier.padding(4.dp))
 
@@ -257,7 +256,7 @@ fun MainPageBody(viewModel : GlobalViewModel, navController: NavHostController)
 }
 
 @Composable
-fun CustomItem(image : Int, text: String, onClickAction : () -> Unit = {}) {
+fun CustomItem(image : Int, text: String, navController: NavHostController) {
     val isDarkTheme = isSystemInDarkTheme()
 
     Card(
@@ -265,7 +264,7 @@ fun CustomItem(image : Int, text: String, onClickAction : () -> Unit = {}) {
         border = BorderStroke(3.dp, Color.Black),
         modifier = Modifier
             .padding(8.dp)
-            .clickable { onClickAction() }
+            .clickable {navController.navigate(FastFeastsScreen.CustomizeFood.name)}
     ){
         Column {
             Image(
