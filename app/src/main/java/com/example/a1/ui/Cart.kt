@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -23,6 +24,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableDoubleStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -51,13 +53,10 @@ fun CartUi(viewModel: CartViewModel, navController : NavHostController, modifier
 
 
     //overall cart variable
-    val cart by remember {
-        mutableStateOf(viewModel.cartItems)
-    }
 
-    val cartItems by remember {
-        derivedStateOf { cart }
-    }
+    val cartItems by remember { derivedStateOf { viewModel.cartItems } }
+    //derived state that recomputes only when its dependencies change, optimize recomposition and ensure that derived values are updated correctly.
+
 
     Column(
         modifier.fillMaxSize(),
@@ -92,22 +91,36 @@ fun CartUi(viewModel: CartViewModel, navController : NavHostController, modifier
 
             Spacer(modifier = Modifier.weight(1f))
 
-            Button(onClick = { viewModel.clearCart() },elevation = ButtonDefaults.buttonElevation(
+            val isClearDialogShown by remember { derivedStateOf { viewModel.isClearCartDialogShown } }
 
-                defaultElevation = 10.dp,
-                pressedElevation = 6.dp
-
-
-            ),
+            Button(
+                onClick = {
+                    viewModel.onClearCartClick()
+                },
+                elevation = ButtonDefaults.buttonElevation(
+                    defaultElevation = 10.dp,
+                    pressedElevation = 6.dp
+                ),
                 colors = ButtonDefaults.buttonColors(darkOrange),
-                modifier = Modifier
-                    .padding(16.dp)
-            ) {
-                Text(text = "Clear Cart",
-                    fontSize = 20.sp,
-                    fontFamily = SansSerif
+            ) { Text(text = "Clear Cart",
+                fontSize = 20.sp,
+                fontFamily = SansSerif
+            ) }
+
+            if (isClearDialogShown){
+                CartConfirmClearCartDialog(
+                    onDismiss = { viewModel.onClearCartDismissClick() },
+                    onConfirm =
+                    {confirmed ->
+                        if (confirmed) {
+                            viewModel.clearCart()
+                        }
+                        viewModel.onClearCartDismissClick()
+                    },
+                    modifier = modifier
                 )
             }
+
         }
 
         var amountOfItemsInCart = 0
@@ -156,7 +169,7 @@ fun CartUi(viewModel: CartViewModel, navController : NavHostController, modifier
 
                 Spacer(modifier = Modifier.weight(1f))
 
-                val totalPrice by remember { mutableDoubleStateOf(viewModel.getTotalPrice()) }
+                val totalPrice by remember { derivedStateOf { viewModel.getTotalPrice() } }
 
                 Text(
                     //String.format = "%.2f" to format the ,totalPrice to be displayed by the text
@@ -274,7 +287,8 @@ fun CartItem( cartViewModel: CartViewModel, food: Food, modifier: Modifier = Mod
                                 cartViewModel.removeFromCart(food)
                             }
                             cartViewModel.onRemoveFromCartDismissClick()
-                        }
+                        },
+                        modifier = modifier
                     )
                 }
 
@@ -287,10 +301,9 @@ fun CartItem( cartViewModel: CartViewModel, food: Food, modifier: Modifier = Mod
 @Composable
 fun CartConfirmRemoveItemDialog(
     onDismiss: () -> Unit,
-    onConfirm: (Boolean) -> Unit
-
+    onConfirm: (Boolean) -> Unit,
+    modifier: Modifier = Modifier
 ){
-
     Dialog(
         onDismissRequest = { onDismiss() },
         properties = DialogProperties(usePlatformDefaultWidth = false)
@@ -299,7 +312,10 @@ fun CartConfirmRemoveItemDialog(
         Card {
             Column {
                 Row {
-                    Text(text = "Warning !")
+                    Text(text = "Warning !",
+                        modifier.fillMaxWidth()
+
+                        )
                 }
                 Row {
                     Text(text = "Do you really wish to remove this item from your cart?")
@@ -308,6 +324,50 @@ fun CartConfirmRemoveItemDialog(
                     Button(onClick = { onConfirm(true) }) {
                         Text(text = "Confirm")
                     }
+
+                    Button(onClick = { onDismiss() }) {
+                        Text(text = "Cancel")
+                    }
+                }
+
+            }
+        }
+    }
+
+
+}
+
+@Composable
+fun CartConfirmClearCartDialog(
+    onDismiss: () -> Unit,
+    onConfirm: (Boolean) -> Unit,
+    modifier: Modifier = Modifier
+){
+    Dialog(
+        onDismissRequest = { onDismiss() },
+        properties = DialogProperties(usePlatformDefaultWidth = false)
+
+    ) {
+        Card {
+            Column {
+                Row {
+                    Text(text = "Warning !",
+                        modifier.fillMaxWidth()
+
+                    )
+                }
+                Row {
+                    Text(text = "Do you really wish to clear your cart?")
+                }
+                Row {
+                    Button(onClick = { onConfirm(true) },
+                        elevation = ButtonDefaults.buttonElevation(
+                        defaultElevation = 10.dp,
+                        pressedElevation = 6.dp
+                    ),) {
+                        Text(text = "Confirm")
+                    }
+
                     Button(onClick = { onDismiss() }) {
                         Text(text = "Cancel")
                     }
