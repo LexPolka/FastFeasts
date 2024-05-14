@@ -4,6 +4,7 @@ import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -49,9 +50,12 @@ import com.example.a1.R
 import com.example.a1.data.cartData.CartViewModel
 import com.example.a1.data.cartData.Food
 import com.example.a1.data.profiledata.GlobalViewModel
+import kotlinx.coroutines.delay
 
 @Composable
 fun InvididualFoodPage(cartViewModel : CartViewModel, globalViewModel: GlobalViewModel, navController: NavHostController) {
+    val isDarkTheme = isSystemInDarkTheme()
+
     val foodState by globalViewModel.foodState.collectAsState()
     val name = foodState.name
     val image = foodState.image
@@ -62,7 +66,24 @@ fun InvididualFoodPage(cartViewModel : CartViewModel, globalViewModel: GlobalVie
     //Screen settings
     val configuration = LocalConfiguration.current
     val screenWidth = configuration.screenWidthDp.dp
-    val backButtonWidth = screenWidth / 2
+    val backButtonWidth = screenWidth / 3
+
+    //toast handler
+    var isToastVisible by remember { mutableStateOf(false) }
+    if (isToastVisible) {
+        LaunchedEffect(Unit) {
+            delay(2000) // Adjust the delay as needed
+            isToastVisible = false
+        }
+    }
+    //Back button handler
+    var isBackPressed by remember { mutableStateOf(false) }
+    if (isBackPressed) {
+        LaunchedEffect(Unit) {
+            delay(2000) // Adjust the delay as needed
+            isBackPressed = false
+        }
+    }
 
     val universalPadding = 8.dp
 
@@ -71,14 +92,16 @@ fun InvididualFoodPage(cartViewModel : CartViewModel, globalViewModel: GlobalVie
         Row {
             IconButton(
                 colors = IconButtonDefaults.iconButtonColors(Color(0xFFFF9D7E)),
-                onClick = { navController.popBackStack() },
+                onClick = { if (!isBackPressed) {
+                    navController.popBackStack()
+                    isBackPressed = true } },
                 modifier = Modifier
-                    .border(3.5.dp, Color(0xFF975743), shape = CircleShape)
+                    .border(3.5.dp, color = if (isDarkTheme) Color.White else Color(0xFF975743), shape = CircleShape)
                     .width(backButtonWidth)
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Icon(
-                        tint = Color.Black,
+                        tint = if (isDarkTheme) Color.White else Color.Black,
                         imageVector = Icons.Filled.ArrowBack,
                         contentDescription = "Back Button",
                         modifier = Modifier
@@ -86,11 +109,12 @@ fun InvididualFoodPage(cartViewModel : CartViewModel, globalViewModel: GlobalVie
                             .padding(universalPadding)
                     )
                     Spacer(modifier = Modifier.weight(0.1f))
-                    Text("Back to Main",color = Color.Black,
+                    Text("Back",color = if (isDarkTheme) Color.White else Color.Black,
                         fontSize = 18.sp,
                         fontWeight = FontWeight.Bold,
                         modifier = Modifier.padding(universalPadding)
                     )
+                    Spacer(modifier = Modifier.weight(0.1f))
                 }
             }
         }
@@ -104,7 +128,8 @@ fun InvididualFoodPage(cartViewModel : CartViewModel, globalViewModel: GlobalVie
 
         //IMAGE
         Image(painter = painterResource(image), contentDescription = "Test",
-            Modifier.width(screenWidth)
+            Modifier
+                .width(screenWidth)
                 .height(screenWidth)
                 .aspectRatio(1f))
 
@@ -114,7 +139,11 @@ fun InvididualFoodPage(cartViewModel : CartViewModel, globalViewModel: GlobalVie
         Button(onClick = {
             val food = Food(name = name, image = image, price = price)
             cartViewModel.addToCart(food)
-            Toast.makeText(context, "Added to Cart.", Toast.LENGTH_SHORT).show()
+            if (!isToastVisible)
+            {
+                Toast.makeText(context, "Added ${name} Cart.", Toast.LENGTH_SHORT).show()
+                isToastVisible = true
+            }
         }) {
             Text("Order")
         }

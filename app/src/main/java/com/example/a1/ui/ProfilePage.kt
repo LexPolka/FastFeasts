@@ -44,12 +44,15 @@ import coil.compose.rememberImagePainter
 import coil.transform.CircleCropTransformation
 import com.example.a1.R
 import android.widget.Toast
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.Card
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.IconButton
@@ -62,6 +65,7 @@ import com.example.a1.Footer
 import com.example.a1.data.profiledata.ProfileViewModel
 import com.example.a1.data.profiledata.Profile
 import com.example.a1.data.AppViewModelProvider
+import com.example.a1.data.profiledata.ProfileEntity
 import kotlinx.coroutines.delay
 
 
@@ -70,6 +74,34 @@ import kotlinx.coroutines.delay
 fun ProfilePage(
     viewModel: ProfileViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
+    val profilesToLoad = listOf( viewModel.getAllProfiles() )
+
+    LazyColumn() {
+        items(profilesToLoad) { profileList ->
+            Column {
+                profileList.forEach{
+                        profile -> ProfileToLoad(viewModel = viewModel, profile = profile)
+                }
+            }
+        }
+    }
+
+    ProfileDataModify(viewModel)
+}
+
+@Composable
+fun ProfileToLoad(viewModel : ProfileViewModel, profile: ProfileEntity?){
+    Card(){
+        profile?.let {
+            Image(painter = painterResource(profile.profilePictureUri.toInt()), contentDescription = "Profile Image")
+        }
+
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun ProfileDataModify(viewModel : ProfileViewModel){
     val context = LocalContext.current
 
     //toast handler
@@ -86,13 +118,14 @@ fun ProfilePage(
     val uiState by viewModel.uiState.collectAsState()
 
     val imageSize = 48.dp
-    val textSize = 20.sp
+    val textSize = 16.sp
+    val linePadding = 12.dp
 
     //Screen settings
     val configuration = LocalConfiguration.current
     val screenWidth = configuration.screenWidthDp.dp
     val screenHeight = configuration.screenHeightDp.dp
-    val componentHeight = screenHeight/10
+    val componentHeight = screenHeight/9
 
     //before saving
     var newName by remember { mutableStateOf(uiState.name)}
@@ -106,6 +139,7 @@ fun ProfilePage(
         ProfileHeader(uiState) { uri ->
             viewModel.setProfilePictureUri(uri)
         }
+        Divider(thickness = 2.dp, color = if (isDarkTheme) Color.White else Color.Black)
 
         LazyColumn(
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -118,7 +152,9 @@ fun ProfilePage(
                 //Name
                 Row (verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.Center,
-                    modifier = Modifier.height(componentHeight)
+                    modifier = Modifier
+                        .height(componentHeight)
+                        .padding(linePadding)
                 ) {
                     Image(painter = painterResource(R.drawable.profile), contentDescription = "Name",
                         Modifier
@@ -136,8 +172,8 @@ fun ProfilePage(
                         colors = TextFieldDefaults.colors(
                             focusedTextColor = Color.White,
                             unfocusedTextColor = Color.White,
-                            focusedIndicatorColor = Color(0xFFFF9D7E), // Color when the TextField is focused
-                            unfocusedIndicatorColor = Color(0xFFFF9D7E), // Color when the TextField is not focused
+                            focusedIndicatorColor = Color(0xFFFDA6900), // Color when the TextField is focused
+                            unfocusedIndicatorColor = Color(0xFFFDA6900), // Color when the TextField is not focused
                             cursorColor = Color(0xFFFF9D7E), // Color of the cursor
                             focusedContainerColor = Color.DarkGray,
                             unfocusedContainerColor = Color.DarkGray
@@ -146,12 +182,14 @@ fun ProfilePage(
                     Spacer(modifier = Modifier.weight(1f))
                 }
 
-                Divider(thickness = 2.dp)
+                Divider(thickness = 1.dp)
 
                 //EMAIL
                 Row (verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.Center,
-                    modifier = Modifier.height(componentHeight)
+                    modifier = Modifier
+                        .height(componentHeight)
+                        .padding(linePadding)
                 ) {
                     Image(painter = painterResource(R.drawable.baseline_email_24), contentDescription = "Email",
                         Modifier
@@ -169,7 +207,9 @@ fun ProfilePage(
                 //BIRTHDAY
                 Row (verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.Center,
-                    modifier = Modifier.height(componentHeight)
+                    modifier = Modifier
+                        .height(componentHeight)
+                        .padding(linePadding)
                 ) {
                     Image(painter = painterResource(R.drawable.baseline_date_range_24), contentDescription = "Birthday",
                         Modifier
@@ -203,18 +243,20 @@ fun ProfilePage(
                         colors = TextFieldDefaults.colors(
                             focusedTextColor = Color.White,
                             unfocusedTextColor = Color.White,
-                            focusedIndicatorColor = Color(0xFFFF9D7E), // Color when the TextField is focused
-                            unfocusedIndicatorColor = Color(0xFFFF9D7E), // Color when the TextField is not focused
+                            focusedIndicatorColor = Color(0xFFFDA6900), // Color when the TextField is focused
+                            unfocusedIndicatorColor = Color(0xFFFDA6900), // Color when the TextField is not focused
                             cursorColor = Color(0xFFFF9D7E), // Color of the cursor
                             focusedContainerColor = Color.DarkGray,
                             unfocusedContainerColor = Color.DarkGray
                         ),
-                        modifier = Modifier.fillParentMaxWidth(0.25f).padding(2.dp)
+                        modifier = Modifier
+                            .fillParentMaxWidth(0.25f)
+                            .padding(2.dp)
                     )
                     Divider(thickness = 1.dp,
                         modifier = Modifier
-                        .height(componentHeight-4.dp)
-                        .width(1.dp))
+                            .height(componentHeight - 4.dp)
+                            .width(1.dp))
                     TextField(
                         value = newMonth,
                         onValueChange = { newValue ->
@@ -240,17 +282,19 @@ fun ProfilePage(
                         colors = TextFieldDefaults.colors(
                             focusedTextColor = Color.White,
                             unfocusedTextColor = Color.White,
-                            focusedIndicatorColor = Color(0xFFFF9D7E), // Color when the TextField is focused
-                            unfocusedIndicatorColor = Color(0xFFFF9D7E), // Color when the TextField is not focused
+                            focusedIndicatorColor = Color(0xFFFDA6900), // Color when the TextField is focused
+                            unfocusedIndicatorColor = Color(0xFFFDA6900), // Color when the TextField is not focused
                             cursorColor = Color(0xFFFF9D7E), // Color of the cursor
                             focusedContainerColor = Color.DarkGray,
                             unfocusedContainerColor = Color.DarkGray
                         ),
-                        modifier = Modifier.fillParentMaxWidth(0.25f).padding(2.dp)
+                        modifier = Modifier
+                            .fillParentMaxWidth(0.25f)
+                            .padding(2.dp)
                     )
                     Divider(thickness = 1.dp,
                         modifier = Modifier
-                            .height(componentHeight-4.dp)
+                            .height(componentHeight - 4.dp)
                             .width(1.dp))
                     TextField(
                         value = newYear,
@@ -279,23 +323,26 @@ fun ProfilePage(
                         colors = TextFieldDefaults.textFieldColors(
                             focusedTextColor = Color.White,
                             unfocusedTextColor = Color.White,
-                            focusedIndicatorColor = Color(0xFFFF9D7E), // Color when the TextField is focused
-                            unfocusedIndicatorColor = Color(0xFFFF9D7E), // Color when the TextField is not focused
+                            focusedIndicatorColor = Color(0xFFFDA6900), // Color when the TextField is focused
+                            unfocusedIndicatorColor = Color(0xFFFDA6900), // Color when the TextField is not focused
                             cursorColor = Color(0xFFFF9D7E), // Color of the cursor
                             containerColor = Color.DarkGray
                         ),
                         modifier = Modifier
-                            .fillParentMaxWidth(0.3f).padding(2.dp)
+                            .fillParentMaxWidth(0.3f)
+                            .padding(2.dp)
                     )
                     Spacer(modifier = Modifier.weight(1f))
                 }
 
-                Divider(thickness = 2.dp)
+                Divider(thickness = 1.dp)
 
                 //PHONE
                 Row (verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.Center,
-                    modifier = Modifier.height(componentHeight)
+                    modifier = Modifier
+                        .height(componentHeight)
+                        .padding(linePadding)
                 ) {
                     Image(painter = painterResource(R.drawable.phone), contentDescription = "Phone Number",
                         Modifier
@@ -324,11 +371,12 @@ fun ProfilePage(
                         maxLines = 1,
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                         shape = RoundedCornerShape(16.dp),
+                        modifier = Modifier.fillMaxWidth(),
                         colors = TextFieldDefaults.colors(
                             focusedTextColor = Color.White,
                             unfocusedTextColor = Color.White,
-                            focusedIndicatorColor = Color(0xFFFF9D7E), // Color when the TextField is focused
-                            unfocusedIndicatorColor = Color(0xFFFF9D7E), // Color when the TextField is not focused
+                            focusedIndicatorColor = Color(0xFFFDA6900), // Color when the TextField is focused
+                            unfocusedIndicatorColor = Color(0xFFFDA6900), // Color when the TextField is not focused
                             cursorColor = Color(0xFFFF9D7E), // Color of the cursor
                             focusedContainerColor = Color.DarkGray,
                             unfocusedContainerColor = Color.DarkGray
@@ -337,12 +385,14 @@ fun ProfilePage(
                     Spacer(modifier = Modifier.weight(1f))
                 }
 
-                Divider(thickness = 2.dp)
+                Divider(thickness = 1.dp)
 
                 //APPLY / CANCEL
                 Row (verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.Center,
-                    modifier = Modifier.height(componentHeight)
+                    modifier = Modifier
+                        .height(componentHeight)
+                        .padding(linePadding)
                 ) {
                     IconButton(
                         colors = IconButtonDefaults.iconButtonColors(Color.White),
@@ -406,7 +456,8 @@ fun ProfilePage(
                         Text("Apply", color = Color.White)
                     }
                 }
-
+                Spacer(Modifier.weight(1f))
+                Divider(thickness = 2.dp, color = if (isDarkTheme) Color.White else Color.Black)
                 Footer()
             }
         }
@@ -476,6 +527,7 @@ fun ProfileIcon(
             modifier = Modifier
                 .size(120.dp)
                 .clip(CircleShape)
+                .border(3.dp, color = Color.DarkGray, shape = CircleShape)
         )
     } else {
         Box(
@@ -484,6 +536,7 @@ fun ProfileIcon(
                 .size(120.dp)
                 .clip(CircleShape)
                 .background(Color.White)
+                .border(3.dp, color = Color.DarkGray, shape = CircleShape)
         ) {
             Icon(
                 imageVector = Icons.Filled.Person,
