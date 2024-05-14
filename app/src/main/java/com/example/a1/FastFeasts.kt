@@ -69,7 +69,9 @@ import com.example.a1.data.cartData.CartViewModel
 import com.example.a1.data.AppViewModelProvider
 import com.example.a1.data.profiledata.GlobalViewModel
 import com.example.a1.ui.CartUi
+import com.example.a1.ui.DiningOptions
 import com.example.a1.ui.InvididualFoodPage
+import com.example.a1.ui.PaymentOptions
 import com.example.a1.ui.login.LoginScreen
 import com.example.a1.ui.login.SignUpScreen
 import com.example.a1.ui.login.PrivacyScreen
@@ -87,6 +89,11 @@ enum class FastFeastsScreen(@StringRes val title: Int) {
     SignUpScreen(title = R.string.Register),
     PrivacyScreen(title = R.string.Privacy),
     PolicyScreen(title = R.string.Terms),
+
+    DiningOptions(title = R.string.dining_options),
+    PaymentOptions(title=R.string.payment_options)
+
+
 }
 
 @Composable
@@ -140,8 +147,7 @@ fun FastFeastsApp(
                         .background(
                             if (currentScreen == FastFeastsScreen.MainPage) Color.Gray
                             else
-                                Color.Transparent
-                            , shape = RoundedCornerShape(5.dp)
+                                Color.Transparent, shape = RoundedCornerShape(5.dp)
                         )
                         .fillMaxWidth()
                     ) {
@@ -169,8 +175,7 @@ fun FastFeastsApp(
                         .background(
                             if (currentScreen == FastFeastsScreen.Profile) Color.Gray
                             else
-                                Color.Transparent
-                            , shape = RoundedCornerShape(5.dp)
+                                Color.Transparent, shape = RoundedCornerShape(5.dp)
                         )
                         .fillMaxWidth()
                     ) {
@@ -276,6 +281,13 @@ fun FastFeastsApp(
                 composable(route = FastFeastsScreen.IndividualFood.name) {
                     InvididualFoodPage(cartViewModel, globalViewModel, navController)
                 }
+                composable(route = FastFeastsScreen.PaymentOptions.name) {
+                    PaymentOptions(navController)
+                }
+                composable(route = FastFeastsScreen.DiningOptions.name) {
+                    DiningOptions(navController)
+                }
+
 
                 navigation(startDestination = FastFeastsScreen.LoginScreen.name , route = "login_flow" ) {
                     composable(route = FastFeastsScreen.LoginScreen.name) {

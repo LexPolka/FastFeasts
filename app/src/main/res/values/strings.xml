@@ -10,6 +10,9 @@
     <string name="Register">Register</string>
     <string name="Privacy">Privacy</string>
     <string name="Terms">Terms</string>
+    <string name="dining_options">Dining Options</string>
+    <string name="payment_options">Payment Options</string>
+
 
 
     <string-array name="Languages">

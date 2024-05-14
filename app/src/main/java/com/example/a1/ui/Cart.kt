@@ -18,9 +18,11 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -30,6 +32,7 @@ import androidx.compose.ui.text.font.FontWeight.Companion.Bold
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.example.a1.FastFeastsScreen
 import com.example.a1.data.cartData.CartViewModel
 import com.example.a1.data.cartData.Food
 import java.util.Locale
@@ -49,8 +52,9 @@ fun CartUi(viewModel: CartViewModel, navController : NavHostController, modifier
         mutableStateOf(viewModel.getCartItems())
     }
 
-    val cartItems = remember { mutableListOf(cart) }
-
+    val cartItems by remember {
+        derivedStateOf { cart }
+    }
 
     Column(
         modifier.fillMaxSize(),
@@ -85,7 +89,7 @@ fun CartUi(viewModel: CartViewModel, navController : NavHostController, modifier
 
             Spacer(modifier = Modifier.weight(1f))
 
-            Button(onClick = { viewModel.clearCart(cart) },elevation = ButtonDefaults.buttonElevation(
+            Button(onClick = { viewModel.clearCart() },elevation = ButtonDefaults.buttonElevation(
 
                 defaultElevation = 10.dp,
                 pressedElevation = 6.dp
@@ -129,11 +133,6 @@ fun CartUi(viewModel: CartViewModel, navController : NavHostController, modifier
         //pass the list of food details ( also a list )
         CartList(viewModel = viewModel, cartItems = cartItems, modifier = Modifier )
 
-//        val totalPrice: Double = cartItems.flatten().sumOf { item ->
-            // Convert the price string to double
-//            item.price.toDoubleOrNull() ?: 0.0
-//        }
-
         Spacer(modifier = Modifier.weight(1f))
 
         Card {
@@ -158,9 +157,9 @@ fun CartUi(viewModel: CartViewModel, navController : NavHostController, modifier
 
         Spacer(modifier = Modifier.height(10.dp))
 
-        // dining option page fist, then to payment options
+        // dining option page first, then to payment options
         Button(
-            onClick = { /*TODO*/ },
+            onClick = { navController.navigate(FastFeastsScreen.DiningOptions.name) },
             elevation = ButtonDefaults.buttonElevation(
 
                 defaultElevation = 10.dp,
@@ -186,18 +185,15 @@ fun CartUi(viewModel: CartViewModel, navController : NavHostController, modifier
 }
 
 @Composable
-fun CartList(viewModel: CartViewModel, cartItems: List<List<Food>>, modifier: Modifier = Modifier){
-
+fun CartList(viewModel: CartViewModel, cartItems: List<Food>, modifier: Modifier = Modifier){
 
     LazyColumn(
         modifier = modifier
     ) {
-        items(cartItems) { foodList ->
+        items(cartItems) { food ->
             Column {
-                foodList.forEach{
-                        food -> CartItem(cartViewModel = viewModel, food = food)
+                CartItem(cartViewModel = viewModel, food = food )
                 }
-            }
         }
     }
 }

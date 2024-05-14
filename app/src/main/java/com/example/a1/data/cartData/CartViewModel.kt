@@ -1,5 +1,6 @@
 package com.example.a1.data.cartData
 
+import androidx.compose.foundation.lazy.layout.LazyLayoutPinnedItemList
 import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
 
@@ -14,14 +15,13 @@ data class Food(
 class CartViewModel : ViewModel() {
     private val items: MutableList<Food> = mutableListOf()
 
-    private val cartItems = mutableStateListOf<Food>()
 
     fun addToCart(foodItem: Food) {
         items.add(foodItem)
     }
 
     fun removeFromCart(food: Food) {
-        cartItems.remove(food)
+        items.remove(food)
     }
 
     fun getCartItems(): List<Food> {
@@ -32,10 +32,10 @@ class CartViewModel : ViewModel() {
         return items.sumOf { it.price.toDoubleOrNull() ?: 0.0 }
     }
 
-
-    fun clearCart(cart: List<Food>) {
-        cartItems.clear()
+    fun clearCart() {
+        items.clear()
     }
+
 
 
 
