@@ -13,10 +13,6 @@ interface ProfileDao {
     @Query("SELECT * FROM profiles WHERE email = :email")
     fun getProfile(email: String): List<ProfileEntity?>
 
-    //gets all profiles when user opens ProfilePage
-    @Query("SELECT * FROM profiles")
-    suspend fun getAllProfiles(): List<ProfileEntity?>
-
     //use insertProfile when registering
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertProfile(profile: ProfileEntity)

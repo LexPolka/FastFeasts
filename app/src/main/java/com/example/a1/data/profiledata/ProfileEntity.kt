@@ -13,6 +13,7 @@ data class ProfileEntity(
     val month : String = "",
     val year : String = "",
     val phoneNumber : String = "",
+    val isStaff : Boolean = false,
 
     @PrimaryKey(autoGenerate = false)
     val email: String = "",

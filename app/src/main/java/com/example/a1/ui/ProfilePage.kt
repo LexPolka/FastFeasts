@@ -76,25 +76,7 @@ import kotlinx.coroutines.launch
 fun ProfilePage(
     viewModel: ProfileViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
-    var profilesToLoad : List<ProfileEntity?> = viewModel.getAllProfiles()
-
-    LazyColumn() {
-        items(profilesToLoad) { profile ->
-            ProfileToLoad(viewModel = viewModel, profile = profile)
-        }
-    }
-
     ProfileDataModify(viewModel)
-}
-
-@Composable
-fun ProfileToLoad(viewModel : ProfileViewModel, profile: ProfileEntity?){
-    Card(){
-        profile?.let {
-            Image(painter = painterResource(profile.profilePictureUri.toInt()), contentDescription = "Profile Image")
-        }
-
-    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)

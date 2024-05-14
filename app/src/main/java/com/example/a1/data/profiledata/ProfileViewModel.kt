@@ -73,14 +73,6 @@ class ProfileViewModel(private val repository: ProfileRepository) : ViewModel() 
         }
     }
 
-    fun getAllProfiles(): List<ProfileEntity?> {
-        var profiles : List<ProfileEntity?> = emptyList()
-        viewModelScope.launch{
-            profiles = repository.getAllProfiles()
-        }
-        return profiles
-    }
-
 }
 
 
@@ -95,4 +87,5 @@ data class Profile(
     val month : String = "",
     val year : String = "",
     val phoneNumber : String = "",
+    val isStaff : Boolean = false,
 )

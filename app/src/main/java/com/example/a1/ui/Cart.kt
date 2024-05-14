@@ -247,22 +247,22 @@ fun CartItem( cartViewModel: CartViewModel, food: Food, modifier: Modifier = Mod
                     fontSize = 30.sp
                 )
 
-                Button(
-                    onClick = { cartConfirmRemoveItemDialog(viewModel = cartViewModel, ) },
-                    elevation = ButtonDefaults.buttonElevation(
-
-                        defaultElevation = 10.dp,
-                        pressedElevation = 6.dp
-
-
-                    ),
-                    shape = CircleShape,
-                    colors = ButtonDefaults.buttonColors(darkOrange),
-                    modifier = Modifier
-                        .align(Alignment.End)
-                        .padding(16.dp)
-                        .size(35.dp)
-                ) { Text(text = "-") }
+//                Button(
+//                    onClick = { cartConfirmRemoveItemDialog(viewModel = cartViewModel, ) },
+//                    elevation = ButtonDefaults.buttonElevation(
+//
+//                        defaultElevation = 10.dp,
+//                        pressedElevation = 6.dp
+//
+//
+//                    ),
+//                    shape = CircleShape,
+//                    colors = ButtonDefaults.buttonColors(darkOrange),
+//                    modifier = Modifier
+//                        .align(Alignment.End)
+//                        .padding(16.dp)
+//                        .size(35.dp)
+//                ) { Text(text = "-") }
 
 
             }
