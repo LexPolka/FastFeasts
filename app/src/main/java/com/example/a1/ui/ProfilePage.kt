@@ -158,8 +158,8 @@ fun ProfileDataModify(viewModel : ProfileViewModel) {
                         modifier = Modifier.border(
                             2.dp,
                             color = if (isDarkTheme) Color.White else Color.DarkGray,
-                            shape = RoundedCornerShape(16.dp)
-                        ),
+                            shape = RoundedCornerShape(16.dp))
+                            .fillMaxWidth(),
                         colors = TextFieldDefaults.textFieldColors(
                             focusedTextColor = Color.White,
                             unfocusedTextColor = Color.White,
@@ -411,7 +411,7 @@ fun ProfileDataModify(viewModel : ProfileViewModel) {
                         maxLines = 1,
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                         shape = RoundedCornerShape(16.dp),
-                        modifier = Modifier.fillMaxWidth(0.9f)
+                        modifier = Modifier.fillMaxWidth()
                             .border(
                                 2.dp,
                                 color = if (isDarkTheme) Color.White else Color.DarkGray,
