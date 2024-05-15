@@ -20,8 +20,8 @@ data class Food(
 )
 
 class CartViewModel : ViewModel() {
-    private val items: MutableList<Food> = mutableListOf()
-    val cartItems: MutableList<Food> = items
+    private val items = mutableStateListOf<Food>()
+    val cartItems: List<Food> get() = items
 
     fun addToCart(foodItem: Food) {
         items.add(foodItem)
