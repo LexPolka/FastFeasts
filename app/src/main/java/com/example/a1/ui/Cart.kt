@@ -54,7 +54,6 @@ fun CartUi(viewModel: CartViewModel, navController : NavHostController, modifier
     val cart by remember {
         mutableStateOf(viewModel.cartItems)
     }
-
     val cartItems by remember {
         derivedStateOf { cart }
     }

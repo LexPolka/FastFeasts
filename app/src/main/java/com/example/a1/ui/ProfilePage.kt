@@ -81,7 +81,7 @@ fun ProfilePage(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ProfileDataModify(viewModel : ProfileViewModel){
+fun ProfileDataModify(viewModel : ProfileViewModel) {
     val context = LocalContext.current
 
     //toast handler
@@ -105,21 +105,25 @@ fun ProfileDataModify(viewModel : ProfileViewModel){
     val configuration = LocalConfiguration.current
     val screenWidth = configuration.screenWidthDp.dp
     val screenHeight = configuration.screenHeightDp.dp
-    val componentHeight = screenHeight/9
+    val componentHeight = screenHeight / 9
 
     //before saving
-    var newName by remember { mutableStateOf(uiState.name)}
-    var newDay by remember { mutableStateOf(uiState.day)}
-    var newMonth by remember { mutableStateOf(uiState.month)}
-    var newYear by remember { mutableStateOf(uiState.year)}
-    var newNumber by remember { mutableStateOf(uiState.phoneNumber)}
+    var newName by remember { mutableStateOf(uiState.name) }
+    var newDay by remember { mutableStateOf(uiState.day) }
+    var newMonth by remember { mutableStateOf(uiState.month) }
+    var newYear by remember { mutableStateOf(uiState.year) }
+    var newNumber by remember { mutableStateOf(uiState.phoneNumber) }
+    var newCCNumber by remember { mutableStateOf(uiState.ccNumber) }
+    var newCCMonth by remember { mutableStateOf(uiState.ccMonth) }
+    var newCCYear by remember { mutableStateOf(uiState.ccYear) }
+    var newCCCode by remember { mutableStateOf(uiState.ccCode) }
 
-    Column (horizontalAlignment = Alignment.CenterHorizontally) {
+    Column(horizontalAlignment = Alignment.CenterHorizontally) {
         //profile setter
         ProfileHeader(uiState) { uri ->
             viewModel.setProfilePictureUri(uri)
         }
-        Divider(thickness = 2.dp, color = if (isDarkTheme) Color.White else Color.Black)
+        Divider(thickness = 3.dp, color = if (isDarkTheme) Color.White else Color.Black)
 
         LazyColumn(
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -130,13 +134,15 @@ fun ProfileDataModify(viewModel : ProfileViewModel){
         ) {
             items(1) {
                 //Name
-                Row (verticalAlignment = Alignment.CenterVertically,
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.Center,
                     modifier = Modifier
                         .height(componentHeight)
                         .padding(linePadding)
                 ) {
-                    Image(painter = painterResource(R.drawable.profile), contentDescription = "Name",
+                    Image(
+                        painter = painterResource(R.drawable.profile), contentDescription = "Name",
                         Modifier
                             .size(imageSize)
                             .padding(6.dp)
@@ -149,49 +155,71 @@ fun ProfileDataModify(viewModel : ProfileViewModel){
                         label = { Text("Username", color = Color(0xFFFF9D7E)) },
                         maxLines = 1,
                         shape = RoundedCornerShape(16.dp),
-                        colors = TextFieldDefaults.colors(
+                        modifier = Modifier.border(
+                            2.dp,
+                            color = if (isDarkTheme) Color.White else Color.DarkGray,
+                            shape = RoundedCornerShape(16.dp)
+                        ),
+                        colors = TextFieldDefaults.textFieldColors(
                             focusedTextColor = Color.White,
                             unfocusedTextColor = Color.White,
                             focusedIndicatorColor = Color(0xFFFDA6900), // Color when the TextField is focused
                             unfocusedIndicatorColor = Color(0xFFFDA6900), // Color when the TextField is not focused
                             cursorColor = Color(0xFFFF9D7E), // Color of the cursor
-                            focusedContainerColor = Color.DarkGray,
-                            unfocusedContainerColor = Color.DarkGray
+                            containerColor = if (isDarkTheme) Color.DarkGray else Color.White,
                         ),
                     )
                     Spacer(modifier = Modifier.weight(1f))
                 }
 
-                Divider(thickness = 1.dp)
+                Divider(
+                    thickness = 2.dp,
+                    color = Color(0xFFFC8803),
+                    modifier = Modifier.padding(horizontal = linePadding)
+                )
 
                 //EMAIL
-                Row (verticalAlignment = Alignment.CenterVertically,
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.Center,
                     modifier = Modifier
                         .height(componentHeight)
                         .padding(linePadding)
                 ) {
-                    Image(painter = painterResource(R.drawable.baseline_email_24), contentDescription = "Email",
+                    Image(
+                        painter = painterResource(R.drawable.baseline_email_24),
+                        contentDescription = "Email",
                         Modifier
                             .size(imageSize)
                             .padding(6.dp)
                             .clip(shape = CircleShape)
                             .background(Color.White)
                     )
-                    Text(text = "FastFeasts@gmail.com", color = if(isDarkTheme)Color.White else Color.Black, fontSize = textSize)
+                    Text(
+                        text = "FastFeasts@gmail.com",
+                        color = if (isDarkTheme) Color.White else Color.Black,
+                        fontSize = textSize
+                    )
                     Spacer(modifier = Modifier.weight(1f))
                 }
 
-                Divider(thickness = 2.dp)
+                Divider(
+                    thickness = 2.dp,
+                    color = Color(0xFFFC8803),
+                    modifier = Modifier.padding(horizontal = linePadding)
+                )
 
                 //BIRTHDAY
-                Row (verticalAlignment = Alignment.CenterVertically,
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.Center,
                     modifier = Modifier
                         .height(componentHeight)
                         .padding(linePadding)
                 ) {
-                    Image(painter = painterResource(R.drawable.baseline_date_range_24), contentDescription = "Birthday",
+                    Image(
+                        painter = painterResource(R.drawable.baseline_date_range_24),
+                        contentDescription = "Birthday",
                         Modifier
                             .size(imageSize)
                             .padding(6.dp)
@@ -205,12 +233,14 @@ fun ProfileDataModify(viewModel : ProfileViewModel){
                                 val intValue = newValue.toIntOrNull() //convert to int
                                 if ((intValue != null && intValue in 1..31) || intValue == null) {
                                     newDay = newValue
-                                }
-                                else
-                                {
+                                } else {
                                     newDay = uiState.day
                                     if (!isToastVisible) {
-                                        Toast.makeText(context, "Day out of range!", Toast.LENGTH_SHORT).show()
+                                        Toast.makeText(
+                                            context,
+                                            "Day out of range!",
+                                            Toast.LENGTH_SHORT
+                                        ).show()
                                         isToastVisible = true
                                     }
                                 }
@@ -220,23 +250,29 @@ fun ProfileDataModify(viewModel : ProfileViewModel){
                         maxLines = 1,
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                         shape = RoundedCornerShape(16.dp),
-                        colors = TextFieldDefaults.colors(
+                        colors = TextFieldDefaults.textFieldColors(
                             focusedTextColor = Color.White,
                             unfocusedTextColor = Color.White,
                             focusedIndicatorColor = Color(0xFFFDA6900), // Color when the TextField is focused
                             unfocusedIndicatorColor = Color(0xFFFDA6900), // Color when the TextField is not focused
                             cursorColor = Color(0xFFFF9D7E), // Color of the cursor
-                            focusedContainerColor = Color.DarkGray,
-                            unfocusedContainerColor = Color.DarkGray
+                            containerColor = if (isDarkTheme) Color.DarkGray else Color.White,
                         ),
                         modifier = Modifier
                             .fillParentMaxWidth(0.25f)
                             .padding(2.dp)
+                            .border(
+                                2.dp,
+                                color = if (isDarkTheme) Color.White else Color.DarkGray,
+                                shape = RoundedCornerShape(16.dp)
+                            ),
                     )
-                    Divider(thickness = 1.dp,
+                    Divider(
+                        thickness = 1.dp,
                         modifier = Modifier
                             .height(componentHeight - 4.dp)
-                            .width(1.dp))
+                            .width(1.dp)
+                    )
                     TextField(
                         value = newMonth,
                         onValueChange = { newValue ->
@@ -244,12 +280,14 @@ fun ProfileDataModify(viewModel : ProfileViewModel){
                                 val intValue = newValue.toIntOrNull() //convert to int
                                 if ((intValue != null && intValue in 1..12) || intValue == null) {
                                     newMonth = newValue
-                                }
-                                else
-                                {
+                                } else {
                                     newMonth = uiState.month
                                     if (!isToastVisible) {
-                                        Toast.makeText(context, "Month out of range!", Toast.LENGTH_SHORT).show()
+                                        Toast.makeText(
+                                            context,
+                                            "Month out of range!",
+                                            Toast.LENGTH_SHORT
+                                        ).show()
                                         isToastVisible = true
                                     }
                                 }
@@ -259,37 +297,45 @@ fun ProfileDataModify(viewModel : ProfileViewModel){
                         maxLines = 1,
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                         shape = RoundedCornerShape(16.dp),
-                        colors = TextFieldDefaults.colors(
+                        colors = TextFieldDefaults.textFieldColors(
                             focusedTextColor = Color.White,
                             unfocusedTextColor = Color.White,
                             focusedIndicatorColor = Color(0xFFFDA6900), // Color when the TextField is focused
                             unfocusedIndicatorColor = Color(0xFFFDA6900), // Color when the TextField is not focused
                             cursorColor = Color(0xFFFF9D7E), // Color of the cursor
-                            focusedContainerColor = Color.DarkGray,
-                            unfocusedContainerColor = Color.DarkGray
+                            containerColor = if (isDarkTheme) Color.DarkGray else Color.White,
                         ),
                         modifier = Modifier
                             .fillParentMaxWidth(0.25f)
                             .padding(2.dp)
+                            .border(
+                                2.dp,
+                                color = if (isDarkTheme) Color.White else Color.DarkGray,
+                                shape = RoundedCornerShape(16.dp)
+                            ),
                     )
-                    Divider(thickness = 1.dp,
+                    Divider(
+                        thickness = 1.dp,
                         modifier = Modifier
                             .height(componentHeight - 4.dp)
-                            .width(1.dp))
+                            .width(1.dp)
+                    )
                     TextField(
                         value = newYear,
                         onValueChange = { newValue ->
-                            if (newValue.all { it.isDigit() })
-                            {
+                            if (newValue.all { it.isDigit() }) {
                                 if (newValue.length < 4) newYear = newValue
-                                if (newValue.length == 4)
-                                {
+                                if (newValue.length == 4) {
                                     val intValue = newValue.toIntOrNull()
                                     if (intValue in 1924..2024) newYear = newValue
-                                    else{
+                                    else {
                                         newYear = uiState.year
                                         if (!isToastVisible) {
-                                            Toast.makeText(context, "Year out of range!", Toast.LENGTH_SHORT).show()
+                                            Toast.makeText(
+                                                context,
+                                                "Year out of range!",
+                                                Toast.LENGTH_SHORT
+                                            ).show()
                                             isToastVisible = true
                                         }
                                     }
@@ -306,25 +352,37 @@ fun ProfileDataModify(viewModel : ProfileViewModel){
                             focusedIndicatorColor = Color(0xFFFDA6900), // Color when the TextField is focused
                             unfocusedIndicatorColor = Color(0xFFFDA6900), // Color when the TextField is not focused
                             cursorColor = Color(0xFFFF9D7E), // Color of the cursor
-                            containerColor = Color.DarkGray
+                            containerColor = if (isDarkTheme) Color.DarkGray else Color.White,
                         ),
                         modifier = Modifier
                             .fillParentMaxWidth(0.3f)
                             .padding(2.dp)
+                            .border(
+                                2.dp,
+                                color = if (isDarkTheme) Color.White else Color.DarkGray,
+                                shape = RoundedCornerShape(16.dp)
+                            ),
                     )
                     Spacer(modifier = Modifier.weight(1f))
                 }
 
-                Divider(thickness = 1.dp)
+                Divider(
+                    thickness = 2.dp,
+                    color = Color(0xFFFC8803),
+                    modifier = Modifier.padding(horizontal = linePadding)
+                )
 
                 //PHONE
-                Row (verticalAlignment = Alignment.CenterVertically,
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.Center,
                     modifier = Modifier
                         .height(componentHeight)
                         .padding(linePadding)
                 ) {
-                    Image(painter = painterResource(R.drawable.phone), contentDescription = "Phone Number",
+                    Image(
+                        painter = painterResource(R.drawable.phone),
+                        contentDescription = "Phone Number",
                         Modifier
                             .size(imageSize)
                             .padding(6.dp)
@@ -334,14 +392,16 @@ fun ProfileDataModify(viewModel : ProfileViewModel){
                     TextField(
                         value = newNumber,
                         onValueChange = { newValue ->
-                            if (newValue.all { it.isDigit() })
-                            {
+                            if (newValue.all { it.isDigit() }) {
                                 if (newValue.length <= 10) newNumber = newValue
-                                else
-                                {
+                                else {
                                     newNumber = uiState.phoneNumber
                                     if (!isToastVisible) {
-                                        Toast.makeText(context, "Phone Number too long!", Toast.LENGTH_SHORT).show()
+                                        Toast.makeText(
+                                            context,
+                                            "Phone Number too long!",
+                                            Toast.LENGTH_SHORT
+                                        ).show()
                                         isToastVisible = true
                                     }
                                 }
@@ -351,24 +411,173 @@ fun ProfileDataModify(viewModel : ProfileViewModel){
                         maxLines = 1,
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                         shape = RoundedCornerShape(16.dp),
-                        modifier = Modifier.fillMaxWidth(),
-                        colors = TextFieldDefaults.colors(
+                        modifier = Modifier.fillMaxWidth(0.9f)
+                            .border(
+                                2.dp,
+                                color = if (isDarkTheme) Color.White else Color.DarkGray,
+                                shape = RoundedCornerShape(16.dp)
+                            ),
+                        colors = TextFieldDefaults.textFieldColors(
                             focusedTextColor = Color.White,
                             unfocusedTextColor = Color.White,
                             focusedIndicatorColor = Color(0xFFFDA6900), // Color when the TextField is focused
                             unfocusedIndicatorColor = Color(0xFFFDA6900), // Color when the TextField is not focused
                             cursorColor = Color(0xFFFF9D7E), // Color of the cursor
-                            focusedContainerColor = Color.DarkGray,
-                            unfocusedContainerColor = Color.DarkGray
+                            containerColor = if (isDarkTheme) Color.DarkGray else Color.White,
                         ),
                     )
                     Spacer(modifier = Modifier.weight(1f))
                 }
 
-                Divider(thickness = 1.dp)
+                Divider(
+                    thickness = 2.dp,
+                    color = Color(0xFFFC8803),
+                    modifier = Modifier.padding(horizontal = linePadding)
+                )
+
+                //CREDIT CARD ROW
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center,
+                    modifier = Modifier
+                        .height(componentHeight*2)
+                        .padding(linePadding)
+                ) {
+                    Image(
+                        painter = painterResource(R.drawable.baseline_add_card_24),
+                        contentDescription = "Credit Card",
+                        Modifier
+                            .size(imageSize)
+                            .padding(6.dp)
+                            .clip(shape = CircleShape)
+                            .background(Color.White)
+                    )
+
+                    Column(
+                        modifier = Modifier.border(
+                            2.dp,
+                            color = if (isDarkTheme) Color.White else Color.DarkGray,
+                            shape = RoundedCornerShape(16.dp)
+                        )
+                    )
+                    {
+                        // Credit Card Number
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.Center,
+                            modifier = Modifier
+                                .height(componentHeight)
+                                .padding(linePadding)
+                        ) {
+
+                            TextField(
+                                value = newCCNumber,
+                                onValueChange = { newCCNumber = it },
+                                label = { Text("Credit Card Number", color = Color(0xFFFF9D7E)) },
+                                maxLines = 1,
+                                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                                shape = RoundedCornerShape(16.dp),
+                                colors = TextFieldDefaults.textFieldColors(
+                                    focusedTextColor = Color.White,
+                                    unfocusedTextColor = Color.White,
+                                    focusedIndicatorColor = Color(0xFFFDA6900), // Color when the TextField is focused
+                                    unfocusedIndicatorColor = Color(0xFFFDA6900), // Color when the TextField is not focused
+                                    cursorColor = Color(0xFFFF9D7E), // Color of the cursor
+                                    containerColor = if (isDarkTheme) Color.DarkGray else Color.White,
+                                ),
+                            )
+                            Spacer(modifier = Modifier.weight(1f))
+                        }
+                        // Expiry Date and CVV
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.Center,
+                            modifier = Modifier
+                                .height(componentHeight)
+                                .padding(linePadding)
+                        ) {
+                            TextField(
+                                value = newCCMonth,
+                                onValueChange = { newCCMonth = it },
+                                label = { Text("MM", color = Color(0xFFFF9D7E)) },
+                                maxLines = 1,
+                                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                                shape = RoundedCornerShape(16.dp),
+                                colors = TextFieldDefaults.textFieldColors(
+                                    focusedTextColor = Color.White,
+                                    unfocusedTextColor = Color.White,
+                                    focusedIndicatorColor = Color(0xFFFDA6900), // Color when the TextField is focused
+                                    unfocusedIndicatorColor = Color(0xFFFDA6900), // Color when the TextField is not focused
+                                    cursorColor = Color(0xFFFF9D7E), // Color of the cursor
+                                    containerColor = if (isDarkTheme) Color.DarkGray else Color.White,
+                                ),
+                                modifier = Modifier
+                                    .fillParentMaxWidth(0.25f)
+                                    .padding(2.dp)
+                            )
+                            Divider(
+                                thickness = 1.dp,
+                                modifier = Modifier
+                                    .height(componentHeight - 4.dp)
+                                    .width(1.dp)
+                            )
+                            TextField(
+                                value = newCCYear,
+                                onValueChange = { newCCYear = it },
+                                label = { Text("YY", color = Color(0xFFFF9D7E)) },
+                                maxLines = 1,
+                                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                                shape = RoundedCornerShape(16.dp),
+                                colors = TextFieldDefaults.textFieldColors(
+                                    focusedTextColor = Color.White,
+                                    unfocusedTextColor = Color.White,
+                                    focusedIndicatorColor = Color(0xFFFDA6900), // Color when the TextField is focused
+                                    unfocusedIndicatorColor = Color(0xFFFDA6900), // Color when the TextField is not focused
+                                    cursorColor = Color(0xFFFF9D7E), // Color of the cursor
+                                    containerColor = if (isDarkTheme) Color.DarkGray else Color.White,
+                                ),
+                                modifier = Modifier
+                                    .fillParentMaxWidth(0.25f)
+                                    .padding(2.dp)
+                            )
+                            Divider(
+                                thickness = 1.dp,
+                                modifier = Modifier
+                                    .height(componentHeight - 4.dp)
+                                    .width(1.dp)
+                            )
+                            TextField(
+                                value = newCCCode,
+                                onValueChange = { newCCCode = it },
+                                label = { Text("CVV", color = Color(0xFFFF9D7E)) },
+                                maxLines = 1,
+                                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                                shape = RoundedCornerShape(16.dp),
+                                colors = TextFieldDefaults.textFieldColors(
+                                    focusedTextColor = Color.White,
+                                    unfocusedTextColor = Color.White,
+                                    focusedIndicatorColor = Color(0xFFFDA6900), // Color when the TextField is focused
+                                    unfocusedIndicatorColor = Color(0xFFFDA6900), // Color when the TextField is not focused
+                                    cursorColor = Color(0xFFFF9D7E), // Color of the cursor
+                                    containerColor = if (isDarkTheme) Color.DarkGray else Color.White,
+                                ),
+                                modifier = Modifier
+                                    .fillParentMaxWidth(0.25f)
+                                    .padding(2.dp)
+                            )
+                        }
+                    }
+                }
+
+                Divider(
+                    thickness = 2.dp,
+                    color = Color(0xFFFC8803),
+                    modifier = Modifier.padding(horizontal = linePadding)
+                )
 
                 //APPLY / CANCEL
-                Row (verticalAlignment = Alignment.CenterVertically,
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.Center,
                     modifier = Modifier
                         .height(componentHeight)
@@ -383,7 +592,8 @@ fun ProfileDataModify(viewModel : ProfileViewModel){
                             newYear = uiState.year
                             newNumber = uiState.phoneNumber
                             if (!isToastVisible) {
-                                Toast.makeText(context, "Cancelled Changes.", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(context, "Cancelled Changes.", Toast.LENGTH_SHORT)
+                                    .show()
                                 isToastVisible = true
                             }
                         },
@@ -398,31 +608,40 @@ fun ProfileDataModify(viewModel : ProfileViewModel){
                     IconButton(
                         colors = IconButtonDefaults.iconButtonColors(Color(0xFFFF9D7E)),
                         onClick = {
-                            if (newYear.toIntOrNull() != null && newYear.toIntOrNull() !in 1934..2024)
-                            {
+                            if (newYear.toIntOrNull() != null && newYear.toIntOrNull() !in 1934..2024) {
                                 if (!isToastVisible) {
-                                    Toast.makeText(context, "Year out of range!", Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(
+                                        context,
+                                        "Year out of range!",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
                                     isToastVisible = true
                                 }
-                            }
-                            else if (newNumber.toIntOrNull() != null && newNumber.length < 10) {
+                            } else if (newNumber.toIntOrNull() != null && newNumber.length < 10) {
                                 if (!isToastVisible) {
-                                    Toast.makeText(context, "Phone Number too short!", Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(
+                                        context,
+                                        "Phone Number too short!",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
                                     isToastVisible = true
                                 }
-                            }
-                            else
-                            {
+                            } else {
                                 //UISTATE
                                 viewModel.setName(newName)
                                 viewModel.setDate(newDay, newMonth, newYear)
                                 viewModel.setPhone(newNumber)
+                                viewModel.setCreditCard(newCCNumber, newCCCode, newCCMonth, newCCYear)
 
                                 //DATABASE
                                 viewModel.saveProfile()
 
                                 if (!isToastVisible) {
-                                    Toast.makeText(context, "Changes have been Applied.", Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(
+                                        context,
+                                        "Changes have been Applied.",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
                                     isToastVisible = true
                                 }
                             }
@@ -437,7 +656,7 @@ fun ProfileDataModify(viewModel : ProfileViewModel){
                     }
                 }
                 Spacer(Modifier.weight(1f))
-                Divider(thickness = 2.dp, color = if (isDarkTheme) Color.White else Color.Black)
+                Divider(thickness = 3.dp, color = if (isDarkTheme) Color.White else Color.Black)
                 Footer()
             }
         }

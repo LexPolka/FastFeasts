@@ -18,12 +18,11 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
+import com.example.a1.data.staffdata.Order
 
 class ProfileViewModel(private val repository: ProfileRepository) : ViewModel() {
     private val _uiState = MutableStateFlow(Profile())
     val uiState: StateFlow<Profile> = _uiState.asStateFlow()
-
-    var profileList: List<ProfileEntity?> = mutableListOf()
 
     //Setters
     fun setProfilePictureUri(uri: Uri?) {
@@ -31,22 +30,25 @@ class ProfileViewModel(private val repository: ProfileRepository) : ViewModel() 
             currentState.copy(profilePictureUri = uri.toString())
         }
     }
-
     fun setName(name: String) {
         _uiState.update { currentState ->
             currentState.copy(name = name)
         }
     }
-
     fun setDate(day: String, month: String, year: String) {
         _uiState.update { currentState ->
             currentState.copy(day = day, month = month, year = year)
         }
     }
-
     fun setPhone(number: String) {
         _uiState.update { currentState ->
             currentState.copy(phoneNumber = number)
+        }
+    }
+
+    fun setCreditCard(ccNumber : String, ccCode : String, ccMonth : String, ccYear: String){
+        _uiState.update { currentState ->
+            currentState.copy(ccNumber = ccNumber, ccCode= ccCode, ccMonth=ccMonth, ccYear=ccYear)
         }
     }
 
@@ -60,7 +62,11 @@ class ProfileViewModel(private val repository: ProfileRepository) : ViewModel() 
             day = _uiState.value.day,
             month = _uiState.value.month,
             year = _uiState.value.year,
-            phoneNumber = _uiState.value.phoneNumber
+            phoneNumber = _uiState.value.phoneNumber,
+            ccNumber = _uiState.value.ccNumber,
+            ccCode = _uiState.value.ccCode,
+            ccMonth = _uiState.value.ccMonth,
+            ccYear = _uiState.value.ccYear
         )
 
         viewModelScope.launch {
@@ -88,4 +94,9 @@ data class Profile(
     val year : String = "",
     val phoneNumber : String = "",
     val isStaff : Boolean = false,
+
+    val ccNumber : String = "",
+    val ccMonth : String = "",
+    val ccYear : String = "",
+    val ccCode : String = "",
 )

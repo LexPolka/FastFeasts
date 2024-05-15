@@ -15,6 +15,11 @@ data class ProfileEntity(
     val phoneNumber : String = "",
     val isStaff : Boolean = false,
 
+    val ccNumber : String = "",
+    val ccMonth : String = "",
+    val ccYear : String = "",
+    val ccCode : String = "",
+
     @PrimaryKey(autoGenerate = false)
     val email: String = "",
 )
