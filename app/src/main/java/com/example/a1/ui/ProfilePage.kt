@@ -156,8 +156,8 @@ fun ProfileDataModify(viewModel : ProfileViewModel) {
                         maxLines = 1,
                         shape = RoundedCornerShape(16.dp),
                         modifier = Modifier.border(
-                            2.dp,
-                            color = if (isDarkTheme) Color.White else Color.DarkGray,
+                            1.5.dp,
+                            color = Color.DarkGray,
                             shape = RoundedCornerShape(16.dp))
                             .fillMaxWidth(),
                         colors = TextFieldDefaults.textFieldColors(
@@ -262,8 +262,8 @@ fun ProfileDataModify(viewModel : ProfileViewModel) {
                             .fillParentMaxWidth(0.25f)
                             .padding(2.dp)
                             .border(
-                                2.dp,
-                                color = if (isDarkTheme) Color.White else Color.DarkGray,
+                                1.5.dp,
+                                color = Color.DarkGray,
                                 shape = RoundedCornerShape(16.dp)
                             ),
                     )
@@ -309,8 +309,8 @@ fun ProfileDataModify(viewModel : ProfileViewModel) {
                             .fillParentMaxWidth(0.25f)
                             .padding(2.dp)
                             .border(
-                                2.dp,
-                                color = if (isDarkTheme) Color.White else Color.DarkGray,
+                                1.5.dp,
+                                color = Color.DarkGray,
                                 shape = RoundedCornerShape(16.dp)
                             ),
                     )
@@ -358,8 +358,8 @@ fun ProfileDataModify(viewModel : ProfileViewModel) {
                             .fillParentMaxWidth(0.3f)
                             .padding(2.dp)
                             .border(
-                                2.dp,
-                                color = if (isDarkTheme) Color.White else Color.DarkGray,
+                                1.5.dp,
+                                color = Color.DarkGray,
                                 shape = RoundedCornerShape(16.dp)
                             ),
                     )
@@ -413,8 +413,8 @@ fun ProfileDataModify(viewModel : ProfileViewModel) {
                         shape = RoundedCornerShape(16.dp),
                         modifier = Modifier.fillMaxWidth()
                             .border(
-                                2.dp,
-                                color = if (isDarkTheme) Color.White else Color.DarkGray,
+                                1.5.dp,
+                                color = Color.DarkGray,
                                 shape = RoundedCornerShape(16.dp)
                             ),
                         colors = TextFieldDefaults.textFieldColors(
@@ -455,8 +455,8 @@ fun ProfileDataModify(viewModel : ProfileViewModel) {
 
                     Column(
                         modifier = Modifier.border(
-                            2.dp,
-                            color = if (isDarkTheme) Color.White else Color.DarkGray,
+                            1.5.dp,
+                            color = Color.DarkGray,
                             shape = RoundedCornerShape(16.dp)
                         )
                     )

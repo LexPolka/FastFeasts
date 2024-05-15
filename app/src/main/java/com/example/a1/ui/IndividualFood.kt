@@ -2,25 +2,20 @@ package com.example.a1.ui
 
 import android.widget.Toast
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -37,25 +32,25 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import com.example.a1.R
+import com.example.a1.BackButton
+import com.example.a1.FastFeastsScreen
 import com.example.a1.data.cartData.CartViewModel
 import com.example.a1.data.cartData.Food
 import com.example.a1.data.profiledata.GlobalViewModel
 import kotlinx.coroutines.delay
+import java.math.BigDecimal
+import java.math.BigInteger
 
 @Composable
-fun InvididualFoodPage(cartViewModel : CartViewModel, globalViewModel: GlobalViewModel, navController: NavHostController) {
+fun IndividualFoodPage(cartViewModel : CartViewModel, globalViewModel: GlobalViewModel, navController: NavHostController) {
     val isDarkTheme = isSystemInDarkTheme()
 
     val foodState by globalViewModel.foodState.collectAsState()
@@ -93,39 +88,7 @@ fun InvididualFoodPage(cartViewModel : CartViewModel, globalViewModel: GlobalVie
 
     Column (modifier = Modifier.padding(universalPadding)) {
         //BACK BUTTON
-        Row {
-            IconButton(
-                colors = IconButtonDefaults.iconButtonColors(Color(0xFFFF9D7E)),
-                onClick = { if (!isBackPressed) {
-                    navController.popBackStack()
-                    isBackPressed = true } },
-                modifier = Modifier
-                    .border(
-                        3.5.dp,
-                        color = if (isDarkTheme) Color.White else Color(0xFFFDA6900),
-                        shape = RoundedCornerShape(20.dp)
-                    )
-                    .width(backButtonWidth)
-            ) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Icon(
-                        tint = Color.White,
-                        imageVector = Icons.Filled.ArrowBack,
-                        contentDescription = "Back Button",
-                        modifier = Modifier
-                            .fillMaxHeight()
-                            .padding(universalPadding)
-                    )
-                    Spacer(modifier = Modifier.weight(0.1f))
-                    Text("Back",color = if (isDarkTheme) Color.White else Color.Black,
-                        fontSize = 18.sp,
-                        fontWeight = FontWeight.Bold,
-                        modifier = Modifier.padding(universalPadding)
-                    )
-                    Spacer(modifier = Modifier.weight(0.1f))
-                }
-            }
-        }
+        BackButton(navController = navController)
 
         Card(modifier = Modifier.padding(universalPadding))
         {
@@ -142,7 +105,7 @@ fun InvididualFoodPage(cartViewModel : CartViewModel, globalViewModel: GlobalVie
             )
 
             //PRICE
-            Text( "Total: $${price}",
+            Text( "Total: $${calcPrice(price, quantity)}",
                 color = if (isDarkTheme) Color.White else Color.Black,
                 fontSize = 20.sp,
                 modifier = Modifier.padding(universalPadding))
@@ -204,4 +167,12 @@ fun InvididualFoodPage(cartViewModel : CartViewModel, globalViewModel: GlobalVie
             }
         }
     }
+}
+
+fun calcPrice(priceString: String, quantity: Int): BigDecimal {
+    val unitPrice = BigDecimal(priceString)
+    val qty = BigInteger.valueOf(quantity.toLong())
+
+    val totalPrice = unitPrice * BigDecimal(qty)
+    return totalPrice
 }

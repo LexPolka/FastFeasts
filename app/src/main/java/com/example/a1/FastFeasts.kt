@@ -62,6 +62,11 @@ import com.example.a1.ui.ProfilePage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material3.IconButtonDefaults
+import androidx.compose.ui.text.font.FontWeight
 import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.navigation
@@ -71,13 +76,14 @@ import com.example.a1.data.profiledata.GlobalViewModel
 import com.example.a1.ui.CartUi
 import com.example.a1.ui.CustomizationScreen
 import com.example.a1.ui.DiningOptions
-import com.example.a1.ui.InvididualFoodPage
+import com.example.a1.ui.IndividualFoodPage
 import com.example.a1.ui.PaymentOptions
 import com.example.a1.ui.StaffPage
 import com.example.a1.ui.login.LoginScreen
 import com.example.a1.ui.login.SignUpScreen
 import com.example.a1.ui.login.PrivacyScreen
 import com.example.a1.ui.login.PolicyScreen
+import kotlinx.coroutines.delay
 
 //enum classes for navigation
 enum class FastFeastsScreen(@StringRes val title: Int) {
@@ -125,6 +131,10 @@ fun FastFeastsApp(
 
     val imageSize = 40.dp
     val imagePadding = 4.dp
+    val verticalPadding = 10.dp
+
+    val uiState by profileViewModel.uiState.collectAsState()
+    val globalVariables by globalViewModel.foodState.collectAsState()
 
     //NAVIGATION DRAWER NEEDS TO BE IN EVERY PAGE!!!!
     ModalNavigationDrawer(
@@ -140,7 +150,7 @@ fun FastFeastsApp(
                     //NAVIGATION SIDE BAR
                     //1 HOME
                     Row( modifier = Modifier
-                        .padding(bottom = 8.dp)
+                        .padding(vertical = verticalPadding)
                         .clickable {
                             scope.launch {
                                 if (drawerState.isOpen) drawerState.close() else drawerState.open()
@@ -168,7 +178,7 @@ fun FastFeastsApp(
                     Divider()
                     //2 PROFILE
                     Row( modifier = Modifier
-                        .padding(bottom = 8.dp)
+                        .padding(vertical = verticalPadding)
                         .clickable {
                             scope.launch {
                                 if (drawerState.isOpen) drawerState.close() else drawerState.open()
@@ -194,9 +204,38 @@ fun FastFeastsApp(
                         Text(text = "Profile", fontSize = 28.sp)
                     }
                     Divider()
-                    //3 LE CART
+                    //3 STAFF (not visible if user is User and Not Staff)
+                    //if (uiState.isStaff)
                     Row( modifier = Modifier
-                        .padding(bottom = 8.dp)
+                        .padding(vertical = verticalPadding)
+                        .clickable {
+                            scope.launch {
+                                if (drawerState.isOpen) drawerState.close() else drawerState.open()
+                            }
+                            navController.navigate(FastFeastsScreen.Staff.name)
+                        }
+                        .background(
+                            if (currentScreen == FastFeastsScreen.Staff) Color.Gray
+                            else
+                                Color.Transparent, shape = RoundedCornerShape(5.dp)
+                        )
+                        .fillMaxWidth()
+                    ) {
+                        Image(
+                            painter = painterResource(R.drawable.baseline_assignment_ind_24),
+                            contentDescription = "Staff",
+                            Modifier
+                                .size(imageSize)
+                                .padding(imagePadding)
+                                .clip(shape = CircleShape)
+                                .background(Color.White)
+                        )
+                        Text(text = "Staff", fontSize = 28.sp)
+                    }
+                    Divider()
+                    //4 LE CART
+                    Row( modifier = Modifier
+                        .padding(vertical = verticalPadding)
                         .clickable {
                             scope.launch {
                                 if (drawerState.isOpen) drawerState.close() else drawerState.open()
@@ -206,8 +245,7 @@ fun FastFeastsApp(
                         .background(
                             if (currentScreen == FastFeastsScreen.Cart) Color.Gray
                             else
-                                Color.Transparent
-                            , shape = RoundedCornerShape(5.dp)
+                                Color.Transparent, shape = RoundedCornerShape(5.dp)
                         )
                         .fillMaxWidth()
                     ) {
@@ -260,11 +298,10 @@ fun FastFeastsApp(
         //EDIT THIS PART TO IMPLEMENT YOUR PAGES/ACTIVITIES
         Scaffold(
             topBar = {
-                HeaderBar(scope, drawerState)
+                HeaderBar(globalViewModel, scope, drawerState)
             }
         ) { innerPadding ->
-            val uiState by profileViewModel.uiState.collectAsState()
-            val globalVariables by globalViewModel.foodState.collectAsState()
+
 
             //NAV HOST IS HERE =============================
             NavHost(
@@ -282,7 +319,7 @@ fun FastFeastsApp(
                     CartUi(cartViewModel, navController)
                 }
                 composable(route = FastFeastsScreen.IndividualFood.name) {
-                    InvididualFoodPage(cartViewModel, globalViewModel, navController)
+                    IndividualFoodPage(cartViewModel, globalViewModel, navController)
                 }
                 composable(route = FastFeastsScreen.DiningOptions.name) {
                     DiningOptions(navController)
@@ -379,11 +416,14 @@ fun NavController.navigateToSingleTop(route:String){
 }
 
 @Composable
-fun HeaderBar(scope : CoroutineScope, drawerState : DrawerState) {
+fun HeaderBar(globalViewModel : GlobalViewModel ,scope : CoroutineScope, drawerState : DrawerState) {
     //HEADER BAR CONTENT
     var expanded by remember { mutableStateOf(false) }
     var selectedIndex by remember { mutableIntStateOf(0) }
     val options = listOf("EkoCheras Mall, Jln Cheras", "Setapak Central, Jln Genting Klang", "VivaCity Mall, Jln Kuching", "1Utama, Lebuh Bandar Utama")
+
+    //SET RESTAURANT LOCATIONS
+    globalViewModel.setLocation(options[selectedIndex])
 
     val startColor = Color(0xFFFF9D7E)
     val endColor = Color(0xFF975743)
@@ -603,6 +643,69 @@ fun Footer()
                 }
             }
 
+        }
+    }
+}
+
+@Composable
+fun BackButton(navController : NavHostController){
+    val isDarkTheme = isSystemInDarkTheme()
+
+    //Screen settings
+    val configuration = LocalConfiguration.current
+    val screenWidth = configuration.screenWidthDp.dp
+    val backButtonWidth = screenWidth / 3
+
+    //toast handler
+    var isToastVisible by remember { mutableStateOf(false) }
+    if (isToastVisible) {
+        LaunchedEffect(Unit) {
+            delay(500) // Adjust the delay as needed
+            isToastVisible = false
+        }
+    }
+    //Back button handler
+    var isBackPressed by remember { mutableStateOf(false) }
+    if (isBackPressed) {
+        LaunchedEffect(Unit) {
+            delay(2000) // Adjust the delay as needed
+            isBackPressed = false
+        }
+    }
+
+    val universalPadding = 8.dp
+
+    Row {
+        IconButton(
+            colors = IconButtonDefaults.iconButtonColors(Color(0xFFFF9D7E)),
+            onClick = { if (!isBackPressed) {
+                navController.navigate(FastFeastsScreen.MainPage.name)
+                isBackPressed = true } },
+            modifier = Modifier
+                .border(
+                    3.5.dp,
+                    color = if (isDarkTheme) Color.White else Color(0xFFFDA6900),
+                    shape = RoundedCornerShape(20.dp)
+                )
+                .width(backButtonWidth)
+        ) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Icon(
+                    tint = Color.White,
+                    imageVector = Icons.Filled.ArrowBack,
+                    contentDescription = "Back Button",
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .padding(universalPadding)
+                )
+                Spacer(modifier = Modifier.weight(0.1f))
+                Text("Back",color = if (isDarkTheme) Color.White else Color.Black,
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.padding(universalPadding)
+                )
+                Spacer(modifier = Modifier.weight(0.1f))
+            }
         }
     }
 }
