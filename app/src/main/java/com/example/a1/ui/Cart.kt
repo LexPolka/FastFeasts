@@ -4,6 +4,8 @@ package com.example.a1.ui
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -47,6 +49,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.navigation.NavHostController
+import com.example.a1.BackButton
 import com.example.a1.FastFeastsScreen
 import com.example.a1.data.cartData.CartViewModel
 import com.example.a1.data.cartData.Food
@@ -65,67 +68,14 @@ fun CartUi(viewModel: CartViewModel, navController : NavHostController, modifier
 
 
     //overall cart variable
-    val cart by remember {
-        mutableStateOf(viewModel.cartItems)
-    }
-
     val cartItems by remember { derivedStateOf { viewModel.cartItems } }
     //derived state that recomputes only when its dependencies change, optimize recomposition and ensure that derived values are updated correctly.
 
-    //Back button handler
-    var isBackPressed by remember { mutableStateOf(false) }
-    if (isBackPressed) {
-        LaunchedEffect(Unit) {
-            delay(2000) // Adjust the delay as needed
-            isBackPressed = false
-        }
-    }
-    //Screen settings
-    val configuration = LocalConfiguration.current
-    val screenWidth = configuration.screenWidthDp.dp
-    val backButtonWidth = screenWidth / 3
-
-    val universalPadding = 8.dp
-
-    val isDarkTheme = isSystemInDarkTheme()
 
     Column(
         modifier.fillMaxSize(),
         ){
-        //BACK BUTTON
-        Row {
-            IconButton(
-                colors = IconButtonDefaults.iconButtonColors(Color(0xFFFF9D7E)),
-                onClick = { if (!isBackPressed) {
-                    navController.popBackStack()
-                    isBackPressed = true } },
-                modifier = Modifier
-                    .border(
-                        3.5.dp,
-                        color = if (isDarkTheme) Color.White else Color(0xFF975743),
-                        shape = CircleShape
-                    )
-                    .width(backButtonWidth)
-            ) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Icon(
-                        tint = if (isDarkTheme) Color.White else Color.Black,
-                        imageVector = Icons.Filled.ArrowBack,
-                        contentDescription = "Back Button",
-                        modifier = Modifier
-                            .fillMaxHeight()
-                            .padding(universalPadding)
-                    )
-                    Spacer(modifier = Modifier.weight(0.1f))
-                    Text("Back",color = if (isDarkTheme) Color.White else Color.Black,
-                        fontSize = 18.sp,
-                        fontWeight = FontWeight.Bold,
-                        modifier = Modifier.padding(universalPadding)
-                    )
-                    Spacer(modifier = Modifier.weight(0.1f))
-                }
-            }
-        }
+        BackButton(navController)
 
         Spacer(modifier = Modifier.height(20.dp))
 
@@ -200,56 +150,66 @@ fun CartUi(viewModel: CartViewModel, navController : NavHostController, modifier
         }
         Spacer(modifier = modifier.height(20.dp))
 
-        //pass the list of food details ( also a list )
-        CartList(viewModel = viewModel, cartItems = cartItems, modifier = Modifier )
+        Box{//pass the list of food details ( also a list )
+            CartList(viewModel = viewModel, cartItems = cartItems, modifier = Modifier )
 
-        Spacer(modifier = Modifier.weight(1f))
-
-        Card {
-            Row {
-                Text(
-                    text = "Total price",
-                    fontSize = 30.sp,
-                    fontWeight = Bold
-
+            Box(modifier = Modifier.fillMaxSize()){
+                Column(
+                    modifier = Modifier
+                    .align(Alignment.BottomCenter)
                 )
+                {
+                    Card {
+                        Row(horizontalArrangement = Arrangement.Center,
+                            verticalAlignment = Alignment.CenterVertically)
+                        {
+                            Text(
+                                text = "Total price",
+                                fontSize = 30.sp,
+                                fontWeight = Bold
 
-                Spacer(modifier = Modifier.weight(1f))
+                            )
+                            Spacer(modifier = Modifier.weight(1f))
+                            val totalPrice by remember { derivedStateOf { viewModel.getTotalPrice() } }
+                            Text(
+                                //String.format = "%.2f" to format the ,totalPrice to be displayed by the text
+                                text = String.format(Locale.getDefault(), "%.2f", totalPrice ),
+                                fontSize = 30.sp,
+                                fontWeight = Bold
+                            )
+                        }
+                    }
 
-                val totalPrice by remember { derivedStateOf { viewModel.getTotalPrice() } }
+                    Spacer(modifier = Modifier.height(10.dp))
+                    // dining option page first, then to payment options
+                    Button(
+                        onClick = { navController.navigate(FastFeastsScreen.DiningOptions.name) },
+                        elevation = ButtonDefaults.buttonElevation(
 
-                Text(
-                    //String.format = "%.2f" to format the ,totalPrice to be displayed by the text
-                    text = String.format(Locale.getDefault(), "%.2f", totalPrice ),
-                    fontSize = 30.sp,
-                    fontWeight = Bold
-                )
+                            defaultElevation = 10.dp,
+                            pressedElevation = 6.dp
+
+
+                        ),
+                        colors = ButtonDefaults.buttonColors(darkOrange)
+                    ) {
+
+                        Text(
+                            text = "Proceed To Payment",
+                            fontSize = 20.sp,
+                            fontFamily = SansSerif
+
+                        )
+
+                    }
+
+
+
+
+                }
             }
         }
 
-        Spacer(modifier = Modifier.height(10.dp))
-
-        // dining option page first, then to payment options
-        Button(
-            onClick = { navController.navigate(FastFeastsScreen.DiningOptions.name) },
-            elevation = ButtonDefaults.buttonElevation(
-
-                defaultElevation = 10.dp,
-                pressedElevation = 6.dp
-
-
-            ),
-            colors = ButtonDefaults.buttonColors(darkOrange)
-        ) {
-
-            Text(
-                text = "Proceed To Payment",
-                fontSize = 20.sp,
-                fontFamily = SansSerif
-
-            )
-
-        }
     }
 
 

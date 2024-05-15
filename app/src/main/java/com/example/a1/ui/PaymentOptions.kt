@@ -1,6 +1,7 @@
 package com.example.a1.ui
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -21,6 +22,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.a1.FastFeastsScreen
 import com.example.a1.R
 
 @Composable
@@ -72,7 +74,7 @@ fun PaymentOptions(
                         contentDescription = "Online Banking",
                         modifier
                             .size(150.dp)
-
+                            .clickable { navController.navigate(FastFeastsScreen.OnlineBanking.name) }
                     )
                     Text(
                         text = "Online Banking",
