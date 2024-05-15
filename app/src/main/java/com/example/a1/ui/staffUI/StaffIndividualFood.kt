@@ -65,6 +65,7 @@ import coil.compose.rememberImagePainter
 import coil.transform.CircleCropTransformation
 import com.example.a1.data.staffdata.IndividualFood
 import com.example.a1.data.staffdata.StaffViewModel
+import com.example.a1.imageBitmapFromBytes
 import kotlinx.coroutines.delay
 
 
@@ -119,8 +120,8 @@ fun StaffIndividualFood(viewModel: StaffViewModel, navController : NavHostContro
 
         individualFoodList.forEach {food ->
 
-            //CONVERT STRING TO PAINTER
-            val painter: Painter = rememberImagePainter(data = food.image)
+            //CONVERT BYTEARRAY TO PAINTER
+            val imageFromByteToBitmap = imageBitmapFromBytes(food.image)
 
             Row(modifier = Modifier
                 .fillMaxWidth()
@@ -128,7 +129,7 @@ fun StaffIndividualFood(viewModel: StaffViewModel, navController : NavHostContro
                 .border(2.dp, shape = RoundedCornerShape(20.dp), color = Color.LightGray)
             ) {
                 Column(){
-                    Image(painter = painter, contentDescription = "Image", modifier = Modifier.size(componentHeight))
+                    Image(bitmap = imageFromByteToBitmap, contentDescription = "Food Image ${food.name}",  modifier = Modifier.size(componentHeight))
                 }
                 Column {
                     Text(text = "Name: ${food.name}", fontSize = 16.sp, modifier = Modifier.padding(universalPadding))
@@ -148,7 +149,7 @@ fun StaffIndividualFood(viewModel: StaffViewModel, navController : NavHostContro
                 val imageInputStream = context.contentResolver.openInputStream(imageUri)
                 val imageData = imageInputStream?.readBytes()
 
-                viewModel.addIndividualFood(foodName, foodPrice, imageData)
+                viewModel.addIndividualFood(foodName, foodPrice, imageData ?: byteArrayOf())
                 isDialogOpen = false
             },
             onDismiss = { isDialogOpen = false }

@@ -56,18 +56,23 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import coil.compose.rememberImagePainter
 import com.example.a1.FastFeastsScreen
 import com.example.a1.data.profiledata.GlobalViewModel
+import com.example.a1.data.staffdata.StaffViewModel
+import com.example.a1.imageBitmapFromBytes
 import kotlinx.coroutines.launch
 
 @Composable
-fun MainPage(viewModel : GlobalViewModel, navController: NavHostController){
+fun MainPage(staffViewModel: StaffViewModel,viewModel : GlobalViewModel, navController: NavHostController){
     val isDarkTheme = isSystemInDarkTheme()
 
     //Screen settings
@@ -81,7 +86,7 @@ fun MainPage(viewModel : GlobalViewModel, navController: NavHostController){
             items(1) {
                 ImageSlider()
                 Divider(thickness = 2.dp, color = if (isDarkTheme) Color.White else Color.Black)
-                MainPageBody(viewModel, navController)
+                MainPageBody(staffViewModel, viewModel, navController)
                 Divider(thickness = 2.dp, color = if (isDarkTheme) Color.White else Color.Black)
                 Footer()
             }
@@ -214,9 +219,10 @@ fun ImageSlider()
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun MainPageBody(viewModel : GlobalViewModel, navController: NavHostController)
+fun MainPageBody(staffViewModel: StaffViewModel, viewModel : GlobalViewModel, navController: NavHostController)
 {
     val isDarkTheme = isSystemInDarkTheme()
+    val individualFoodList by staffViewModel.individualFoodList.collectAsState()
 
     Column(Modifier.fillMaxWidth()) {
         //CUSTOM ITEMS
@@ -249,43 +255,18 @@ fun MainPageBody(viewModel : GlobalViewModel, navController: NavHostController)
             horizontalArrangement = Arrangement.Center,
             verticalArrangement = Arrangement.Center,
             modifier = Modifier.fillMaxWidth()) {
-            IndividualFoodItem(R.drawable.fries, "Are Fries?", "5.90", navController, viewModel)
-            IndividualFoodItem(R.drawable.icecream, "Ice Cream", "2.50", navController, viewModel)
+
+            individualFoodList.forEach { food ->
+                IndividualFoodItem(image = food.image ?: byteArrayOf(), name = food.name, price = food.price, navController = navController, viewModel = viewModel)
+            }
         }
     }
 }
-
 @Composable
-fun CustomItem(image : Int, text: String, navController: NavHostController) {
+fun IndividualFoodItem(image : ByteArray, name: String, price : String, navController: NavHostController, viewModel : GlobalViewModel) {
     val isDarkTheme = isSystemInDarkTheme()
-
-    Card(
-        shape = RoundedCornerShape(16.dp),
-        border = BorderStroke(3.dp, Color.Black),
-        modifier = Modifier
-            .padding(8.dp)
-            .clickable {navController.navigate(FastFeastsScreen.CustomizeFood.name)}
-    ){
-        Column {
-            Image(
-                painter = painterResource(image), contentDescription = text,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(150.dp),
-                contentScale = ContentScale.Crop
-            )
-            Text(
-                text = text,
-                color = (if(isDarkTheme) Color.White else Color.Black),
-                modifier = Modifier.padding(8.dp)
-            )
-        }
-    }
-}
-
-@Composable
-fun IndividualFoodItem(image : Int, name: String, price : String, navController: NavHostController, viewModel : GlobalViewModel) {
-    val isDarkTheme = isSystemInDarkTheme()
+    //CONVERT BYTEARRAY TO PAINTER
+    val imageFromByteToBitmap = imageBitmapFromBytes(image)
 
     Card(
         shape = RoundedCornerShape(18.dp),
@@ -300,7 +281,7 @@ fun IndividualFoodItem(image : Int, name: String, price : String, navController:
     ) {
         Column {
             Image(
-                painter = painterResource(image), contentDescription = name,
+                bitmap = imageFromByteToBitmap, contentDescription = name,
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(115.dp),
@@ -309,6 +290,34 @@ fun IndividualFoodItem(image : Int, name: String, price : String, navController:
             Text(
                 text = name,
                 color = (if (isDarkTheme) Color.White else Color.Black),
+                modifier = Modifier.padding(8.dp)
+            )
+        }
+    }
+}
+
+@Composable
+fun CustomItem(image : Int, text: String, navController: NavHostController) {
+    val isDarkTheme = isSystemInDarkTheme()
+
+    Card(
+        shape = RoundedCornerShape(16.dp),
+        border = BorderStroke(3.dp, Color.Black),
+        modifier = Modifier
+            .padding(8.dp)
+            .clickable { navController.navigate(FastFeastsScreen.CustomizeFood.name) }
+    ){
+        Column {
+            Image(
+                painter = painterResource(image), contentDescription = text,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(150.dp),
+                contentScale = ContentScale.Crop
+            )
+            Text(
+                text = text,
+                color = (if(isDarkTheme) Color.White else Color.Black),
                 modifier = Modifier.padding(8.dp)
             )
         }

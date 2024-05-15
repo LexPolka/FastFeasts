@@ -21,7 +21,7 @@ data class OrderEntity(
 data class IndividualFood(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
-    val image: ByteArray?,
+    val image: ByteArray,
     val name : String = "",
     val price : String = "",
 )

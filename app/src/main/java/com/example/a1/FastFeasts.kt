@@ -2,6 +2,7 @@ package com.example.a1
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.BitmapFactory
 import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.material3.Text
@@ -66,6 +67,8 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.IconButtonDefaults
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.text.font.FontWeight
 import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -318,7 +321,7 @@ fun FastFeastsApp(
                 modifier = Modifier.padding(innerPadding)
             ) {
                 composable(route = FastFeastsScreen.MainPage.name) {
-                    MainPage(globalViewModel, navController)
+                    MainPage(staffViewModel, globalViewModel, navController)
                 }
                 composable(route = FastFeastsScreen.Profile.name) {
                     ProfilePage(profileViewModel)
@@ -756,4 +759,9 @@ fun toggleDarkMode(isDarkTheme: Boolean) {
         AppCompatDelegate.MODE_NIGHT_YES // Enable dark mode
     }
     AppCompatDelegate.setDefaultNightMode(mode)
+}
+
+//Image(bitmap = yourBitMap)
+fun imageBitmapFromBytes(encodedImageData: ByteArray): ImageBitmap {
+    return BitmapFactory.decodeByteArray(encodedImageData, 0, encodedImageData.size).asImageBitmap()
 }

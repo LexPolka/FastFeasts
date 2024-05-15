@@ -77,12 +77,15 @@ fun ProfilePage(
     viewModel: ProfileViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
     val uiState by viewModel.uiState.collectAsState()
-    //profile setter
-    ProfileHeader(uiState) { uri ->
-        viewModel.setProfilePictureUri(uri)
+    Column {
+        //profile setter
+        ProfileHeader(uiState) { uri ->
+            viewModel.setProfilePictureUri(uri)
+        }
+
+        ProfileDataModify(viewModel)
     }
 
-    ProfileDataModify(viewModel)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -157,10 +160,12 @@ fun ProfileDataModify(viewModel : ProfileViewModel) {
                         label = { Text("Username", color = Color(0xFFFF9D7E)) },
                         maxLines = 1,
                         shape = RoundedCornerShape(16.dp),
-                        modifier = Modifier.border(
-                            1.5.dp,
-                            color = Color.DarkGray,
-                            shape = RoundedCornerShape(16.dp))
+                        modifier = Modifier
+                            .border(
+                                1.5.dp,
+                                color = Color.DarkGray,
+                                shape = RoundedCornerShape(16.dp)
+                            )
                             .fillMaxWidth(),
                         colors = TextFieldDefaults.textFieldColors(
                             focusedTextColor = Color.White,
@@ -413,7 +418,8 @@ fun ProfileDataModify(viewModel : ProfileViewModel) {
                         maxLines = 1,
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                         shape = RoundedCornerShape(16.dp),
-                        modifier = Modifier.fillMaxWidth()
+                        modifier = Modifier
+                            .fillMaxWidth()
                             .border(
                                 1.5.dp,
                                 color = Color.DarkGray,
@@ -442,7 +448,7 @@ fun ProfileDataModify(viewModel : ProfileViewModel) {
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.Center,
                     modifier = Modifier
-                        .height(componentHeight*2)
+                        .height(componentHeight * 2)
                         .padding(linePadding)
                 ) {
                     Image(

@@ -8,7 +8,7 @@ import androidx.lifecycle.ViewModel
 
 
 data class Food(
-    val image: Int = 0,
+    val image: ByteArray = byteArrayOf(),
     val name : String = "",
     val price : String = "", //use string cuz for int, just do .toInt()
 )

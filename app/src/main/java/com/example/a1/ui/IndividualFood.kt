@@ -47,6 +47,7 @@ import com.example.a1.FastFeastsScreen
 import com.example.a1.data.cartData.CartViewModel
 import com.example.a1.data.cartData.Food
 import com.example.a1.data.profiledata.GlobalViewModel
+import com.example.a1.imageBitmapFromBytes
 import kotlinx.coroutines.delay
 import java.math.BigDecimal
 import java.math.BigInteger
@@ -88,7 +89,7 @@ fun IndividualFoodPage(cartViewModel : CartViewModel, globalViewModel: GlobalVie
 
     var quantity by remember { mutableStateOf(1) }
 
-    val painter: Painter = rememberImagePainter(data = image)
+    val imageFromByteToBitmap = imageBitmapFromBytes(image)
 
     Column (modifier = Modifier.padding(universalPadding)) {
         //BACK BUTTON
@@ -102,10 +103,13 @@ fun IndividualFoodPage(cartViewModel : CartViewModel, globalViewModel: GlobalVie
                     fontSize = 24.sp,
                     modifier = Modifier.padding(universalPadding))
             }
+
+
             //IMAGE
-            Image(painter = painter, contentDescription = "Test",
+            Image(bitmap = imageFromByteToBitmap, contentDescription = "Test",
                 Modifier
                     .width(screenWidth)
+                    .height(screenWidth)
             )
 
             //PRICE

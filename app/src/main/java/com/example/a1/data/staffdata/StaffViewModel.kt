@@ -86,7 +86,9 @@ class StaffViewModel(private val repository: StaffRepository) : ViewModel() {
     // Convert image URI to byte array
     // val imageInputStream = context.contentResolver.openInputStream(imageUri)
     // val imageData = imageInputStream?.readBytes()
-    fun addIndividualFood(foodName : String, foodPrice : String, imageData : ByteArray?){
+
+    //val imageFromByteToBitmap = imageBitmapFromBytes(food.image)
+    fun addIndividualFood(foodName : String, foodPrice : String, imageData : ByteArray){
         val food = IndividualFood(
             name = foodName,
             price = foodPrice,

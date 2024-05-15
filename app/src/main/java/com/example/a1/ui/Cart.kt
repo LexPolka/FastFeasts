@@ -39,6 +39,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily.Companion.SansSerif
@@ -49,6 +50,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.navigation.NavHostController
+import coil.compose.rememberImagePainter
 import com.example.a1.BackButton
 import com.example.a1.FastFeastsScreen
 import com.example.a1.data.cartData.CartViewModel
@@ -238,6 +240,7 @@ fun CartItem( cartViewModel: CartViewModel, food: Food, modifier: Modifier = Mod
 //the card that displays individual items in the cart, will be called by the cart list(lazy col func)
     val darkOrange = Color(0xFF975743)
 
+    val painter: Painter = rememberImagePainter(data = food.image)
 
     Card(
         modifier.size(width = 400.dp, height = 100.dp)
@@ -254,7 +257,7 @@ fun CartItem( cartViewModel: CartViewModel, food: Food, modifier: Modifier = Mod
                     fontSize = 30.sp
                 )
 
-                Image(painter = painterResource(food.image), contentDescription = "Image of Food")
+                Image(painter = painter, contentDescription = "Image of Food")
 
             }
 
