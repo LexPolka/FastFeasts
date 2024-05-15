@@ -5,6 +5,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -22,6 +23,7 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
@@ -72,7 +74,7 @@ fun InvididualFoodPage(cartViewModel : CartViewModel, globalViewModel: GlobalVie
     var isToastVisible by remember { mutableStateOf(false) }
     if (isToastVisible) {
         LaunchedEffect(Unit) {
-            delay(2000) // Adjust the delay as needed
+            delay(500) // Adjust the delay as needed
             isToastVisible = false
         }
     }
@@ -87,6 +89,8 @@ fun InvididualFoodPage(cartViewModel : CartViewModel, globalViewModel: GlobalVie
 
     val universalPadding = 8.dp
 
+    var quantity by remember { mutableStateOf(1) }
+
     Column (modifier = Modifier.padding(universalPadding)) {
         //BACK BUTTON
         Row {
@@ -96,12 +100,16 @@ fun InvididualFoodPage(cartViewModel : CartViewModel, globalViewModel: GlobalVie
                     navController.popBackStack()
                     isBackPressed = true } },
                 modifier = Modifier
-                    .border(3.5.dp, color = if (isDarkTheme) Color.White else Color(0xFF975743), shape = CircleShape)
+                    .border(
+                        3.5.dp,
+                        color = if (isDarkTheme) Color.White else Color(0xFFFDA6900),
+                        shape = RoundedCornerShape(20.dp)
+                    )
                     .width(backButtonWidth)
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Icon(
-                        tint = if (isDarkTheme) Color.White else Color.Black,
+                        tint = Color.White,
                         imageVector = Icons.Filled.ArrowBack,
                         contentDescription = "Back Button",
                         modifier = Modifier
@@ -118,34 +126,82 @@ fun InvididualFoodPage(cartViewModel : CartViewModel, globalViewModel: GlobalVie
                 }
             }
         }
-        //NAME
-        Row(){
-            Text(text = name, color = Color.Black,
+
+        Card(modifier = Modifier.padding(universalPadding))
+        {
+            //NAME
+            Row(){
+                Text(text = name, color = if (isDarkTheme) Color.White else Color.Black,
+                    fontSize = 24.sp,
+                    modifier = Modifier.padding(universalPadding))
+            }
+            //IMAGE
+            Image(painter = painterResource(image), contentDescription = "Test",
+                Modifier
+                    .width(screenWidth)
+            )
+
+            //PRICE
+            Text( "Total: $${price}",
+                color = if (isDarkTheme) Color.White else Color.Black,
                 fontSize = 20.sp,
-                fontWeight = FontWeight.Bold,
                 modifier = Modifier.padding(universalPadding))
         }
 
-        //IMAGE
-        Image(painter = painterResource(image), contentDescription = "Test",
-            Modifier
-                .width(screenWidth)
-                .height(screenWidth)
-                .aspectRatio(1f))
-
-        Text(price)
-
-        //ORDER
-        Button(onClick = {
-            val food = Food(name = name, image = image, price = price)
-            cartViewModel.addToCart(food)
-            if (!isToastVisible)
+        Row(verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            modifier = Modifier.padding(universalPadding)
+        ){
+            //ORDER
+            Button(onClick = {
+                for (i in 0 until quantity)
+                {
+                    val food = Food(name = name, image = image, price = price)
+                    cartViewModel.addToCart(food)
+                    if (!isToastVisible)
+                    {
+                        Toast.makeText(context, "Added ${quantity} ${name} Cart.", Toast.LENGTH_SHORT).show()
+                        isToastVisible = true
+                    }
+                }
+            },
+                colors = ButtonDefaults.buttonColors(Color(0xFFFF9D7E)),
+                modifier = Modifier.height(48.dp)
+            )
             {
-                Toast.makeText(context, "Added ${name} Cart.", Toast.LENGTH_SHORT).show()
-                isToastVisible = true
+                Text("Order",
+                    color = if (isDarkTheme) Color.White else Color.Black,
+                    fontSize = 20.sp
+                )
             }
-        }) {
-            Text("Order")
+            //DECREASE
+            Button(
+                onClick = { if (quantity > 1) quantity -= 1 },
+                shape = CircleShape,
+                colors = ButtonDefaults.buttonColors(Color(0xFFFF9D7E))
+            ) {
+                Text("-",
+                    color = if (isDarkTheme) Color.White else Color.Black,
+                    fontSize = 20.sp
+                )
+            }
+
+            Text(text = quantity.toString(),
+                color = if (isDarkTheme) Color.White else Color.Black,
+                fontSize = 20.sp
+            )
+
+            //INCREASE
+            Button(
+                onClick = { if (quantity < 10) quantity += 1 },
+                shape = CircleShape,
+                colors = ButtonDefaults.buttonColors(Color(0xFFFF9D7E))
+            ) {
+                Text("+",
+                    color = if (isDarkTheme) Color.White else Color.Black,
+                    fontSize = 20.sp
+                )
+            }
         }
     }
 }
