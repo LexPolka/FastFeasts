@@ -91,6 +91,7 @@ fun PaymentOptions(
                         contentDescription = "Pay at Counter",
                         modifier
                             .size(150.dp)
+                            .clickable { navController.navigate(FastFeastsScreen.PayAtCounter.name) }
 
                     )
                     Text(

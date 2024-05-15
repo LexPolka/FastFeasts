@@ -78,6 +78,7 @@ import com.example.a1.ui.CustomizationScreen
 import com.example.a1.ui.DiningOptions
 import com.example.a1.ui.IndividualFoodPage
 import com.example.a1.ui.OnlineBankingUi
+import com.example.a1.ui.PayAtCounterUi
 import com.example.a1.ui.PaymentOptions
 import com.example.a1.ui.StaffPage
 import com.example.a1.ui.login.LoginScreen
@@ -103,6 +104,7 @@ enum class FastFeastsScreen(@StringRes val title: Int) {
     DiningOptions(title = R.string.dining_options),
     PaymentOptions(title=R.string.payment_options),
     OnlineBanking(title = R.string.online_banking),
+    PayAtCounter(title = R.string.pay_at_counter),
 
     Staff(title = R.string.staff)
 }
@@ -340,9 +342,9 @@ fun FastFeastsApp(
                 composable(route = FastFeastsScreen.OnlineBanking.name) {
                     OnlineBankingUi(navController)
                 }
-                //composable(route = FastFeastsScreen.PaymentOptions.name) {
-                //    PaymentOptions(navController)
-                //}
+                composable(route = FastFeastsScreen.PayAtCounter.name) {
+                    PayAtCounterUi(navController)
+                }
 
 
 

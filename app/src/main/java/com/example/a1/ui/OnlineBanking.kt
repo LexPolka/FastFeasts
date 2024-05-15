@@ -1,11 +1,10 @@
 package com.example.a1.ui
 
-
-import android.content.ClipData.Item
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -14,6 +13,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontFamily
@@ -35,7 +35,12 @@ fun OnlineBankingUi(navController: NavController){
     val receiptItems = viewModel.cartItems
     val totalPrice = viewModel.getTotalPrice()
 
-    Column {
+    Column(
+        modifier = Modifier
+            .fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally
+
+    ) {
 
         Column {
             Text("Thanks for Dining at")
@@ -45,10 +50,6 @@ fun OnlineBankingUi(navController: NavController){
         Text("Please proceed to the counter to pickup your food")
         Text("Reference Number: $referenceNumber")
 
-        Box{
-
-
-        }
 
         Spacer(Modifier.weight(1f))
 
@@ -61,7 +62,13 @@ fun OnlineBankingUi(navController: NavController){
                 Spacer(modifier = Modifier.height(10.dp))
 
                 Card {
-                    Text("Total Price: $totalPrice")
+                    Row {
+
+                        Text("Total Price: ")
+                        Spacer(modifier = Modifier.weight(1f))
+                        Text("$totalPrice")
+
+                    }
                 }
 
                 Button(
