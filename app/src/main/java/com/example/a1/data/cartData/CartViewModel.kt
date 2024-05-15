@@ -1,16 +1,10 @@
 package com.example.a1.data.cartData
 
-import androidx.compose.foundation.lazy.layout.LazyLayoutPinnedItemList
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import coil.compose.rememberImagePainter
-import com.example.a1.data.profiledata.Profile
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 
 
 data class Food(
@@ -19,7 +13,7 @@ data class Food(
     val price : String = "", //use string cuz for int, just do .toInt()
 )
 
-class CartViewModel : ViewModel() {
+class CartViewModel(cartRepository: CartRepository) : ViewModel() {
     private val items = mutableStateListOf<Food>()
     val cartItems: List<Food> get() = items
 

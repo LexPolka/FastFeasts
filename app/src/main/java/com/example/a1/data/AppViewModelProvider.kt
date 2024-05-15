@@ -4,8 +4,8 @@ import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory
 import androidx.lifecycle.viewmodel.CreationExtras
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
+import com.example.a1.data.cartData.CartViewModel
 import com.example.a1.data.profiledata.ProfileViewModel
-import com.example.a1.data.staffdata.StaffOfflineRepository
 import com.example.a1.data.staffdata.StaffViewModel
 
 /**
@@ -22,6 +22,11 @@ object AppViewModelProvider {
         initializer {
             StaffViewModel(FastFeastsApplication().container.staffRepository)
         }
+
+        initializer {
+            CartViewModel(FastFeastsApplication().container.cartRepository)
+        }
+
     }
 }
 

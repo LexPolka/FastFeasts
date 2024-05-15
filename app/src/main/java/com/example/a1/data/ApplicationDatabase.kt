@@ -6,6 +6,8 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import com.example.a1.data.cartData.FoodDao
+import com.example.a1.data.cartData.FoodEntity
 import com.example.a1.data.profiledata.ProfileDao
 import com.example.a1.data.profiledata.ProfileEntity
 import com.example.a1.data.staffdata.FoodListConverter
@@ -13,11 +15,12 @@ import com.example.a1.data.staffdata.IndividualFood
 import com.example.a1.data.staffdata.OrderEntity
 import com.example.a1.data.staffdata.StaffDao
 
-@Database(entities = [ProfileEntity::class, OrderEntity::class, IndividualFood::class], version = 4, exportSchema = false)
+@Database(entities = [ProfileEntity::class, OrderEntity::class, IndividualFood::class, FoodEntity::class], version = 5, exportSchema = false)
 @TypeConverters(FoodListConverter::class)
 abstract class ApplicationDatabase : RoomDatabase() {
     abstract fun profileDao(): ProfileDao
     abstract fun staffDao(): StaffDao
+    abstract fun foodDao(): FoodDao
 
     companion object {
         @Volatile
