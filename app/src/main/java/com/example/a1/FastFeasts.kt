@@ -120,7 +120,7 @@ fun FastFeastsApp(
     profileViewModel: ProfileViewModel = viewModel(factory = AppViewModelProvider.Factory),
     staffViewModel: StaffViewModel  =viewModel(factory = AppViewModelProvider.Factory),
     globalViewModel: GlobalViewModel = viewModel(),
-    cartViewModel : CartViewModel = viewModel(),
+    cartViewModel : CartViewModel = viewModel(factory = AppViewModelProvider.Factory),
     navController: NavHostController = rememberNavController()
 ) {
     //Navigation variables

@@ -55,6 +55,7 @@ import com.example.a1.BackButton
 import com.example.a1.FastFeastsScreen
 import com.example.a1.data.cartData.CartViewModel
 import com.example.a1.data.cartData.Food
+import com.example.a1.imageBitmapFromBytes
 import kotlinx.coroutines.delay
 import java.util.Locale
 
@@ -240,7 +241,7 @@ fun CartItem( cartViewModel: CartViewModel, food: Food, modifier: Modifier = Mod
 //the card that displays individual items in the cart, will be called by the cart list(lazy col func)
     val darkOrange = Color(0xFF975743)
 
-    val painter: Painter = rememberImagePainter(data = food.image)
+    val imageFromByteToBitmap = imageBitmapFromBytes(food.image)
 
     Card(
         modifier.size(width = 400.dp, height = 100.dp)
@@ -257,7 +258,7 @@ fun CartItem( cartViewModel: CartViewModel, food: Food, modifier: Modifier = Mod
                     fontSize = 30.sp
                 )
 
-                Image(painter = painter, contentDescription = "Image of Food")
+                Image(bitmap = imageFromByteToBitmap, contentDescription = "Image of Food")
 
             }
 

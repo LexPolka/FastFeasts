@@ -26,7 +26,6 @@ object AppViewModelProvider {
         initializer {
             CartViewModel(FastFeastsApplication().container.cartRepository)
         }
-
     }
 }
 

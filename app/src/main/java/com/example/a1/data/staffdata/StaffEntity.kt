@@ -17,7 +17,6 @@ data class OrderEntity(
 )
 
 @Entity(tableName = "individualFoodItems")
-@TypeConverters(FoodListConverter::class)
 data class IndividualFood(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
