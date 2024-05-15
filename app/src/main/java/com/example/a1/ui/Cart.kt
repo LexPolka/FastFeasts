@@ -304,6 +304,7 @@ fun CartItem( cartViewModel: CartViewModel, food: Food, modifier: Modifier = Mod
     Spacer(modifier = Modifier.height(10.dp))
 }
 
+
 @Composable
 fun CartConfirmRemoveItemDialog(
     onDismiss: () -> Unit,
