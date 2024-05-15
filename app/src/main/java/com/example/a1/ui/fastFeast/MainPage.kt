@@ -1,9 +1,5 @@
-package com.example.a1.ui
+package com.example.a1.ui.fastFeast
 
-import android.widget.Space
-import androidx.compose.animation.core.Animatable
-import androidx.compose.animation.core.LinearOutSlowInEasing
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -14,7 +10,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -34,7 +29,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import com.example.a1.Footer
 import com.example.a1.R
 import kotlinx.coroutines.delay
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -44,32 +38,21 @@ import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.KeyboardArrowLeft
-import androidx.compose.material.icons.filled.KeyboardArrowRight
-import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.outlined.KeyboardArrowLeft
 import androidx.compose.material.icons.outlined.KeyboardArrowRight
-import androidx.compose.material3.Button
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import coil.compose.rememberImagePainter
-import com.example.a1.FastFeastsScreen
 import com.example.a1.data.profiledata.GlobalViewModel
 import com.example.a1.data.staffdata.StaffViewModel
-import com.example.a1.imageBitmapFromBytes
-import kotlinx.coroutines.launch
 
 @Composable
 fun MainPage(staffViewModel: StaffViewModel,viewModel : GlobalViewModel, navController: NavHostController){
@@ -256,6 +239,19 @@ fun MainPageBody(staffViewModel: StaffViewModel, viewModel : GlobalViewModel, na
             verticalArrangement = Arrangement.Center,
             modifier = Modifier.fillMaxWidth()) {
 
+            if (individualFoodList.isEmpty()){
+                Column (verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp)){
+                    Text("Uh Oh!", color =  if (isDarkTheme) Color.White else Color.DarkGray, fontSize = 24.sp, fontWeight = FontWeight.Bold, modifier = Modifier.padding(2.dp))
+                    Text("Looks like the Menu is Empty", color =  if (isDarkTheme) Color.White else Color.DarkGray, fontSize = 20.sp, modifier = Modifier.padding(2.dp))
+                    Text("Server may be Under Maintenance.", color =  if (isDarkTheme) Color.LightGray else Color.Gray, fontSize = 14.sp)
+                    Text("Please Contact Us using provided links below or", color =  if (isDarkTheme) Color.LightGray else Color.Gray, fontSize = 14.sp)
+                    Text("Order through counter, Thank You.", color =  if (isDarkTheme) Color.LightGray else Color.Gray, fontSize = 14.sp)
+                    Text("We apologise for any inconvenience caused.", color =  if (isDarkTheme) Color.LightGray else Color.Gray, fontSize = 14.sp)
+                }
+
+            }
             individualFoodList.forEach { food ->
                 IndividualFoodItem(image = food.image ?: byteArrayOf(), name = food.name, price = food.price, navController = navController, viewModel = viewModel)
             }
@@ -284,6 +280,7 @@ fun IndividualFoodItem(image : ByteArray, name: String, price : String, navContr
                 bitmap = imageFromByteToBitmap, contentDescription = name,
                 modifier = Modifier
                     .fillMaxWidth()
+                    .aspectRatio(1f)
                     .height(115.dp),
                 contentScale = ContentScale.Crop
             )

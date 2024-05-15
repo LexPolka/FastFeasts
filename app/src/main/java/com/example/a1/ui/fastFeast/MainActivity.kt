@@ -1,4 +1,4 @@
-package com.example.a1
+package com.example.a1.ui.fastFeast
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity

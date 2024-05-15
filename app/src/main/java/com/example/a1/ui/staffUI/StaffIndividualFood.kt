@@ -1,21 +1,21 @@
 package com.example.a1.ui.staffUI
 
-import android.content.Intent
 import android.net.Uri
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -25,15 +25,12 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Person
-import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Button
-import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -44,28 +41,24 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
-import androidx.navigation.NavHost
 import androidx.navigation.NavHostController
-import com.example.a1.FastFeastsScreen
-import com.example.a1.R
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalContext
-import androidx.core.net.toUri
+import androidx.compose.ui.res.painterResource
 import coil.compose.rememberImagePainter
-import coil.transform.CircleCropTransformation
+import com.example.a1.R
 import com.example.a1.data.staffdata.IndividualFood
 import com.example.a1.data.staffdata.StaffViewModel
-import com.example.a1.imageBitmapFromBytes
+import com.example.a1.ui.fastFeast.compressImage
+import com.example.a1.ui.fastFeast.imageBitmapFromBytes
 import kotlinx.coroutines.delay
 
 
@@ -110,15 +103,46 @@ fun StaffIndividualFood(viewModel: StaffViewModel, navController : NavHostContro
 
         }
     }
+    
+    IndividualFoodList(individualFoodList, viewModel)
+    
+    //DIALOG MANAGER
+    if (isDialogOpen) {
+        FoodInputDialog(
+            //SAVING THE INPUT DATA AS A FOOD ITEM
+            onConfirm = { foodName, foodPrice, imageUri ->
 
+                //if there is a bytearray, use the compressed image as image
+                val imageInputStream = context.contentResolver.openInputStream(imageUri)
+                val imageData = imageInputStream?.readBytes()
+
+                viewModel.addIndividualFood(foodName, foodPrice, imageData ?: byteArrayOf())
+                isDialogOpen = false
+            },
+            onDismiss = { isDialogOpen = false }
+        )
+    }
+}
+
+@Composable
+fun IndividualFoodList(individualFoodList : List<IndividualFood>, viewModel : StaffViewModel){
     //LOADING IN ALL FOOD ITEMS
+    
+    //Screen settings
+    val configuration = LocalConfiguration.current
+    val screenWidth = configuration.screenWidthDp.dp
+    val screenHeight = configuration.screenHeightDp.dp
+    val componentHeight = screenHeight/10
+
+    val universalPadding = 6.dp
+    
     Column(
         modifier = Modifier.padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         Text(text = "Current Menu Items", fontSize = 20.sp, fontWeight = FontWeight.Bold)
 
-        individualFoodList.forEach {food ->
+        individualFoodList.forEach { food ->
 
             //CONVERT BYTEARRAY TO PAINTER
             val imageFromByteToBitmap = imageBitmapFromBytes(food.image)
@@ -136,24 +160,32 @@ fun StaffIndividualFood(viewModel: StaffViewModel, navController : NavHostContro
                     Spacer(modifier = Modifier.width(16.dp))
                     Text(text = "Price: ${food.price}", fontSize = 16.sp, modifier = Modifier.padding(universalPadding))
                 }
+                Spacer(modifier = Modifier.weight(1f))
+                Column (verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally){
+                    IconButton(
+                        colors = IconButtonDefaults.iconButtonColors(Color.White),
+                        onClick = {
+                            viewModel.removeIndividualFood(food)
+                        },
+                        modifier = Modifier
+                            .padding(universalPadding)
+                            .border(3.5.dp, Color(0xFFFF9D7E), shape = CircleShape)
+                            .width(120.dp)
+                            .height(componentHeight / 2)
+                    ) {
+                        Row {
+                            Icon(
+                                imageVector = Icons.Filled.Delete,
+                                contentDescription = "Delete Food",
+                                tint = Color.Red,
+                            )
+                            Text("Remove", color = Color.Red)
+                        }
+                        
+                    }
+                }
             }
         }
-    }
-
-    //DIALOG MANAGER
-    if (isDialogOpen) {
-        FoodInputDialog(
-            //SAVING THE INPUT DATA AS A FOOD ITEM
-            onConfirm = { foodName, foodPrice, imageUri ->
-
-                val imageInputStream = context.contentResolver.openInputStream(imageUri)
-                val imageData = imageInputStream?.readBytes()
-
-                viewModel.addIndividualFood(foodName, foodPrice, imageData ?: byteArrayOf())
-                isDialogOpen = false
-            },
-            onDismiss = { isDialogOpen = false }
-        )
     }
 }
 
@@ -184,11 +216,12 @@ fun FoodInputDialog(onConfirm: (String, String, Uri) -> Unit, onDismiss: () -> U
     }
 
     //CONVERT URI TO PAINTER
-    val painter: Painter = rememberImagePainter(data = imageUri)
+    var painter: Painter = rememberImagePainter(data = imageUri)
 
     Dialog(
         onDismissRequest = { onDismiss() },
-        properties = DialogProperties(usePlatformDefaultWidth = false))
+        properties = DialogProperties(usePlatformDefaultWidth = false)
+    )
     {
         Column(
             modifier = Modifier
@@ -198,24 +231,47 @@ fun FoodInputDialog(onConfirm: (String, String, Uri) -> Unit, onDismiss: () -> U
             verticalArrangement = Arrangement.spacedBy(universalPadding)
         ) {
             //ADD IMAGE
-            Text(text = "  Select Image", modifier = Modifier.padding(universalPadding))
+            Text(
+                text = "Select Image",
+                modifier = Modifier.padding(universalPadding),
+                color = Color.Black
+            )
+
+            //CHECK IF IMAGE IS TOO BIG FOR DATABASE
+            //check for blanks
             if (imageUri.toString().isNotBlank() && imageUri != null) {
-                Image(
-                    painter = painter,
-                    contentDescription = "Food Picture",
-                    modifier = Modifier
-                        .size(80.dp)
-                        .clickable { launcher.launch("image/*") }
-                        .clip(shape = RoundedCornerShape(universalPadding))
-                )
+                val imageToCheck = imageUri ?: Uri.EMPTY
+                //uri converted to bytes
+                val imageInputStream = context.contentResolver.openInputStream(imageToCheck)
+                val imageData = imageInputStream?.readBytes()
+                //check for size
+                if (imageData?.size!! > 8000) {
+                    imageUri = null
+                    if (!isToastVisible) {
+                        Toast.makeText(context, "Image too Large!", Toast.LENGTH_SHORT).show()
+                        isToastVisible = true
+                    }
+                }
+                else {
+                    Image(
+                        painter = painter,
+                        contentDescription = "Food Picture",
+                        modifier = Modifier
+                            .size(80.dp)
+                            .clickable { launcher.launch("image/*") }
+                            .clip(shape = RoundedCornerShape(universalPadding))
+                    )
+                }
             }
             else {
                 Icon(
                     imageVector = Icons.Filled.Person,
                     contentDescription = "Default Profile Picture",
+                    tint = Color.Gray,
                     modifier = Modifier
                         .size(80.dp)
                         .clickable { launcher.launch("image/*") }
+                        .padding(universalPadding)
                 )
             }
 
@@ -223,7 +279,7 @@ fun FoodInputDialog(onConfirm: (String, String, Uri) -> Unit, onDismiss: () -> U
             TextField(
                 value = foodName,
                 onValueChange = { foodName = it },
-                label = { Text(text = "Food Name")} ,
+                label = { Text(text = "Food Name") },
                 shape = RoundedCornerShape(20.dp),
                 modifier = Modifier.fillMaxWidth()
             )
@@ -257,14 +313,15 @@ fun FoodInputDialog(onConfirm: (String, String, Uri) -> Unit, onDismiss: () -> U
                 IconButton(
                     colors = IconButtonDefaults.iconButtonColors(Color(0xFFFF9D7E)),
                     onClick = {
-                        if (foodName.isNotBlank() && foodPrice.isNotBlank() && imageUri.toString().isNotBlank())
-                        {
-                            onConfirm(foodName, foodPrice, imageUri?: Uri.EMPTY)
+                        if (foodName.isNotBlank() && foodPrice.isNotBlank() && imageUri.toString()
+                                .isNotBlank()
+                        ) {
+                            onConfirm(foodName, foodPrice, imageUri ?: Uri.EMPTY)
                             onDismiss()
-                        }
-                        else {
+                        } else {
                             if (!isToastVisible) {
-                                Toast.makeText(context,  "Fill in ALL Inputs.", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(context, "Fill in ALL Inputs.", Toast.LENGTH_SHORT)
+                                    .show()
                                 isToastVisible = true
                             }
                         }

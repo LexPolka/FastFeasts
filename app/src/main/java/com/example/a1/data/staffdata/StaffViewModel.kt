@@ -87,6 +87,7 @@ class StaffViewModel(private val repository: StaffRepository) : ViewModel() {
     // val imageInputStream = context.contentResolver.openInputStream(imageUri)
     // val imageData = imageInputStream?.readBytes()
 
+    //Convert ByteArray to Bitmap
     //val imageFromByteToBitmap = imageBitmapFromBytes(food.image)
     fun addIndividualFood(foodName : String, foodPrice : String, imageData : ByteArray){
         val food = IndividualFood(
@@ -96,6 +97,12 @@ class StaffViewModel(private val repository: StaffRepository) : ViewModel() {
         )
         viewModelScope.launch {
             repository.insertIndividualFood(food)
+        }
+    }
+
+    fun removeIndividualFood(food: IndividualFood){
+        viewModelScope.launch {
+            repository.deleteIndividualFood(food)
         }
     }
 

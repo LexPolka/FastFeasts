@@ -24,7 +24,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import com.example.a1.FastFeastsScreen
+import com.example.a1.ui.fastFeast.FastFeastsScreen
 import com.example.a1.R
 
 @Composable
@@ -33,15 +33,15 @@ fun StaffPage(navController : NavHostController){
 
     //Screen settings
     val configuration = LocalConfiguration.current
-    val screenWidth = configuration.screenWidthDp.dp
     val screenHeight = configuration.screenHeightDp.dp
     val componentHeight = screenHeight / 9
 
     val imageSize = 48.dp
-    val textSize = 16.sp
     val linePadding = 12.dp
 
     Column {
+        Text(text = "Staff", fontSize = 32.sp, modifier = Modifier.padding(linePadding))
+        
         //Look at Orders
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -51,7 +51,7 @@ fun StaffPage(navController : NavHostController){
                 .padding(linePadding)
         ) {
             Image(
-                painter = painterResource(R.drawable.baseline_assignment_ind_24), contentDescription = "Name",
+                painter = painterResource(R.drawable.baseline_pending_actions_24), contentDescription = "Name",
                 Modifier
                     .size(imageSize)
                     .padding(6.dp)
@@ -110,7 +110,7 @@ fun StaffPage(navController : NavHostController){
                 }
         ) {
             Image(
-                painter = painterResource(R.drawable.baseline_assignment_ind_24), contentDescription = "Name",
+                painter = painterResource(R.drawable.baseline_restaurant_menu_24), contentDescription = "Name",
                 Modifier
                     .size(imageSize)
                     .padding(6.dp)

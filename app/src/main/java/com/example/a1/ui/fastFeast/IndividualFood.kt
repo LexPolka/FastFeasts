@@ -1,27 +1,19 @@
-package com.example.a1.ui
+package com.example.a1.ui.fastFeast
 
 import android.widget.Toast
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.border
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -33,21 +25,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import coil.compose.rememberImagePainter
-import com.example.a1.BackButton
-import com.example.a1.FastFeastsScreen
 import com.example.a1.data.cartData.CartViewModel
 import com.example.a1.data.cartData.Food
 import com.example.a1.data.profiledata.GlobalViewModel
-import com.example.a1.imageBitmapFromBytes
 import kotlinx.coroutines.delay
 import java.math.BigDecimal
 import java.math.BigInteger
@@ -89,6 +74,7 @@ fun IndividualFoodPage(cartViewModel : CartViewModel, globalViewModel: GlobalVie
 
     var quantity by remember { mutableStateOf(1) }
 
+    //Convert ByteArray to Bitmap
     val imageFromByteToBitmap = imageBitmapFromBytes(image)
 
     Column (modifier = Modifier.padding(universalPadding)) {
@@ -108,6 +94,7 @@ fun IndividualFoodPage(cartViewModel : CartViewModel, globalViewModel: GlobalVie
             //IMAGE
             Image(bitmap = imageFromByteToBitmap, contentDescription = "Test",
                 Modifier
+                    .aspectRatio(1f)
                     .width(screenWidth)
                     .height(screenWidth)
             )

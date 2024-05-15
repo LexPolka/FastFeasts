@@ -1,9 +1,11 @@
-package com.example.a1
+package com.example.a1.ui.fastFeast
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
+import android.os.Environment
 import androidx.compose.foundation.Image
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -57,7 +59,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.example.a1.ui.MainPage
 import com.example.a1.data.profiledata.ProfileViewModel
 import com.example.a1.ui.ProfilePage
 import kotlinx.coroutines.CoroutineScope
@@ -70,9 +71,11 @@ import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.text.font.FontWeight
+import androidx.core.content.FileProvider
 import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.navigation
+import com.example.a1.R
 import com.example.a1.data.cartData.CartViewModel
 import com.example.a1.data.AppViewModelProvider
 import com.example.a1.data.profiledata.GlobalViewModel
@@ -80,7 +83,6 @@ import com.example.a1.data.staffdata.StaffViewModel
 import com.example.a1.ui.CartUi
 import com.example.a1.ui.CustomizationScreen
 import com.example.a1.ui.DiningOptions
-import com.example.a1.ui.IndividualFoodPage
 import com.example.a1.ui.OnlineBankingUi
 import com.example.a1.ui.PayAtCounterUi
 import com.example.a1.ui.PaymentOptions
@@ -91,14 +93,18 @@ import com.example.a1.ui.login.PrivacyScreen
 import com.example.a1.ui.login.PolicyScreen
 import com.example.a1.ui.staffUI.StaffIndividualFood
 import kotlinx.coroutines.delay
+import java.io.ByteArrayOutputStream
+import java.io.File
+import java.io.FileOutputStream
+import java.io.IOException
 
 //enum classes for navigation
 enum class FastFeastsScreen(@StringRes val title: Int) {
     MainPage(title = R.string.main_menu),
     CustomizeFood(title = R.string.CustomizeBurger),
     Profile(title = R.string.profile),
-    Payment(title=R.string.dinein),
-    Cart(title=R.string.cart),
+    Payment(title= R.string.dinein),
+    Cart(title= R.string.cart),
     IndividualFood(title= R.string.individual),
 
     LoginScreen(title = R.string.Login),
@@ -107,12 +113,12 @@ enum class FastFeastsScreen(@StringRes val title: Int) {
     PolicyScreen(title = R.string.Terms),
 
     DiningOptions(title = R.string.dining_options),
-    PaymentOptions(title=R.string.payment_options),
+    PaymentOptions(title= R.string.payment_options),
     OnlineBanking(title = R.string.online_banking),
     PayAtCounter(title = R.string.pay_at_counter),
 
     Staff(title = R.string.staff),
-    StaffIndividualFood(title=R.string.staffFood),
+    StaffIndividualFood(title= R.string.staffFood),
 }
 
 @Composable
@@ -693,7 +699,7 @@ fun BackButton(navController : NavHostController){
         IconButton(
             colors = IconButtonDefaults.iconButtonColors(Color(0xFFFF9D7E)),
             onClick = { if (!isBackPressed) {
-                navController.navigate(FastFeastsScreen.MainPage.name)
+                navController.popBackStack()
                 isBackPressed = true } },
             modifier = Modifier
                 .border(
@@ -765,3 +771,13 @@ fun toggleDarkMode(isDarkTheme: Boolean) {
 fun imageBitmapFromBytes(encodedImageData: ByteArray): ImageBitmap {
     return BitmapFactory.decodeByteArray(encodedImageData, 0, encodedImageData.size).asImageBitmap()
 }
+
+// Function to compress the image data
+fun compressImage(imageData: ByteArray?): ByteArray {
+     val bitmap = BitmapFactory.decodeByteArray(imageData, 0, imageData!!.size)
+     val compressedBitmap = Bitmap.createScaledBitmap(bitmap, 300, 300, false)
+     val outputStream = ByteArrayOutputStream()
+     compressedBitmap.compress(Bitmap.CompressFormat.JPEG, 30, outputStream)
+     return outputStream.toByteArray()
+}
+
