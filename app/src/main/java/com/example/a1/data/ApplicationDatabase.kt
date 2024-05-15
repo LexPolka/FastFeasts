@@ -15,7 +15,7 @@ import com.example.a1.data.staffdata.IndividualFood
 import com.example.a1.data.staffdata.OrderEntity
 import com.example.a1.data.staffdata.StaffDao
 
-@Database(entities = [ProfileEntity::class, OrderEntity::class, IndividualFood::class, FoodEntity::class], version = 5, exportSchema = false)
+@Database(entities = [ProfileEntity::class, OrderEntity::class, IndividualFood::class, FoodEntity::class], version = 2, exportSchema = false)
 @TypeConverters(FoodListConverter::class)
 abstract class ApplicationDatabase : RoomDatabase() {
     abstract fun profileDao(): ProfileDao
