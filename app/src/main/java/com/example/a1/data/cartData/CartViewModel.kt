@@ -54,11 +54,11 @@ class CartViewModel : ViewModel() {
         private set
 
     fun onClearCartClick(){
-        isRemoveDialogShown = true
+        isClearCartDialogShown = true
     }
 
     fun onClearCartDismissClick(){
-        isRemoveDialogShown = false
+        isClearCartDialogShown = false
     }
 
 
