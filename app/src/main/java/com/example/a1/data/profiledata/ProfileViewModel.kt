@@ -81,8 +81,6 @@ class ProfileViewModel(private val repository: ProfileRepository) : ViewModel() 
 
 }
 
-
-
 data class Profile(
     //profile picture
     val profilePictureUri: String = "",

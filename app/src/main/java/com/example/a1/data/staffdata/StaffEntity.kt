@@ -16,6 +16,16 @@ data class OrderEntity(
     val items: MutableList<Food> = mutableListOf()
 )
 
+@Entity(tableName = "individualFoodItems")
+@TypeConverters(FoodListConverter::class)
+data class IndividualFood(
+    @PrimaryKey(autoGenerate = true)
+    val id: Int = 0,
+    val image: ByteArray?,
+    val name : String = "",
+    val price : String = "",
+)
+
 class FoodListConverter {
     @TypeConverter
     fun fromFoodList(value: MutableList<Food>?): String {

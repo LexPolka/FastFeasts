@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
 data class IndividualFoodItem(
-    val image: Int = 0,
+    val image: ByteArray = byteArrayOf(),
     val name : String = "",
     val price : String = "", //use string cuz for int, just do .toInt()
 )
@@ -25,7 +25,7 @@ class GlobalViewModel : ViewModel() {
     val restaurant: StateFlow<RestaurantLocation> = _restaurant.asStateFlow()
 
     //Setters
-    fun setDisplayIndividualFood(image: Int, name : String, price : String)
+    fun setDisplayIndividualFood(image: ByteArray, name : String, price : String)
     {
         _foodState.update {currentState ->
             currentState.copy(name = name, price = price, image = image)

@@ -33,6 +33,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -40,6 +41,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import coil.compose.rememberImagePainter
 import com.example.a1.BackButton
 import com.example.a1.FastFeastsScreen
 import com.example.a1.data.cartData.CartViewModel
@@ -86,6 +88,8 @@ fun IndividualFoodPage(cartViewModel : CartViewModel, globalViewModel: GlobalVie
 
     var quantity by remember { mutableStateOf(1) }
 
+    val painter: Painter = rememberImagePainter(data = image)
+
     Column (modifier = Modifier.padding(universalPadding)) {
         //BACK BUTTON
         BackButton(navController = navController)
@@ -99,7 +103,7 @@ fun IndividualFoodPage(cartViewModel : CartViewModel, globalViewModel: GlobalVie
                     modifier = Modifier.padding(universalPadding))
             }
             //IMAGE
-            Image(painter = painterResource(image), contentDescription = "Test",
+            Image(painter = painter, contentDescription = "Test",
                 Modifier
                     .width(screenWidth)
             )

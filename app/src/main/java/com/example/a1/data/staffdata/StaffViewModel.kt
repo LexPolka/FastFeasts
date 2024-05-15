@@ -1,5 +1,6 @@
 package com.example.a1.data.staffdata
 
+import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.a1.data.cartData.Food
@@ -19,13 +20,24 @@ class StaffViewModel(private val repository: StaffRepository) : ViewModel() {
     private val _orderList = MutableStateFlow<List<Order>>(emptyList())
     val orderList: StateFlow<List<Order>> = _orderList.asStateFlow()
 
+    //Is a list of IndividualFood
+    private val _individualFoodList = MutableStateFlow<List<IndividualFood>>(emptyList())
+    val individualFoodList: StateFlow<List<IndividualFood>> = _individualFoodList.asStateFlow()
+
+    //observing changes in orders/food
     init {
         viewModelScope.launch {
             repository.getAllOrders().collect { orders ->
                 _orderList.value = orders.map { it?.let { Order(it.id, it.items) } ?: Order("", mutableListOf()) }
             }
         }
+        viewModelScope.launch {
+            repository.getAllIndividualFood().collect { foodItems ->
+                _individualFoodList.value = foodItems.filterNotNull()
+            }
+        }
     }
+
 
     fun addOrder(order: Order) {
         val orderToEntity = OrderEntity(
@@ -67,6 +79,28 @@ class StaffViewModel(private val repository: StaffRepository) : ViewModel() {
             val order = _orderList.value.find { it.id == orderId }
             if (order != null) {
                 repository.insertOrder(OrderEntity(orderToEntity.id, mutableListOf()))
+            }
+        }
+    }
+
+    // Convert image URI to byte array
+    // val imageInputStream = context.contentResolver.openInputStream(imageUri)
+    // val imageData = imageInputStream?.readBytes()
+    fun addIndividualFood(foodName : String, foodPrice : String, imageData : ByteArray?){
+        val food = IndividualFood(
+            name = foodName,
+            price = foodPrice,
+            image = imageData
+        )
+        viewModelScope.launch {
+            repository.insertIndividualFood(food)
+        }
+    }
+
+    fun getAllIndividualFood(){
+        viewModelScope.launch {
+            repository.getAllIndividualFood().collect { foodItems ->
+                _individualFoodList.value = foodItems.filterNotNull()
             }
         }
     }

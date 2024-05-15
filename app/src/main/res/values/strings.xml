@@ -2,20 +2,23 @@
     <string name="app_name">Fast Feasts</string>
     <string name="main_menu">Main Menu</string>
     <string name="profile">My Profile</string>
-    <string name="dinein">Dine-In</string>
     <string name="individual">Food Item</string>
-    <string name="cart">Cart</string>
     <string name="CustomizeBurger">Customize Burger</string>
+
     <string name="Login">Login</string>
     <string name="Register">Register</string>
     <string name="Privacy">Privacy</string>
     <string name="Terms">Terms</string>
+
+    <string name="cart">Cart</string>
+    <string name="dinein">Dine-In</string>
     <string name="dining_options">Dining Options</string>
     <string name="payment_options">Payment Options</string>
     <string name="online_banking">Online Banking</string>
     <string name="pay_at_counter">Pay At Counter</string>
 
     <string name="staff">Staff</string>
+    <string name="staffFood">Staff Individual Food</string>
 
 
     <string-array name="Languages">

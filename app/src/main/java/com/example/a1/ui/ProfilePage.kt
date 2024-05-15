@@ -76,6 +76,12 @@ import kotlinx.coroutines.launch
 fun ProfilePage(
     viewModel: ProfileViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
+    val uiState by viewModel.uiState.collectAsState()
+    //profile setter
+    ProfileHeader(uiState) { uri ->
+        viewModel.setProfilePictureUri(uri)
+    }
+
     ProfileDataModify(viewModel)
 }
 
@@ -119,10 +125,6 @@ fun ProfileDataModify(viewModel : ProfileViewModel) {
     var newCCCode by remember { mutableStateOf(uiState.ccCode) }
 
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        //profile setter
-        ProfileHeader(uiState) { uri ->
-            viewModel.setProfilePictureUri(uri)
-        }
         Divider(thickness = 3.dp, color = if (isDarkTheme) Color.White else Color.Black)
 
         LazyColumn(

@@ -9,10 +9,11 @@ import androidx.room.TypeConverters
 import com.example.a1.data.profiledata.ProfileDao
 import com.example.a1.data.profiledata.ProfileEntity
 import com.example.a1.data.staffdata.FoodListConverter
+import com.example.a1.data.staffdata.IndividualFood
 import com.example.a1.data.staffdata.OrderEntity
 import com.example.a1.data.staffdata.StaffDao
 
-@Database(entities = [ProfileEntity::class, OrderEntity::class], version = 4, exportSchema = false)
+@Database(entities = [ProfileEntity::class, OrderEntity::class, IndividualFood::class], version = 4, exportSchema = false)
 @TypeConverters(FoodListConverter::class)
 abstract class ApplicationDatabase : RoomDatabase() {
     abstract fun profileDao(): ProfileDao

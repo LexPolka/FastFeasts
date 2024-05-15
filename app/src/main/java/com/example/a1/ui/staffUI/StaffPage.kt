@@ -1,7 +1,8 @@
-package com.example.a1.ui
+package com.example.a1.ui.staffUI
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -23,6 +24,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.example.a1.FastFeastsScreen
 import com.example.a1.R
 
 @Composable
@@ -57,7 +59,7 @@ fun StaffPage(navController : NavHostController){
                     .background(Color.White)
             )
 
-            Text(text = "Check Pending Orders", color = Color(0xFFFC8803))
+            Text(text = "Check Pending Orders", color = if (isDarkTheme) Color.White else Color.Black)
 
             Spacer(modifier = Modifier.weight(1f))
         }
@@ -85,7 +87,7 @@ fun StaffPage(navController : NavHostController){
                     .background(Color.White)
             )
 
-            Text(text = "Manage Stock", color = Color(0xFFFC8803))
+            Text(text = "Manage Stock", color = if (isDarkTheme) Color.White else Color.Black)
 
             Spacer(modifier = Modifier.weight(1f))
         }
@@ -103,6 +105,9 @@ fun StaffPage(navController : NavHostController){
             modifier = Modifier
                 .height(componentHeight)
                 .padding(linePadding)
+                .clickable {
+                    navController.navigate(FastFeastsScreen.StaffIndividualFood.name)
+                }
         ) {
             Image(
                 painter = painterResource(R.drawable.baseline_assignment_ind_24), contentDescription = "Name",
@@ -113,7 +118,7 @@ fun StaffPage(navController : NavHostController){
                     .background(Color.White)
             )
 
-            Text(text = "Add/Delete Menu Item", color = Color(0xFFFC8803))
+            Text(text = "Add/Delete Menu Item", color = if (isDarkTheme) Color.White else Color.Black)
 
             Spacer(modifier = Modifier.weight(1f))
         }

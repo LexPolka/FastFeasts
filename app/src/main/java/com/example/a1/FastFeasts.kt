@@ -73,6 +73,7 @@ import androidx.navigation.navigation
 import com.example.a1.data.cartData.CartViewModel
 import com.example.a1.data.AppViewModelProvider
 import com.example.a1.data.profiledata.GlobalViewModel
+import com.example.a1.data.staffdata.StaffViewModel
 import com.example.a1.ui.CartUi
 import com.example.a1.ui.CustomizationScreen
 import com.example.a1.ui.DiningOptions
@@ -80,11 +81,12 @@ import com.example.a1.ui.IndividualFoodPage
 import com.example.a1.ui.OnlineBankingUi
 import com.example.a1.ui.PayAtCounterUi
 import com.example.a1.ui.PaymentOptions
-import com.example.a1.ui.StaffPage
+import com.example.a1.ui.staffUI.StaffPage
 import com.example.a1.ui.login.LoginScreen
 import com.example.a1.ui.login.SignUpScreen
 import com.example.a1.ui.login.PrivacyScreen
 import com.example.a1.ui.login.PolicyScreen
+import com.example.a1.ui.staffUI.StaffIndividualFood
 import kotlinx.coroutines.delay
 
 //enum classes for navigation
@@ -106,12 +108,14 @@ enum class FastFeastsScreen(@StringRes val title: Int) {
     OnlineBanking(title = R.string.online_banking),
     PayAtCounter(title = R.string.pay_at_counter),
 
-    Staff(title = R.string.staff)
+    Staff(title = R.string.staff),
+    StaffIndividualFood(title=R.string.staffFood),
 }
 
 @Composable
 fun FastFeastsApp(
     profileViewModel: ProfileViewModel = viewModel(factory = AppViewModelProvider.Factory),
+    staffViewModel: StaffViewModel  =viewModel(factory = AppViewModelProvider.Factory),
     globalViewModel: GlobalViewModel = viewModel(),
     cartViewModel : CartViewModel = viewModel(),
     navController: NavHostController = rememberNavController()
@@ -336,6 +340,9 @@ fun FastFeastsApp(
                 }
                 composable(route = FastFeastsScreen.Staff.name) {
                     StaffPage(navController)
+                }
+                composable(route = FastFeastsScreen.StaffIndividualFood.name) {
+                    StaffIndividualFood(staffViewModel, navController)
                 }
 
                 //depending on userInput from paymentOptions , to be implemented
