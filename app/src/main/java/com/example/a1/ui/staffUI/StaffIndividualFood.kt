@@ -22,6 +22,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -50,14 +51,15 @@ import androidx.navigation.NavHostController
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Vertices
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.core.text.isDigitsOnly
 import coil.compose.rememberImagePainter
 import com.example.a1.R
 import com.example.a1.data.staffdata.IndividualFood
 import com.example.a1.data.staffdata.StaffViewModel
-import com.example.a1.ui.fastFeast.compressImage
 import com.example.a1.ui.fastFeast.imageBitmapFromBytes
 import kotlinx.coroutines.delay
 
@@ -132,61 +134,71 @@ fun IndividualFoodList(individualFoodList : List<IndividualFood>, viewModel : St
     val configuration = LocalConfiguration.current
     val screenWidth = configuration.screenWidthDp.dp
     val screenHeight = configuration.screenHeightDp.dp
-    val componentHeight = screenHeight/10
+    val componentHeight = screenHeight/9
 
     val universalPadding = 6.dp
-    
-    Column(
-        modifier = Modifier.padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp)
-    ) {
-        Text(text = "Current Menu Items", fontSize = 20.sp, fontWeight = FontWeight.Bold)
 
-        individualFoodList.forEach { food ->
+    Column {
+        Text(
+            text = "Current Menu Items",
+            fontSize = 20.sp,
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier.padding(universalPadding) // Add bottom padding between title and items
+        )
+        LazyColumn(
+            modifier = Modifier.padding(16.dp),
+        ) {
+            items(individualFoodList.size) { index ->
+                val food = individualFoodList[index]
+                val imageFromByteToBitmap = imageBitmapFromBytes(food.image)
 
-            //CONVERT BYTEARRAY TO PAINTER
-            val imageFromByteToBitmap = imageBitmapFromBytes(food.image)
-
-            Row(modifier = Modifier
-                .fillMaxWidth()
-                .padding(universalPadding)
-                .border(2.dp, shape = RoundedCornerShape(20.dp), color = Color.LightGray)
-            ) {
-                Column(){
-                    Image(bitmap = imageFromByteToBitmap, contentDescription = "Food Image ${food.name}",  modifier = Modifier.size(componentHeight))
-                }
-                Column {
-                    Text(text = "Name: ${food.name}", fontSize = 16.sp, modifier = Modifier.padding(universalPadding))
-                    Spacer(modifier = Modifier.width(16.dp))
-                    Text(text = "Price: ${food.price}", fontSize = 16.sp, modifier = Modifier.padding(universalPadding))
-                }
-                Spacer(modifier = Modifier.weight(1f))
-                Column (verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally){
-                    IconButton(
-                        colors = IconButtonDefaults.iconButtonColors(Color.White),
-                        onClick = {
-                            viewModel.removeIndividualFood(food)
-                        },
-                        modifier = Modifier
-                            .padding(universalPadding)
-                            .border(3.5.dp, Color(0xFFFF9D7E), shape = CircleShape)
-                            .width(120.dp)
-                            .height(componentHeight / 2)
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = universalPadding) // Adjust vertical padding
+                        .border(2.dp, shape = RoundedCornerShape(20.dp), color = Color.LightGray)
+                ) {
+                    Column() {
+                        Image(
+                            bitmap = imageFromByteToBitmap,
+                            contentDescription = "Food Image ${food.name}",
+                            modifier = Modifier
+                                .size(componentHeight)
+                                .clip(shape = RoundedCornerShape(20.dp))
+                                .aspectRatio(1f)
+                        )
+                    }
+                    Column {
+                        Text(text = "Name: ${food.name}", fontSize = 16.sp, modifier = Modifier.padding(universalPadding))
+                        Spacer(modifier = Modifier.width(16.dp))
+                        Text(text = "Price: ${food.price}", fontSize = 16.sp, modifier = Modifier.padding(universalPadding))
+                    }
+                    Spacer(modifier = Modifier.weight(1f))
+                    Column(
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        Row {
+                        IconButton(
+                            colors = IconButtonDefaults.iconButtonColors(Color.White),
+                            onClick = { viewModel.removeIndividualFood(food) },
+                            modifier = Modifier
+                                .padding(universalPadding)
+                                .border(3.5.dp, Color(0xFFFF9D7E), shape = CircleShape)
+                                .width(componentHeight / 2)
+                                .height(componentHeight / 2)
+                        ) {
                             Icon(
                                 imageVector = Icons.Filled.Delete,
                                 contentDescription = "Delete Food",
-                                tint = Color.Red,
+                                tint = Color.Red
                             )
-                            Text("Remove", color = Color.Red)
                         }
-                        
                     }
                 }
             }
         }
     }
+
 }
 
 @Composable
@@ -313,11 +325,18 @@ fun FoodInputDialog(onConfirm: (String, String, Uri) -> Unit, onDismiss: () -> U
                 IconButton(
                     colors = IconButtonDefaults.iconButtonColors(Color(0xFFFF9D7E)),
                     onClick = {
-                        if (foodName.isNotBlank() && foodPrice.isNotBlank() && imageUri.toString()
-                                .isNotBlank()
-                        ) {
-                            onConfirm(foodName, foodPrice, imageUri ?: Uri.EMPTY)
-                            onDismiss()
+                        if (foodName.isNotBlank() && foodPrice.isNotBlank() && imageUri.toString().isNotBlank() && imageUri != null) {
+                            val priceDouble = foodPrice.toDoubleOrNull()
+                            if (priceDouble != null && priceDouble >= 0) {
+                                onConfirm(foodName, foodPrice, imageUri ?: Uri.EMPTY)
+                                onDismiss()
+                            } else {
+                                if (!isToastVisible) {
+                                    Toast.makeText(context, "Invalid Price Input!", Toast.LENGTH_SHORT)
+                                        .show()
+                                    isToastVisible = true
+                                }
+                            }
                         } else {
                             if (!isToastVisible) {
                                 Toast.makeText(context, "Fill in ALL Inputs.", Toast.LENGTH_SHORT)

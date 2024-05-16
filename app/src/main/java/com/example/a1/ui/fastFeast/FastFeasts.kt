@@ -772,12 +772,3 @@ fun imageBitmapFromBytes(encodedImageData: ByteArray): ImageBitmap {
     return BitmapFactory.decodeByteArray(encodedImageData, 0, encodedImageData.size).asImageBitmap()
 }
 
-// Function to compress the image data
-fun compressImage(imageData: ByteArray?): ByteArray {
-     val bitmap = BitmapFactory.decodeByteArray(imageData, 0, imageData!!.size)
-     val compressedBitmap = Bitmap.createScaledBitmap(bitmap, 300, 300, false)
-     val outputStream = ByteArrayOutputStream()
-     compressedBitmap.compress(Bitmap.CompressFormat.JPEG, 30, outputStream)
-     return outputStream.toByteArray()
-}
-
