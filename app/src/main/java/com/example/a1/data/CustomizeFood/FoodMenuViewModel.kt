@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import com.example.a1.R
+import kotlinx.coroutines.flow.MutableStateFlow
 
 class FoodMenuViewModel : ViewModel() {
     //==DIALOG FOR BURGER BUNS SELECTION=====================================================
@@ -133,12 +134,18 @@ class FoodMenuViewModel : ViewModel() {
     //==============
     var TotalPrice by mutableStateOf(0.00)
     inner class Burger(val Buns: Buns, val Patty: Patty, val Lettuce: Lettuce, val Sauce: Sauce, val Extra: Extra)
+    inner class BurgerDisplayInCart(val Name: String, val Price: Double, val Image: Int)
+    var emptySlotBurger = BurgerDisplayInCart("",TotalPrice, R.drawable.burgericon)
+    var addBurger by mutableStateOf<BurgerDisplayInCart>(emptySlotBurger)
+    private val _burgerState = MutableStateFlow(BurgerDisplayInCart("", TotalPrice, R.drawable.burgericon))
+
     fun CustomBurgertotalPrice(){
         TotalPrice = addBun.price + addPatty.price + addLettuce.price + addSauce.price + addExtra.price
 
     }
-    val mutableList: MutableList<Burger> = mutableListOf(
+    fun addedNewBurgerInCart(newBurger: BurgerDisplayInCart){
+        addBurger = newBurger
 
-    )
+    }
 }
 

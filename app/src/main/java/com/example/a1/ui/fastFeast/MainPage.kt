@@ -302,7 +302,7 @@ fun CustomItem(image : Int, text: String, navController: NavHostController) {
         border = BorderStroke(3.dp, Color.Black),
         modifier = Modifier
             .padding(8.dp)
-            .clickable { navController.navigate(FastFeastsScreen.CustomizeFood.name) }
+            .clickable { navController.navigate(FastFeastsScreen.CustomizeBurger.name) }
     ){
         Column {
             Image(

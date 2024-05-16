@@ -24,6 +24,7 @@ class GlobalViewModel : ViewModel() {
     private val _restaurant = MutableStateFlow(RestaurantLocation())
     val restaurant: StateFlow<RestaurantLocation> = _restaurant.asStateFlow()
 
+
     //Setters
     fun setDisplayIndividualFood(image: ByteArray, name : String, price : String)
     {

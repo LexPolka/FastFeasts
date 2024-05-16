@@ -2,10 +2,8 @@ package com.example.a1.ui.fastFeast
 
 import android.content.Context
 import android.content.Intent
-import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
-import android.os.Environment
 import androidx.compose.foundation.Image
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -71,7 +69,6 @@ import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.text.font.FontWeight
-import androidx.core.content.FileProvider
 import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.navigation
@@ -81,7 +78,7 @@ import com.example.a1.data.AppViewModelProvider
 import com.example.a1.data.profiledata.GlobalViewModel
 import com.example.a1.data.staffdata.StaffViewModel
 import com.example.a1.ui.CartUi
-import com.example.a1.ui.CustomizationScreen
+import com.example.a1.ui.CustomizeFood.CustomizationScreen
 import com.example.a1.ui.DiningOptions
 import com.example.a1.ui.OnlineBankingUi
 import com.example.a1.ui.PayAtCounterUi
@@ -93,15 +90,11 @@ import com.example.a1.ui.login.PrivacyScreen
 import com.example.a1.ui.login.PolicyScreen
 import com.example.a1.ui.staffUI.StaffIndividualFood
 import kotlinx.coroutines.delay
-import java.io.ByteArrayOutputStream
-import java.io.File
-import java.io.FileOutputStream
-import java.io.IOException
 
 //enum classes for navigation
 enum class FastFeastsScreen(@StringRes val title: Int) {
     MainPage(title = R.string.main_menu),
-    CustomizeFood(title = R.string.CustomizeBurger),
+    CustomizeBurger(title = R.string.CustomizeBurger),
     Profile(title = R.string.profile),
     Payment(title= R.string.dinein),
     Cart(title= R.string.cart),
@@ -344,7 +337,7 @@ fun FastFeastsApp(
                 composable(route = FastFeastsScreen.PaymentOptions.name) {
                     PaymentOptions(navController)
                 }
-                composable(route = FastFeastsScreen.CustomizeFood.name) {
+                composable(route = FastFeastsScreen.CustomizeBurger.name) {
                     CustomizationScreen(navController)
                 }
                 composable(route = FastFeastsScreen.Staff.name) {
