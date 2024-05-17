@@ -1,11 +1,14 @@
 package com.example.a1.ui
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
@@ -24,6 +27,7 @@ import androidx.navigation.NavController
 import com.example.a1.ui.fastFeast.FastFeastsScreen
 import com.example.a1.data.cartData.CartViewModel
 import com.example.a1.data.cartData.Food
+import java.util.Locale
 
 @Composable
 fun OnlineBankingUi(
@@ -51,24 +55,28 @@ fun OnlineBankingUi(
 
         Text("Please proceed to the counter to pickup your food")
         Text("Reference Number: $referenceNumber")
+        Spacer(Modifier.height(15.dp))
 
-
-        Spacer(Modifier.weight(1f))
 
         Box{
+            Card { ReceiptList(receiptItems = receiptItems, modifier = Modifier ) }
+        }
+        Spacer(Modifier.weight(1f)) //push the others down
+        Box{
+
             //totalPrice & back to main menu button
             Column {
-
-                Card { ReceiptList(receiptItems = receiptItems, modifier = Modifier ) }
-
                 Spacer(modifier = Modifier.height(10.dp))
 
                 Card {
-                    Row {
+                    Row(
+                        Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
 
                         Text("Total Price: ")
                         Spacer(modifier = Modifier.weight(1f))
-                        Text("$totalPrice")
+                        Text(text = String.format(Locale.getDefault(), "%.2f", totalPrice ))
 
                     }
                 }
@@ -106,7 +114,8 @@ fun ReceiptList(
 ){
 
     LazyColumn(
-        modifier = modifier
+        modifier = Modifier
+            .padding(vertical = 8.dp)
     ) {
         items(receiptItems) { food ->
             Column {
@@ -121,10 +130,19 @@ fun ReceiptList(
 
 @Composable
 fun ReceiptItem(
-food: Food
+food: Food,
+modifier: Modifier = Modifier
 ){
-    Row {
-        Text(text = food.name )
+    Row(
+        Modifier
+        .fillMaxWidth()
+        .padding(horizontal = 16.dp, vertical = 8.dp), // Add padding to the Row
+    horizontalArrangement = Arrangement.SpaceBetween
+
+    ) {
+        Text(text = food.name,
+            modifier = Modifier.weight(1f)
+            )
         Text(text = food.price )
     }
 
