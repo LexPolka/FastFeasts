@@ -57,6 +57,17 @@ fun OnlineBankingUi(
         Text("Reference Number: $referenceNumber")
         Spacer(Modifier.height(15.dp))
 
+        Row(
+            Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+
+            Text("Item")
+            Spacer(modifier = Modifier.weight(1f))
+            Text("Price")
+            Spacer(modifier = Modifier.height(15.dp))
+
+        }
 
         Box{
             Card { ReceiptList(receiptItems = receiptItems, modifier = Modifier ) }

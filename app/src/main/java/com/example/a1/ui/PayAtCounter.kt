@@ -52,6 +52,18 @@ fun PayAtCounterUi(
         Text("Reference Number: $referenceNumber")
         Spacer(Modifier.height(15.dp))
 
+        Row(
+            Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+
+            Text("Item")
+            Spacer(modifier = Modifier.weight(1f))
+            Text("Price")
+            Spacer(modifier = Modifier.height(15.dp))
+
+        }
+
         Card { ReceiptList(receiptItems = receiptItems, modifier = Modifier ) }
 
         Spacer(Modifier.weight(1f))
