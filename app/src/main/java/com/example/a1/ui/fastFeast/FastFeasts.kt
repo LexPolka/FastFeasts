@@ -65,6 +65,7 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Home
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
@@ -89,6 +90,7 @@ import com.example.a1.ui.login.SignUpScreen
 import com.example.a1.ui.login.PrivacyScreen
 import com.example.a1.ui.login.PolicyScreen
 import com.example.a1.ui.staffUI.StaffIndividualFood
+import com.example.a1.ui.staffUI.StaffStocks
 import kotlinx.coroutines.delay
 
 //enum classes for navigation
@@ -112,6 +114,8 @@ enum class FastFeastsScreen(@StringRes val title: Int) {
 
     Staff(title = R.string.staff),
     StaffIndividualFood(title= R.string.staffFood),
+    StaffStocks(title = R.string.staffStocks),
+    StaffOrders(title = R.string.staffOrders),
 }
 
 @Composable
@@ -340,11 +344,15 @@ fun FastFeastsApp(
                 composable(route = FastFeastsScreen.CustomizeBurger.name) {
                     CustomizationScreen(navController)
                 }
+
                 composable(route = FastFeastsScreen.Staff.name) {
                     StaffPage(navController)
                 }
                 composable(route = FastFeastsScreen.StaffIndividualFood.name) {
                     StaffIndividualFood(staffViewModel, navController)
+                }
+                composable(route = FastFeastsScreen.StaffStocks.name) {
+                    StaffStocks(staffViewModel, navController)
                 }
 
                 //depending on userInput from paymentOptions , to be implemented
@@ -354,6 +362,7 @@ fun FastFeastsApp(
                 composable(route = FastFeastsScreen.PayAtCounter.name) {
                     PayAtCounterUi(cartViewModel, navController)
                 }
+
 
 
 
@@ -695,10 +704,13 @@ fun BackButton(navController : NavHostController){
                 navController.popBackStack()
                 isBackPressed = true } },
             modifier = Modifier
+                .padding(universalPadding)
+                .background(color = if (isDarkTheme) Color.White else Color(0xFFFDA6900),
+                    shape = RoundedCornerShape(24.dp))
                 .border(
-                    3.5.dp,
+                    3.dp,
                     color = if (isDarkTheme) Color.White else Color(0xFFFDA6900),
-                    shape = RoundedCornerShape(20.dp)
+                    shape = RoundedCornerShape(24.dp)
                 )
                 .width(backButtonWidth)
         ) {
@@ -719,6 +731,31 @@ fun BackButton(navController : NavHostController){
                 )
                 Spacer(modifier = Modifier.weight(0.1f))
             }
+        }
+
+        IconButton(
+            colors = IconButtonDefaults.iconButtonColors(Color(0xFFFF9D7E)),
+            onClick = { if (!isBackPressed) {
+                navController.navigate(FastFeastsScreen.MainPage.name)
+                isBackPressed = true } },
+            modifier = Modifier
+                .padding(universalPadding)
+                .background(color = if (isDarkTheme) Color.White else Color(0xFFFDA6900),
+                    shape = RoundedCornerShape(24.dp))
+                .border(
+                    3.dp,
+                    color = if (isDarkTheme) Color.White else Color(0xFFFDA6900),
+                    shape = RoundedCornerShape(24.dp)
+                )
+        ) {
+            Icon(
+                tint = Color.White,
+                imageVector = Icons.Filled.Home,
+                contentDescription = "Home Button",
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .padding(universalPadding)
+            )
         }
     }
 }

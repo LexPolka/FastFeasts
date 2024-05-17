@@ -2,18 +2,25 @@ package com.example.a1.ui.fastFeast
 
 import android.widget.Toast
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -27,9 +34,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.example.a1.R
 import com.example.a1.data.cartData.CartViewModel
 import com.example.a1.data.cartData.Food
 import com.example.a1.data.profiledata.GlobalViewModel
@@ -51,7 +61,7 @@ fun IndividualFoodPage(cartViewModel : CartViewModel, globalViewModel: GlobalVie
     //Screen settings
     val configuration = LocalConfiguration.current
     val screenWidth = configuration.screenWidthDp.dp
-    val backButtonWidth = screenWidth / 3
+    val viewCartWidth = screenWidth * 45/100
 
     //toast handler
     var isToastVisible by remember { mutableStateOf(false) }
@@ -159,6 +169,37 @@ fun IndividualFoodPage(cartViewModel : CartViewModel, globalViewModel: GlobalVie
                     color = if (isDarkTheme) Color.White else Color.Black,
                     fontSize = 20.sp
                 )
+            }
+        }
+
+        Box {
+            // VIEW CART BUTTON
+            IconButton(
+                onClick = { navController.navigate(FastFeastsScreen.Cart.name) },
+                modifier = Modifier
+                    .padding(20.dp)
+                    .width(viewCartWidth)
+                    .align(Alignment.BottomEnd)
+                    .background(Color(0xFFFF9D7E), shape = RoundedCornerShape(20.dp))
+                    .border(
+                        3.5.dp,
+                        color = if (isDarkTheme) Color.White else Color(0xFFFDA6900),
+                        shape = RoundedCornerShape(20.dp)
+                    )
+            ) {
+                Row(horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically) {
+                    Spacer(Modifier.weight(0.3f))
+                    Icon(
+                        painter = painterResource(R.drawable.cart),
+                        contentDescription = "View Cart",
+                        tint = Color.White,
+                    )
+                    Spacer(Modifier.weight(0.3f))
+                    Text(text = "View Cart", color =  if (isDarkTheme) Color.White else Color.Black, fontSize = 18.sp, fontWeight = FontWeight.Bold, modifier = Modifier.padding(2.dp))
+                    Spacer(Modifier.weight(0.3f))
+                }
+
             }
         }
     }

@@ -25,6 +25,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Person
@@ -55,11 +56,14 @@ import androidx.compose.ui.graphics.Vertices
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.core.text.isDigitsOnly
+import androidx.navigation.NavHost
 import coil.compose.rememberImagePainter
 import com.example.a1.R
 import com.example.a1.data.staffdata.IndividualFood
 import com.example.a1.data.staffdata.StaffViewModel
+import com.example.a1.ui.fastFeast.BackButton
 import com.example.a1.ui.fastFeast.imageBitmapFromBytes
 import kotlinx.coroutines.delay
 
@@ -84,7 +88,7 @@ fun StaffIndividualFood(viewModel: StaffViewModel, navController : NavHostContro
     val individualFoodList by viewModel.individualFoodList.collectAsState()
 
     Box(modifier = Modifier.fillMaxSize()){
-        // VIEW CART BUTTON
+        //ADD FOOD BUTTON
         IconButton(
             onClick = { isDialogOpen = true },
             modifier = Modifier
@@ -106,15 +110,13 @@ fun StaffIndividualFood(viewModel: StaffViewModel, navController : NavHostContro
         }
     }
     
-    IndividualFoodList(individualFoodList, viewModel)
+    IndividualFoodList(individualFoodList, viewModel, navController)
     
     //DIALOG MANAGER
     if (isDialogOpen) {
         FoodInputDialog(
             //SAVING THE INPUT DATA AS A FOOD ITEM
             onConfirm = { foodName, foodPrice, imageUri ->
-
-                //if there is a bytearray, use the compressed image as image
                 val imageInputStream = context.contentResolver.openInputStream(imageUri)
                 val imageData = imageInputStream?.readBytes()
 
@@ -127,7 +129,7 @@ fun StaffIndividualFood(viewModel: StaffViewModel, navController : NavHostContro
 }
 
 @Composable
-fun IndividualFoodList(individualFoodList : List<IndividualFood>, viewModel : StaffViewModel){
+fun IndividualFoodList(individualFoodList : List<IndividualFood>, viewModel : StaffViewModel, navController : NavHostController){
     //LOADING IN ALL FOOD ITEMS
     
     //Screen settings
@@ -139,6 +141,8 @@ fun IndividualFoodList(individualFoodList : List<IndividualFood>, viewModel : St
     val universalPadding = 6.dp
 
     Column {
+        BackButton(navController = navController)
+
         Text(
             text = "Current Menu Items",
             fontSize = 20.sp,
@@ -301,6 +305,7 @@ fun FoodInputDialog(onConfirm: (String, String, Uri) -> Unit, onDismiss: () -> U
                 onValueChange = { foodPrice = it },
                 label = { Text(text = "Food Price") },
                 shape = RoundedCornerShape(20.dp),
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                 modifier = Modifier.fillMaxWidth()
             )
 

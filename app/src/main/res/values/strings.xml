@@ -18,6 +18,8 @@
     <string name="pay_at_counter">Pay At Counter</string>
 
     <string name="staff">Staff</string>
+    <string name="staffStocks">Staff Stocks</string>
+    <string name="staffOrders">Staff Order List</string>
     <string name="staffFood">Staff Individual Food</string>
 
 

@@ -7,6 +7,12 @@ import androidx.lifecycle.ViewModel
 import com.example.a1.R
 import kotlinx.coroutines.flow.MutableStateFlow
 
+data class Stock(
+    val name : String = "",
+    var quantity : Int = 0,
+    val image: Int = 0
+)
+
 class FoodMenuViewModel : ViewModel() {
     //==DIALOG FOR BURGER BUNS SELECTION=====================================================
     var openDialogBun by mutableStateOf(false)

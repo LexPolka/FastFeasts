@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.a1.ui.fastFeast.FastFeastsScreen
 import com.example.a1.R
+import com.example.a1.ui.fastFeast.BackButton
 
 @Composable
 fun StaffPage(navController : NavHostController){
@@ -40,6 +41,8 @@ fun StaffPage(navController : NavHostController){
     val linePadding = 12.dp
 
     Column {
+        BackButton(navController = navController)
+        
         Text(text = "Staff", fontSize = 32.sp, modifier = Modifier.padding(linePadding))
         
         //Look at Orders
@@ -77,6 +80,7 @@ fun StaffPage(navController : NavHostController){
             modifier = Modifier
                 .height(componentHeight)
                 .padding(linePadding)
+                .clickable { navController.navigate(FastFeastsScreen.StaffStocks.name) }
         ) {
             Image(
                 painter = painterResource(R.drawable.baseline_assignment_ind_24), contentDescription = "Name",
