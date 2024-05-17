@@ -26,11 +26,13 @@ import com.example.a1.data.cartData.CartViewModel
 import com.example.a1.data.cartData.Food
 
 @Composable
-fun OnlineBankingUi(navController: NavController){
+fun OnlineBankingUi(
+    viewModel: CartViewModel,
+    navController: NavController
+){
 
     val darkOrange = Color(0xFF975743)
 
-    val viewModel: CartViewModel = viewModel()
     val referenceNumber = (1..200).random()
     val receiptItems = viewModel.cartItems
     val totalPrice = viewModel.getTotalPrice()

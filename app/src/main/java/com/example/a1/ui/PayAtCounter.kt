@@ -22,11 +22,13 @@ import androidx.navigation.NavController
 import com.example.a1.ui.fastFeast.FastFeastsScreen
 import com.example.a1.data.cartData.CartViewModel
 @Composable
-fun PayAtCounterUi(navController: NavController){
+fun PayAtCounterUi(
+    viewModel: CartViewModel,
+    navController: NavController
+){
 
     val darkOrange = Color(0xFF975743)
 
-    val viewModel: CartViewModel = viewModel()
     val referenceNumber = (200..400).random()
     val receiptItems = viewModel.cartItems
     val totalPrice = viewModel.getTotalPrice()
