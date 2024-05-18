@@ -44,6 +44,7 @@ import com.example.a1.ui.fastFeast.imageBitmapFromBytes
 import java.util.Locale
 import androidx.compose.runtime.*
 import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.text.TextStyle
 
 
 @Composable
@@ -53,6 +54,7 @@ fun CartUi(
     viewModel: CartViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
     val darkOrange = Color(0xFF975743)
+    val darkGrey = Color(0xFF444444)
 
     //val foodList = viewModel.cartItems.collectAsState()
 
@@ -62,6 +64,7 @@ fun CartUi(
     val cartItems by remember { derivedStateOf { viewModel.cart } }
     //derived state that recomputes only when its dependencies change, optimize recomposition and ensure that derived values are updated correctly.
 
+    val isEmptyChecker = false
 
     Column(
         modifier.fillMaxSize(),
@@ -135,7 +138,16 @@ fun CartUi(
         Box {
 
             if (cartItems.isEmpty()) {
-                Column(horizontalAlignment = Alignment.CenterHorizontally) { Text(text = "Your cart is empty", modifier = Modifier.padding(16.dp)) }
+                Column(horizontalAlignment = Alignment.CenterHorizontally)
+                {
+                    Text(text = "Your cart is empty",
+                        modifier = Modifier.padding(16.dp),
+                        style = TextStyle(
+                            color = darkGrey
+
+                        )
+                    )
+                }
             } else {
                 CartList(viewModel = viewModel, cartItems = cartItems)
             }
@@ -172,7 +184,8 @@ fun CartUi(
                             defaultElevation = 10.dp,
                             pressedElevation = 6.dp
                         ),
-                        colors = ButtonDefaults.buttonColors(darkOrange)
+                        colors = ButtonDefaults.buttonColors(darkOrange),
+                        enabled = cartItems.isNotEmpty()
                     ) {
                         Text(
                             text = "Proceed To Payment",
