@@ -308,7 +308,7 @@ fun FastFeastsApp(
                 }
             }
         },
-        gesturesEnabled = true,
+        gesturesEnabled = isLoggedIn.isLoggedIn,
     ) {
         //EDIT THIS PART TO IMPLEMENT YOUR PAGES/ACTIVITIES
         Scaffold(
