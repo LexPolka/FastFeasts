@@ -67,8 +67,7 @@ import kotlinx.coroutines.delay
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ProfilePage( viewModel: ProfileViewModel
-) {
+fun ProfilePage( viewModel: ProfileViewModel ) {
     val uiState by viewModel.uiState.collectAsState()
     Column {
         //profile setter
