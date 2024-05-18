@@ -67,6 +67,7 @@ class CartViewModel(private val cartRepository: CartRepository) : ViewModel() {
 
     fun clearFoodCart() {
         items.clear()
+        clearCart()
     }
 
 

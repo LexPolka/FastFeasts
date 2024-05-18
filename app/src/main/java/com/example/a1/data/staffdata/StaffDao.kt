@@ -17,8 +17,8 @@ interface StaffDao {
     fun getOrderById(orderId: String): Flow<OrderEntity?>
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertOrder(order: OrderEntity)
-    @Delete
-    suspend fun deleteOrder(order: OrderEntity)
+    @Query("DELETE FROM orders WHERE orderID = :orderID")
+    suspend fun deleteOrder(orderID : String)
     @Query("DELETE FROM orders")
     suspend fun clearAllOrders()
 
@@ -27,7 +27,7 @@ interface StaffDao {
     fun getAllIndividualFood() : Flow<List<IndividualFood?>>
     @Query("SELECT * FROM individualFoodItems WHERE id = :foodID")
     fun getIndividualFoodById(foodID: String): Flow<IndividualFood?>
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertIndividualFood(order: IndividualFood)
     @Delete
     suspend fun deleteIndividualFood(order: IndividualFood)

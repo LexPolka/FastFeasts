@@ -6,7 +6,7 @@ interface StaffRepository {
     fun getAllOrders(): Flow<List<OrderEntity?>>
     fun getOrderById(orderId: String): Flow<OrderEntity?>
     fun insertOrder(order: OrderEntity)
-    suspend fun deleteOrder(order: OrderEntity)
+    suspend fun deleteOrder(orderID: String)
     suspend fun clearAllOrders()
 
     fun getAllIndividualFood(): Flow<List<IndividualFood?>>

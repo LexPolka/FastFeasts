@@ -7,7 +7,7 @@ class StaffOfflineRepository(private val staffDao: StaffDao) : StaffRepository {
     override fun getAllOrders(): Flow<List<OrderEntity?>> = staffDao.getAllOrders()
     override fun getOrderById(orderId: String): Flow<OrderEntity?> = staffDao.getOrderById(orderId)
     override fun insertOrder(order: OrderEntity) = staffDao.insertOrder(order)
-    override suspend fun deleteOrder(order: OrderEntity) = staffDao.deleteOrder(order)
+    override suspend fun deleteOrder(orderID: String) = staffDao.deleteOrder(orderID)
     override suspend fun clearAllOrders() = staffDao.clearAllOrders()
 
     override fun getAllIndividualFood(): Flow<List<IndividualFood?>> = staffDao.getAllIndividualFood()

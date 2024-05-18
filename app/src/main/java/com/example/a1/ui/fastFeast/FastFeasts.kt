@@ -137,9 +137,6 @@ fun FastFeastsApp(
         backStackEntry?.destination?.route ?: FastFeastsScreen.MainPage.name
     )
 
-    val isDarkTheme = isSystemInDarkTheme()
-    var darkMode by remember { mutableStateOf( isDarkTheme )}
-
     //Side bar variables
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
@@ -155,6 +152,19 @@ fun FastFeastsApp(
     val uiState by profileViewModel.uiState.collectAsState()
     val globalVariables by globalViewModel.foodState.collectAsState()
     val isLoggedIn by globalViewModel.variables.collectAsState()
+
+    val isDarkTheme = isSystemInDarkTheme()
+    var darkMode by remember { mutableStateOf(isDarkTheme) }
+
+    fun toggleDarkMode() {
+        darkMode = !darkMode
+        val mode = if (isDarkTheme) {
+            AppCompatDelegate.MODE_NIGHT_YES // Enable dark mode
+        } else {
+            AppCompatDelegate.MODE_NIGHT_NO // Enable light mode
+        }
+        AppCompatDelegate.setDefaultNightMode(mode)
+    }
 
     //NAVIGATION DRAWER NEEDS TO BE IN EVERY PAGE!!!!
     ModalNavigationDrawer(
@@ -288,8 +298,7 @@ fun FastFeastsApp(
                     Row( modifier = Modifier
                         .padding(bottom = 8.dp)
                         .clickable {
-                            toggleDarkMode(darkMode)
-                            darkMode = !darkMode
+                            toggleDarkMode()
                         }
                         .background(
                             if (isDarkTheme) Color.Gray
@@ -762,15 +771,6 @@ private fun openInstagramProfile(context: Context) {
         data = Uri.parse("https://www.instagram.com/$instagramUsername")
     }
     context.startActivity(intent)
-}
-
-fun toggleDarkMode(isDarkTheme: Boolean) {
-    val mode = if (isDarkTheme) {
-        AppCompatDelegate.MODE_NIGHT_NO // Enable light mode
-    } else {
-        AppCompatDelegate.MODE_NIGHT_YES // Enable dark mode
-    }
-    AppCompatDelegate.setDefaultNightMode(mode)
 }
 
 //Image(bitmap = yourBitMap)

@@ -46,15 +46,18 @@ fun OnlineBankingUi(
     val referenceNumber by remember { mutableStateOf((0..0xFFFFFF).random().toString(16).padStart(6, '0')) }
     val totalPrice = viewModel.getTotalCartPrice()
 
-    receiptItems.forEach { food ->
-        staffViewModel.addToOrder(
-            orderID = referenceNumber,
-            name = food.name,
-            image = food.image,
-            price = food.price,
-        )
+    val addToOrderExecuted = remember { mutableStateOf(false) }
+    if (!addToOrderExecuted.value) {
+        receiptItems.forEach { food ->
+            staffViewModel.addToOrder(
+                orderID = referenceNumber,
+                name = food.name,
+                image = food.image,
+                price = food.price,
+            )
+        }
+        addToOrderExecuted.value = true
     }
-
 
     Column(
         modifier = Modifier
