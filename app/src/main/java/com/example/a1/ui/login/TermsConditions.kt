@@ -101,11 +101,6 @@ fun TermsAndConditions(onBtnClick: () -> Unit) {
                     "These Terms shall be governed and construed in accordance with the laws of [Your Jurisdiction], without regard to its conflict of law provisions. Any dispute arising out of or in connection with these Terms shall be subject to the exclusive jurisdiction of the courts of [Your Jurisdiction]."
                 )
 
-                SectionTitle("10. Contact Us")
-                ParagraphText(
-                    "If you have any questions about these Terms, please contact us at:\n[Your Company Name]\n[Your Company Address]\n[Your Contact Email]\n[Your Contact Phone Number]"
-                )
-
                 Button(
                     onClick = onBtnClick,
                     modifier = Modifier.align(Alignment.CenterHorizontally),
