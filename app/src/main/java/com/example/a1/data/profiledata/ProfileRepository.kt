@@ -9,4 +9,5 @@ interface ProfileRepository {
     suspend fun insertProfile(profile: ProfileEntity)
 
     suspend fun deleteProfile(profile: ProfileEntity)
+    suspend fun deleteAllProfile()
 }

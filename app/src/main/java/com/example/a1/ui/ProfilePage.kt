@@ -161,8 +161,6 @@ fun ProfileDataModify(viewModel : ProfileViewModel) {
                             )
                             .fillMaxWidth(),
                         colors = TextFieldDefaults.textFieldColors(
-                            focusedTextColor = Color.White,
-                            unfocusedTextColor = Color.White,
                             focusedIndicatorColor = Color(0xFFFDA6900), // Color when the TextField is focused
                             unfocusedIndicatorColor = Color(0xFFFDA6900), // Color when the TextField is not focused
                             cursorColor = Color(0xFFFF9D7E), // Color of the cursor
@@ -251,8 +249,6 @@ fun ProfileDataModify(viewModel : ProfileViewModel) {
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                         shape = RoundedCornerShape(16.dp),
                         colors = TextFieldDefaults.textFieldColors(
-                            focusedTextColor = Color.White,
-                            unfocusedTextColor = Color.White,
                             focusedIndicatorColor = Color(0xFFFDA6900), // Color when the TextField is focused
                             unfocusedIndicatorColor = Color(0xFFFDA6900), // Color when the TextField is not focused
                             cursorColor = Color(0xFFFF9D7E), // Color of the cursor
@@ -298,8 +294,6 @@ fun ProfileDataModify(viewModel : ProfileViewModel) {
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                         shape = RoundedCornerShape(16.dp),
                         colors = TextFieldDefaults.textFieldColors(
-                            focusedTextColor = Color.White,
-                            unfocusedTextColor = Color.White,
                             focusedIndicatorColor = Color(0xFFFDA6900), // Color when the TextField is focused
                             unfocusedIndicatorColor = Color(0xFFFDA6900), // Color when the TextField is not focused
                             cursorColor = Color(0xFFFF9D7E), // Color of the cursor
@@ -347,8 +341,6 @@ fun ProfileDataModify(viewModel : ProfileViewModel) {
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                         shape = RoundedCornerShape(16.dp),
                         colors = TextFieldDefaults.textFieldColors(
-                            focusedTextColor = Color.White,
-                            unfocusedTextColor = Color.White,
                             focusedIndicatorColor = Color(0xFFFDA6900), // Color when the TextField is focused
                             unfocusedIndicatorColor = Color(0xFFFDA6900), // Color when the TextField is not focused
                             cursorColor = Color(0xFFFF9D7E), // Color of the cursor
@@ -419,8 +411,6 @@ fun ProfileDataModify(viewModel : ProfileViewModel) {
                                 shape = RoundedCornerShape(16.dp)
                             ),
                         colors = TextFieldDefaults.textFieldColors(
-                            focusedTextColor = Color.White,
-                            unfocusedTextColor = Color.White,
                             focusedIndicatorColor = Color(0xFFFDA6900), // Color when the TextField is focused
                             unfocusedIndicatorColor = Color(0xFFFDA6900), // Color when the TextField is not focused
                             cursorColor = Color(0xFFFF9D7E), // Color of the cursor
@@ -479,8 +469,6 @@ fun ProfileDataModify(viewModel : ProfileViewModel) {
                                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                                 shape = RoundedCornerShape(16.dp),
                                 colors = TextFieldDefaults.textFieldColors(
-                                    focusedTextColor = Color.White,
-                                    unfocusedTextColor = Color.White,
                                     focusedIndicatorColor = Color(0xFFFDA6900), // Color when the TextField is focused
                                     unfocusedIndicatorColor = Color(0xFFFDA6900), // Color when the TextField is not focused
                                     cursorColor = Color(0xFFFF9D7E), // Color of the cursor
@@ -505,8 +493,6 @@ fun ProfileDataModify(viewModel : ProfileViewModel) {
                                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                                 shape = RoundedCornerShape(16.dp),
                                 colors = TextFieldDefaults.textFieldColors(
-                                    focusedTextColor = Color.White,
-                                    unfocusedTextColor = Color.White,
                                     focusedIndicatorColor = Color(0xFFFDA6900), // Color when the TextField is focused
                                     unfocusedIndicatorColor = Color(0xFFFDA6900), // Color when the TextField is not focused
                                     cursorColor = Color(0xFFFF9D7E), // Color of the cursor
@@ -530,8 +516,6 @@ fun ProfileDataModify(viewModel : ProfileViewModel) {
                                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                                 shape = RoundedCornerShape(16.dp),
                                 colors = TextFieldDefaults.textFieldColors(
-                                    focusedTextColor = Color.White,
-                                    unfocusedTextColor = Color.White,
                                     focusedIndicatorColor = Color(0xFFFDA6900), // Color when the TextField is focused
                                     unfocusedIndicatorColor = Color(0xFFFDA6900), // Color when the TextField is not focused
                                     cursorColor = Color(0xFFFF9D7E), // Color of the cursor
@@ -555,8 +539,6 @@ fun ProfileDataModify(viewModel : ProfileViewModel) {
                                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                                 shape = RoundedCornerShape(16.dp),
                                 colors = TextFieldDefaults.textFieldColors(
-                                    focusedTextColor = Color.White,
-                                    unfocusedTextColor = Color.White,
                                     focusedIndicatorColor = Color(0xFFFDA6900), // Color when the TextField is focused
                                     unfocusedIndicatorColor = Color(0xFFFDA6900), // Color when the TextField is not focused
                                     cursorColor = Color(0xFFFF9D7E), // Color of the cursor

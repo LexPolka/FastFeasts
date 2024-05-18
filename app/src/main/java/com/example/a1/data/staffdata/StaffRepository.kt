@@ -13,5 +13,5 @@ interface StaffRepository {
     fun getIndividualFoodById(foodID: String): Flow<IndividualFood?>
     suspend fun insertIndividualFood(food: IndividualFood)
     suspend fun deleteIndividualFood(food: IndividualFood)
-    suspend fun clearAllIndividualFood()
+    suspend fun deleteAllIndividualFood()
 }

@@ -93,6 +93,9 @@ import com.example.a1.ui.login.TermsAndConditions
 import com.example.a1.ui.staffUI.StaffIndividualFood
 import com.example.a1.ui.staffUI.StaffStocks
 import kotlinx.coroutines.delay
+import java.io.ByteArrayOutputStream
+import java.util.zip.Deflater
+import java.util.zip.Inflater
 
 //enum classes for navigation
 enum class FastFeastsScreen(@StringRes val title: Int) {
@@ -323,7 +326,7 @@ fun FastFeastsApp(
             //NAV HOST IS HERE =============================
             NavHost(
                 navController = navController,
-                startDestination = FastFeastsScreen.MainPage.name, //replace login_flow with FastFeastsScreen.MainPage.name
+                startDestination = "login_flow", //replace login_flow with FastFeastsScreen.MainPage.name
                 modifier = Modifier.padding(innerPadding)
             ) {
                 composable(route = FastFeastsScreen.MainPage.name) {
@@ -366,12 +369,9 @@ fun FastFeastsApp(
                     PayAtCounterUi(cartViewModel, navController)
                 }
 
-
-
-
-
                 navigation(startDestination = FastFeastsScreen.LoginScreen.name , route = "login_flow" ) {
                     composable(route = FastFeastsScreen.LoginScreen.name) {
+                        profileViewModel.deleteAllProfiles()
                         LoginScreen(
                             onLoginClick = {
                                 navController.navigate(

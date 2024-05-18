@@ -18,6 +18,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.a1.data.staffdata.Order
 
 class ProfileViewModel(private val repository: ProfileRepository) : ViewModel() {
@@ -76,6 +77,12 @@ class ProfileViewModel(private val repository: ProfileRepository) : ViewModel() 
             } catch (e: Exception) {
                 // Handle error (e.g., log, show error message)
             }
+        }
+    }
+
+    fun deleteAllProfiles(){
+        viewModelScope.launch {
+            repository.deleteAllProfile()
         }
     }
 

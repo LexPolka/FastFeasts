@@ -15,7 +15,7 @@ data class IndividualFoodItem(
 
 data class GlobalVariables(
     val location : String = "",
-    val isLoggedIn : Boolean = false,
+    val isLoggedIn : Boolean = true,
 )
 
 class GlobalViewModel : ViewModel() {

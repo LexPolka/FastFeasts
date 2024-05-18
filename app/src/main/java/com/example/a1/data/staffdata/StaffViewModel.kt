@@ -16,6 +16,12 @@ data class Order(
     val items: MutableList<Food> = mutableListOf()
 )
 
+data class Stock(
+    val name : String = "",
+    var quantity : Int = 0,
+    val image: Int = 0
+)
+
 class StaffViewModel(private val repository: StaffRepository) : ViewModel() {
     private val _orderList = MutableStateFlow<List<Order>>(emptyList())
     val orderList: StateFlow<List<Order>> = _orderList.asStateFlow()
@@ -111,6 +117,12 @@ class StaffViewModel(private val repository: StaffRepository) : ViewModel() {
             repository.getAllIndividualFood().collect { foodItems ->
                 _individualFoodList.value = foodItems.filterNotNull()
             }
+        }
+    }
+
+    fun deleteAllIndividualFood(){
+        viewModelScope.launch {
+            repository.deleteAllIndividualFood()
         }
     }
 }

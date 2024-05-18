@@ -32,5 +32,5 @@ interface StaffDao {
     @Delete
     suspend fun deleteIndividualFood(order: IndividualFood)
     @Query("DELETE FROM individualFoodItems")
-    suspend fun clearAllIndividualFood()
+    suspend fun deleteAllIndividualFood()
 }
