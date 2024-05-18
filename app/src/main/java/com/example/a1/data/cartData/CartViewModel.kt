@@ -33,6 +33,7 @@ class CartViewModel(private val cartRepository: CartRepository) : ViewModel() {
 
     fun addToCart(foodItem: Food) {
         items.add(foodItem)
+        addToDatabase(foodItem)
     }
 
     fun removeFromCart(food: Food) {
@@ -62,9 +63,14 @@ class CartViewModel(private val cartRepository: CartRepository) : ViewModel() {
     private val _cartItems = MutableStateFlow<List<FoodEntity>>(emptyList())
     val cartItems: StateFlow<List<FoodEntity>> = _cartItems.asStateFlow()
 
-    fun addToCart(food: FoodEntity) {
+    fun addToDatabase(food: Food) {
+        val foodEntity  = FoodEntity(
+            name = food.name,
+            image = food.image,
+            price = food.price
+        )
         viewModelScope.launch{
-            cartRepository.addItem(food)
+            cartRepository.addItem(foodEntity)
         }
     }
 

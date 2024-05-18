@@ -8,9 +8,9 @@ import kotlinx.coroutines.withContext
 
 
 class CartOfflineRepository( private val foodDao: FoodDao): CartRepository {
-    override suspend fun addItem(food: FoodEntity) = foodDao.addFood(food = FoodEntity())
+    override suspend fun addItem(food: FoodEntity) = foodDao.addFood(food)
 
-    override suspend fun removeItem(food: FoodEntity) = foodDao.removeFood(food = FoodEntity())
+    override suspend fun removeItem(food: FoodEntity) = foodDao.removeFood(food)
 
     override fun getCart(): Flow<List<Food>> = foodDao.getCart()
 
