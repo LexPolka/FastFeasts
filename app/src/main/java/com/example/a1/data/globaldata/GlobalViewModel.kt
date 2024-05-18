@@ -13,16 +13,17 @@ data class IndividualFoodItem(
     val price : String = "", //use string cuz for int, just do .toInt()
 )
 
-data class RestaurantLocation(
-    val location : String = ""
+data class GlobalVariables(
+    val location : String = "",
+    val isLoggedIn : Boolean = false,
 )
 
 class GlobalViewModel : ViewModel() {
     private val _foodState = MutableStateFlow(IndividualFoodItem())
     val foodState: StateFlow<IndividualFoodItem> = _foodState.asStateFlow()
 
-    private val _restaurant = MutableStateFlow(RestaurantLocation())
-    val restaurant: StateFlow<RestaurantLocation> = _restaurant.asStateFlow()
+    private val _variables = MutableStateFlow(GlobalVariables())
+    val variables: StateFlow<GlobalVariables> = _variables.asStateFlow()
 
 
     //Setters
@@ -34,8 +35,14 @@ class GlobalViewModel : ViewModel() {
     }
 
     fun setLocation(location : String){
-        _restaurant.update { currentState ->
+        _variables.update { currentState ->
             currentState.copy(location = location)
+        }
+    }
+
+    fun loggedIn(value : Boolean){
+        _variables.update { currentState ->
+            currentState.copy(isLoggedIn = value)
         }
     }
 }

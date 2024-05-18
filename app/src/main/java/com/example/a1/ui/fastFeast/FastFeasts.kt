@@ -149,6 +149,7 @@ fun FastFeastsApp(
 
     val uiState by profileViewModel.uiState.collectAsState()
     val globalVariables by globalViewModel.foodState.collectAsState()
+    val isLoggedIn by globalViewModel.variables.collectAsState()
 
     //NAVIGATION DRAWER NEEDS TO BE IN EVERY PAGE!!!!
     ModalNavigationDrawer(
@@ -312,7 +313,9 @@ fun FastFeastsApp(
         //EDIT THIS PART TO IMPLEMENT YOUR PAGES/ACTIVITIES
         Scaffold(
             topBar = {
-                HeaderBar(globalViewModel, scope, drawerState)
+                if (isLoggedIn.isLoggedIn){
+                    HeaderBar(globalViewModel, scope, drawerState)
+                }
             }
         ) { innerPadding ->
 
@@ -591,36 +594,6 @@ fun Footer()
             horizontalArrangement = Arrangement.Center,
             modifier = Modifier.fillMaxSize()
         ) {
-            //LINKS COLUMN ========================
-            Column(horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.padding(columnSpacing))
-            {
-                Text(text = "Links", color = Color.White, fontSize = bigTextSize)
-
-                Row (verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.Center,
-                    modifier = Modifier
-                        .clickable { }
-                        .padding(bottom = buttonPadding)) {
-                    Text(text = "Terms and Conditions", color = Color.White, fontSize = smallTextSize)
-                }
-                Row (verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.Center,
-                    modifier = Modifier
-                        .clickable { }
-                        .padding(bottom = buttonPadding)) {
-                    Text(text = "About Us", color = Color.White, fontSize = smallTextSize)
-                }
-                Row (verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.Center,
-                    modifier = Modifier
-                        .clickable { }
-                        .padding(bottom = buttonPadding)) {
-                    Text(text = "Feedback", color = Color.White, fontSize = smallTextSize)
-                }
-
-            }
-
             //CONTACT US COLUMN ========================
             Column(horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier.padding(columnSpacing))
