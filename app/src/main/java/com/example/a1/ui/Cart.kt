@@ -42,8 +42,6 @@ import com.example.a1.data.cartData.CartViewModel
 import com.example.a1.data.cartData.Food
 import com.example.a1.ui.fastFeast.imageBitmapFromBytes
 import java.util.Locale
-import androidx.compose.runtime.*
-import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.text.TextStyle
 
 
@@ -63,8 +61,6 @@ fun CartUi(
     //overall cart variable
     val cartItems by remember { derivedStateOf { viewModel.cart } }
     //derived state that recomputes only when its dependencies change, optimize recomposition and ensure that derived values are updated correctly.
-
-    val isEmptyChecker = false
 
     Column(
         modifier.fillMaxSize(),
