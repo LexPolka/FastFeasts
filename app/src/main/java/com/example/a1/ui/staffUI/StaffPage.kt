@@ -49,9 +49,10 @@ fun StaffPage(navController : NavHostController){
         Row(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center,
-            modifier = androidx.compose.ui.Modifier
+            modifier = Modifier
                 .height(componentHeight)
                 .padding(linePadding)
+                .clickable { navController.navigate(FastFeastsScreen.StaffOrders.name) }
         ) {
             Image(
                 painter = painterResource(R.drawable.baseline_pending_actions_24), contentDescription = "Name",

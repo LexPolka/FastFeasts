@@ -91,6 +91,7 @@ import com.example.a1.ui.login.PrivacyPolicy
 import com.example.a1.ui.login.SignUpScreen
 import com.example.a1.ui.login.TermsAndConditions
 import com.example.a1.ui.staffUI.StaffIndividualFood
+import com.example.a1.ui.staffUI.StaffOrders
 import com.example.a1.ui.staffUI.StaffStocks
 import kotlinx.coroutines.delay
 import java.io.ByteArrayOutputStream
@@ -359,6 +360,9 @@ fun FastFeastsApp(
                 }
                 composable(route = FastFeastsScreen.StaffStocks.name) {
                     StaffStocks(staffViewModel, navController)
+                }
+                composable(route = FastFeastsScreen.StaffOrders.name) {
+                    StaffOrders(staffViewModel, navController)
                 }
 
                 //depending on userInput from paymentOptions , to be implemented

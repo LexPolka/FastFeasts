@@ -15,8 +15,8 @@ interface StaffDao {
     fun getAllOrders(): Flow<List<OrderEntity?>>
     @Query("SELECT * FROM orders WHERE id = :orderId")
     fun getOrderById(orderId: String): Flow<OrderEntity?>
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insertOrder(order: OrderEntity)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertOrder(order: OrderEntity)
     @Delete
     suspend fun deleteOrder(order: OrderEntity)
     @Query("DELETE FROM orders")

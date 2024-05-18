@@ -41,9 +41,9 @@ class StaffViewModel(private val repository: StaffRepository) : ViewModel() {
         }
     }
 
-    fun addToOrder(id : String, name : String, price : String, image : ByteArray){
+    fun addToOrder(orderID : String, name : String, price : String, image : ByteArray){
         val newOrder = OrderEntity(
-            id = id,
+            orderID = orderID,
             name = name,
             price = price,
             image = image,
@@ -51,6 +51,12 @@ class StaffViewModel(private val repository: StaffRepository) : ViewModel() {
 
         viewModelScope.launch {
             repository.insertOrder(newOrder)
+        }
+    }
+
+    fun clearAllOrders(){
+        viewModelScope.launch {
+            repository.clearAllOrders()
         }
     }
 

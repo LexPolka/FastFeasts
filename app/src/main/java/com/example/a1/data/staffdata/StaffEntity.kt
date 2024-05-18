@@ -10,8 +10,9 @@ import com.google.gson.reflect.TypeToken
 
 @Entity(tableName = "orders")
 data class OrderEntity(
-    @PrimaryKey(autoGenerate = false)
-    val id: String = "",
+    @PrimaryKey(autoGenerate = true)
+    val id: Int = 0,
+    val orderID : String = "",
     val image: ByteArray,
     val name : String = "",
     val price : String = "",

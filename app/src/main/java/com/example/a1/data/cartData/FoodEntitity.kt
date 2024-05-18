@@ -2,7 +2,6 @@ package com.example.a1.data.cartData
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import androidx.room.TypeConverters
 
 @Entity(tableName = "food")
 data class FoodEntity(

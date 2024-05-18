@@ -15,7 +15,7 @@ import com.example.a1.data.staffdata.IndividualFood
 import com.example.a1.data.staffdata.OrderEntity
 import com.example.a1.data.staffdata.StaffDao
 
-@Database(entities = [ProfileEntity::class, OrderEntity::class, IndividualFood::class, FoodEntity::class, StockEntity::class], version = 4, exportSchema = false)
+@Database(entities = [ProfileEntity::class, OrderEntity::class, IndividualFood::class, FoodEntity::class, StockEntity::class], version = 5, exportSchema = false)
 abstract class ApplicationDatabase : RoomDatabase() {
     abstract fun profileDao(): ProfileDao
     abstract fun staffDao(): StaffDao
