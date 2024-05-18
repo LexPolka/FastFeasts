@@ -81,7 +81,6 @@ dependencies {
     implementation(libs.gson)
 
     //Room
-    val room_version = "2.6.1"
     implementation(libs.androidx.room.runtime)
     annotationProcessor(libs.androidx.room.compiler)
     kapt(libs.androidx.room.room.compiler)

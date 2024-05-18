@@ -86,22 +86,6 @@ fun LoginScreen(onLoginClick: () -> Unit, onSignUpClick: () -> Unit) {
             visualTransformation = PasswordVisualTransformation()
         )
         Spacer(Modifier.height(itemSpacing))
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween
-        ){
-            Row(
-                horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Checkbox(checked = checked, onCheckedChange = onCheckedChange )
-                Text("Remember me")
-            }
-            TextButton(onClick = {}) {
-                Text("Forgot Password?")
-            }
-        }
-        Spacer(Modifier.height(itemSpacing))
         Button(
             onClick = onLoginClick,
             modifier = Modifier.fillMaxWidth(),

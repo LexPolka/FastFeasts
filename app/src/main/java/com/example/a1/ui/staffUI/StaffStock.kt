@@ -76,7 +76,7 @@ fun StaffStocks(viewModel: StaffViewModel, navController: NavHostController) {
         )
     )
     //TEMPORARY!! ALLOY PLS REMOVE THIS AND REPLACE WITH ACTUAL DATA /\
-    
+
 
     Column {
         BackButton(navController = navController)

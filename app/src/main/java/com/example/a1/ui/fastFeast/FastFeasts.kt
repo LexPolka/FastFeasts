@@ -86,9 +86,9 @@ import com.example.a1.ui.PayAtCounterUi
 import com.example.a1.ui.PaymentOptions
 import com.example.a1.ui.staffUI.StaffPage
 import com.example.a1.ui.login.LoginScreen
+import com.example.a1.ui.login.PrivacyPolicy
 import com.example.a1.ui.login.SignUpScreen
-import com.example.a1.ui.login.PrivacyScreen
-import com.example.a1.ui.login.PolicyScreen
+import com.example.a1.ui.login.TermsAndConditions
 import com.example.a1.ui.staffUI.StaffIndividualFood
 import com.example.a1.ui.staffUI.StaffStocks
 import kotlinx.coroutines.delay
@@ -320,7 +320,7 @@ fun FastFeastsApp(
             //NAV HOST IS HERE =============================
             NavHost(
                 navController = navController,
-                startDestination = FastFeastsScreen.MainPage.name, //replace login_flow with FastFeastsScreen.MainPage.name
+                startDestination = "login_flow", //replace login_flow with FastFeastsScreen.MainPage.name
                 modifier = Modifier.padding(innerPadding)
             ) {
                 composable(route = FastFeastsScreen.MainPage.name) {
@@ -415,10 +415,10 @@ fun FastFeastsApp(
                         )
                     }
                     composable(route = FastFeastsScreen.PrivacyScreen.name) {
-                        PolicyScreen( {navController.navigateUp() })
+                        PrivacyPolicy ({ navController.navigateUp() })
                     }
                     composable(route = FastFeastsScreen.PolicyScreen.name) {
-                        PrivacyScreen ({ navController.navigateUp() })
+                        TermsAndConditions( {navController.navigateUp() })
                     }
                 }
             }

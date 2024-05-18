@@ -2,6 +2,7 @@ package com.example.a1.ui.login
 
 import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -31,6 +32,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -57,6 +59,8 @@ fun SignUpScreen(
     var isPasswordSame by remember { mutableStateOf(false) }
     val isFieldsNotEmpty = firstName.isNotEmpty() &&
             email.isNotEmpty() && password.isNotEmpty() && confirmPassword.isNotEmpty() && agree
+
+    val isDarkTheme = isSystemInDarkTheme()
 
     Column(
         modifier = Modifier
@@ -112,18 +116,19 @@ fun SignUpScreen(
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            val privacyText = " Privacy "
-            val policyText = " Policy "
+            val privacyText = " Privacy Policy "
+            val policyText = " Terms & Conditions "
             val annotatedString = buildAnnotatedString {
                 withStyle(SpanStyle(color = MaterialTheme.colorScheme.onBackground)) {
                     append("I agree with")
                 }
-                append("")
                 withStyle(SpanStyle(color = MaterialTheme.colorScheme.primary)) {
                     pushStringAnnotation(tag = privacyText, privacyText)
                     append(privacyText)
                 }
-                append("And")
+                withStyle(SpanStyle(color = MaterialTheme.colorScheme.onBackground)) {
+                    append("and")
+                }
                 withStyle(SpanStyle(color = MaterialTheme.colorScheme.primary)) {
                     pushStringAnnotation(tag = policyText, policyText)
                     append(policyText)
@@ -137,13 +142,13 @@ fun SignUpScreen(
             annotatedString.getStringAnnotations(offset, offset).forEach {
                 when (it.tag) {
                     privacyText -> {
-                        Toast.makeText(context, "Privacy Text Clicked", Toast.LENGTH_SHORT)
+                        Toast.makeText(context, "Privacy Policy Clicked", Toast.LENGTH_SHORT)
                             .show()
                         onPrivacyClick()
                     }
 
                     policyText -> {
-                        Toast.makeText(context, "Policy Text Clicked", Toast.LENGTH_SHORT)
+                        Toast.makeText(context, "Terms & Conditions Clicked", Toast.LENGTH_SHORT)
                             .show()
                         onPolicyClick()
                     }
