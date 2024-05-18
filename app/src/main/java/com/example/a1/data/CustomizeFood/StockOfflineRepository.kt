@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 
 
 class StockOfflineRepository(private val stockDao: StockDao) : StockRepository {
-    override val allIngredients: LiveData<List<StockEntity>> = stockDao.getAllIngredients()
+    override val allIngredients: List<StockEntity> = stockDao.getAllIngredients()
 
     override suspend fun insertIngredient(stockEntity: StockEntity) {
         stockDao.insertIngredient(stockEntity)
