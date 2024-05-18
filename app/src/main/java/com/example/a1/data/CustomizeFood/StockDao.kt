@@ -12,7 +12,7 @@ import com.example.a1.data.profiledata.ProfileEntity
 @Dao
 interface StockDao {
     @Query("SELECT * FROM StockEntity")
-    fun getAllIngredients(): LiveData<List<StockEntity>>
+    fun getAllIngredients(): List<StockEntity>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertIngredient(stockEntity: StockEntity)

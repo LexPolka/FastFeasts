@@ -1,14 +1,12 @@
 package com.example.a1.data
 
 import android.content.Context
-import androidx.databinding.adapters.Converters
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.example.a1.data.CustomizeFood.StockDao
 import com.example.a1.data.CustomizeFood.StockEntity
-
 import com.example.a1.data.cartData.FoodDao
 import com.example.a1.data.cartData.FoodEntity
 import com.example.a1.data.profiledata.ProfileDao

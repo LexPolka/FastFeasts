@@ -11,7 +11,7 @@ data class StockEntity(
 
     @PrimaryKey(autoGenerate = true)
     val id : Int = 0, ){
-    constructor(name: String, presetQuantity: Int) : this(name, presetQuantity, 0)
+
 }
 
 

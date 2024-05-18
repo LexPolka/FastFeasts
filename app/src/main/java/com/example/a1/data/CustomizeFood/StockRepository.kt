@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 
 
 interface StockRepository {
-    val allIngredients: LiveData<List<StockEntity>>
+    val allIngredients: List<StockEntity>
 
     suspend fun insertIngredient(stockEntity: StockEntity)
     suspend fun updateIngredientQuantity(id: Int, quantity: Int)
