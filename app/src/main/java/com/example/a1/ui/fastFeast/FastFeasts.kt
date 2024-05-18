@@ -326,7 +326,7 @@ fun FastFeastsApp(
             //NAV HOST IS HERE =============================
             NavHost(
                 navController = navController,
-                startDestination = "login_flow", //replace login_flow with FastFeastsScreen.MainPage.name
+                startDestination = FastFeastsScreen.MainPage.name, //replace login_flow with FastFeastsScreen.MainPage.name
                 modifier = Modifier.padding(innerPadding)
             ) {
                 composable(route = FastFeastsScreen.MainPage.name) {
@@ -336,7 +336,7 @@ fun FastFeastsApp(
                     ProfilePage(profileViewModel)
                 }
                 composable(route = FastFeastsScreen.Cart.name) {
-                    CartUi(cartViewModel, navController)
+                    CartUi(navController, modifier = Modifier, cartViewModel)
                 }
                 composable(route = FastFeastsScreen.IndividualFood.name) {
                     IndividualFoodPage(cartViewModel, globalViewModel, navController)
@@ -371,7 +371,6 @@ fun FastFeastsApp(
 
                 navigation(startDestination = FastFeastsScreen.LoginScreen.name , route = "login_flow" ) {
                     composable(route = FastFeastsScreen.LoginScreen.name) {
-                        profileViewModel.deleteAllProfiles()
                         LoginScreen(
                             onLoginClick = {
                                 navController.navigate(

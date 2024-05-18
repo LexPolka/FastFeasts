@@ -16,6 +16,8 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -24,22 +26,22 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.example.a1.data.AppViewModelProvider
 import com.example.a1.ui.fastFeast.FastFeastsScreen
 import com.example.a1.data.cartData.CartViewModel
 import com.example.a1.data.cartData.Food
+import com.example.a1.data.cartData.FoodEntity
 import java.util.Locale
 
 @Composable
 fun OnlineBankingUi(
-    viewModel: CartViewModel,
+    viewModel: CartViewModel = viewModel(factory = AppViewModelProvider.Factory),
     navController: NavController
 ){
-
+    val receiptItems = viewModel.cart
     val darkOrange = Color(0xFF975743)
-
     val referenceNumber = (1..200).random()
-    val receiptItems = viewModel.cartItems
-    val totalPrice = viewModel.getTotalPrice()
+    val totalPrice = viewModel.getTotalCartPrice()
 
     Column(
         modifier = Modifier
@@ -141,19 +143,19 @@ fun ReceiptList(
 
 @Composable
 fun ReceiptItem(
-food: Food,
-modifier: Modifier = Modifier
+    food: Food,
+    modifier: Modifier = Modifier
 ){
     Row(
         Modifier
-        .fillMaxWidth()
-        .padding(horizontal = 16.dp, vertical = 8.dp), // Add padding to the Row
-    horizontalArrangement = Arrangement.SpaceBetween
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp, vertical = 8.dp), // Add padding to the Row
+        horizontalArrangement = Arrangement.SpaceBetween
 
     ) {
         Text(text = food.name,
             modifier = Modifier.weight(1f)
-            )
+        )
         Text(text = food.price )
     }
 
