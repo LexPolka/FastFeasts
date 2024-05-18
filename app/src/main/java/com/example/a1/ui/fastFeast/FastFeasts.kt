@@ -363,10 +363,10 @@ fun FastFeastsApp(
 
                 //depending on userInput from paymentOptions , to be implemented
                 composable(route = FastFeastsScreen.OnlineBanking.name) {
-                    OnlineBankingUi(cartViewModel, navController)
+                    OnlineBankingUi(staffViewModel, cartViewModel, navController)
                 }
                 composable(route = FastFeastsScreen.PayAtCounter.name) {
-                    PayAtCounterUi(cartViewModel, navController)
+                    PayAtCounterUi(staffViewModel, cartViewModel, navController)
                 }
 
                 navigation(startDestination = FastFeastsScreen.LoginScreen.name , route = "login_flow" ) {

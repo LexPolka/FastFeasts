@@ -8,7 +8,7 @@ interface CartRepository {
 
     suspend fun addItem(food: FoodEntity)
     suspend fun removeItem(food: FoodEntity)
-    fun getCart(): kotlinx.coroutines.flow.Flow<List<Food>>
+    fun getCart(): kotlinx.coroutines.flow.Flow<List<FoodEntity>>
 
     suspend fun clearCart()
 

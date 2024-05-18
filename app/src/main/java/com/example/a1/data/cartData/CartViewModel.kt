@@ -1,8 +1,6 @@
 package com.example.a1.data.cartData
 
 import android.graphics.BitmapFactory
-import androidx.compose.runtime.State
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -27,6 +25,18 @@ data class Food(
 
 class CartViewModel(private val cartRepository: CartRepository) : ViewModel() {
 
+    private val _cartList = MutableStateFlow<List<FoodEntity>>(emptyList())
+    val cartList: StateFlow<List<FoodEntity>> = _cartList.asStateFlow()
+
+    init {
+        viewModelScope.launch {
+            cartRepository.getCart().collect { orders ->
+                _cartList.value = orders.filterNotNull()
+            }
+        }
+    }
+
+
     //Food
     private val items = mutableStateListOf<Food>()
     val cart: List<Food> get() = items
@@ -38,6 +48,7 @@ class CartViewModel(private val cartRepository: CartRepository) : ViewModel() {
 
     fun removeFromCart(food: Food) {
         items.remove(food)
+        removeFromDatabase(food)
     }
 
     fun getTotalCartPrice(): Double {
@@ -46,7 +57,7 @@ class CartViewModel(private val cartRepository: CartRepository) : ViewModel() {
 
     fun getTotalCartItems(): Int {
         var counter = 0
-        for (x in cart){
+        for (x in cart) {
             counter++
         }
 
@@ -64,20 +75,28 @@ class CartViewModel(private val cartRepository: CartRepository) : ViewModel() {
     val cartItems: StateFlow<List<FoodEntity>> = _cartItems.asStateFlow()
 
     fun addToDatabase(food: Food) {
-        val foodEntity  = FoodEntity(
+        val foodEntity = FoodEntity(
             name = food.name,
             image = food.image,
             price = food.price
         )
-        viewModelScope.launch{
+        viewModelScope.launch {
             cartRepository.addItem(foodEntity)
         }
     }
 
-    fun removeFromCart(food: FoodEntity) {
-        viewModelScope.launch{
-            cartRepository.removeItem(food)
+    fun removeFromDatabase(food: Food) {
+        viewModelScope.launch {
+            val foodEntity = FoodEntity(
+                name = food.name,
+                image = food.image,
+                price = food.price
+            )
+            viewModelScope.launch {
+                cartRepository.removeItem(foodEntity)
+            }
         }
+
     }
 
     fun getTotalPrice(): Double {
@@ -89,15 +108,12 @@ class CartViewModel(private val cartRepository: CartRepository) : ViewModel() {
     }
 
     fun clearCart() {
-        viewModelScope.launch{
+        viewModelScope.launch {
             cartRepository.clearCart()
         }
     }
 
-    //Convert food -> foodEntity
 
-
-    //dialogs
     var isRemoveDialogShown by mutableStateOf(false)
         private set
 
@@ -112,11 +128,11 @@ class CartViewModel(private val cartRepository: CartRepository) : ViewModel() {
     var isClearCartDialogShown by mutableStateOf(false)
         private set
 
-    fun onClearCartClick(){
+    fun onClearCartClick() {
         isClearCartDialogShown = true
     }
 
-    fun onClearCartDismissClick(){
+    fun onClearCartDismissClick() {
         isClearCartDialogShown = false
     }
 
@@ -138,6 +154,5 @@ class CartViewModel(private val cartRepository: CartRepository) : ViewModel() {
         }
         return buffer.int
     }
-
 
 }

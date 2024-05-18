@@ -20,7 +20,7 @@ interface FoodDao {
     suspend fun removeFood(food: FoodEntity)
 
     @Query("SELECT * FROM food")
-    fun getCart(): Flow<List<Food>>
+    fun getCart(): Flow<List<FoodEntity>>
 
     @Query("DELETE FROM food")
     suspend fun clearCart()

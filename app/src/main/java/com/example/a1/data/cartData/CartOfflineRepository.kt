@@ -12,7 +12,7 @@ class CartOfflineRepository( private val foodDao: FoodDao): CartRepository {
 
     override suspend fun removeItem(food: FoodEntity) = foodDao.removeFood(food)
 
-    override fun getCart(): Flow<List<Food>> = foodDao.getCart()
+    override fun getCart(): Flow<List<FoodEntity>> = foodDao.getCart()
 
     override suspend fun clearCart() = foodDao.clearCart()
 

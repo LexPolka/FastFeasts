@@ -13,8 +13,6 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -26,10 +24,12 @@ import androidx.navigation.NavController
 import com.example.a1.data.AppViewModelProvider
 import com.example.a1.ui.fastFeast.FastFeastsScreen
 import com.example.a1.data.cartData.CartViewModel
+import com.example.a1.data.staffdata.StaffViewModel
 import java.util.Locale
 
 @Composable
 fun PayAtCounterUi(
+    staffViewModel: StaffViewModel,
     viewModel: CartViewModel = viewModel(factory = AppViewModelProvider.Factory),
     navController: NavController
 ){
@@ -38,7 +38,7 @@ fun PayAtCounterUi(
     //val foodList = viewModel.cartItems.collectAsState()
     //val receiptItems = foodList.value
     val darkOrange = Color(0xFF975743)
-    val referenceNumber = (200..400).random()
+    val referenceNumber = (1001..2000).random()
     val totalPrice = viewModel.getTotalCartPrice()
 
     Column(

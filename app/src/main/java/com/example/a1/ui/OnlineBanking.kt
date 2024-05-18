@@ -31,16 +31,18 @@ import com.example.a1.ui.fastFeast.FastFeastsScreen
 import com.example.a1.data.cartData.CartViewModel
 import com.example.a1.data.cartData.Food
 import com.example.a1.data.cartData.FoodEntity
+import com.example.a1.data.staffdata.StaffViewModel
 import java.util.Locale
 
 @Composable
 fun OnlineBankingUi(
+    staffViewModel: StaffViewModel,
     viewModel: CartViewModel = viewModel(factory = AppViewModelProvider.Factory),
     navController: NavController
 ){
     val receiptItems = viewModel.cart
     val darkOrange = Color(0xFF975743)
-    val referenceNumber = (1..200).random()
+    val referenceNumber = (1..1000).random()
     val totalPrice = viewModel.getTotalCartPrice()
 
     Column(

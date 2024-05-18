@@ -11,13 +11,11 @@ import com.example.a1.data.cartData.FoodDao
 import com.example.a1.data.cartData.FoodEntity
 import com.example.a1.data.profiledata.ProfileDao
 import com.example.a1.data.profiledata.ProfileEntity
-import com.example.a1.data.staffdata.FoodListConverter
 import com.example.a1.data.staffdata.IndividualFood
 import com.example.a1.data.staffdata.OrderEntity
 import com.example.a1.data.staffdata.StaffDao
 
-@Database(entities = [ProfileEntity::class, OrderEntity::class, IndividualFood::class, FoodEntity::class, StockEntity::class], version = 3, exportSchema = false)
-@TypeConverters(FoodListConverter::class)
+@Database(entities = [ProfileEntity::class, OrderEntity::class, IndividualFood::class, FoodEntity::class, StockEntity::class], version = 4, exportSchema = false)
 abstract class ApplicationDatabase : RoomDatabase() {
     abstract fun profileDao(): ProfileDao
     abstract fun staffDao(): StaffDao
