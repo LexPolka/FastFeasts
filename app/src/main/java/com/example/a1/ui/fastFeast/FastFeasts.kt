@@ -76,6 +76,7 @@ import androidx.navigation.navigation
 import com.example.a1.R
 import com.example.a1.data.cartData.CartViewModel
 import com.example.a1.data.AppViewModelProvider
+import com.example.a1.data.CustomizeFood.StockViewModel
 import com.example.a1.data.profiledata.GlobalViewModel
 import com.example.a1.data.staffdata.StaffViewModel
 import com.example.a1.ui.CartUi
@@ -288,8 +289,7 @@ fun FastFeastsApp(
                         .background(
                             if (isDarkTheme) Color.Gray
                             else
-                                Color.Transparent
-                            , shape = RoundedCornerShape(5.dp)
+                                Color.Transparent, shape = RoundedCornerShape(5.dp)
                         )
                         .fillMaxWidth()
                     ) {
