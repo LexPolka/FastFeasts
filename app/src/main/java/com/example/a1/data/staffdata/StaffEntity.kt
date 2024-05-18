@@ -9,11 +9,12 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
 @Entity(tableName = "orders")
-@TypeConverters(FoodListConverter::class)
 data class OrderEntity(
     @PrimaryKey(autoGenerate = false)
     val id: String = "",
-    val items: MutableList<Food> = mutableListOf()
+    val image: ByteArray,
+    val name : String = "",
+    val price : String = "",
 )
 
 @Entity(tableName = "individualFoodItems")
@@ -24,19 +25,3 @@ data class IndividualFood(
     val name : String = "",
     val price : String = "",
 )
-
-class FoodListConverter {
-    @TypeConverter
-    fun fromFoodList(value: MutableList<Food>?): String {
-        val gson = Gson()
-        val type = object : TypeToken<MutableList<Food>>() {}.type
-        return gson.toJson(value, type)
-    }
-
-    @TypeConverter
-    fun toFoodList(value: String): MutableList<Food>? {
-        val gson = Gson()
-        val type = object : TypeToken<MutableList<Food>>() {}.type
-        return gson.fromJson(value, type)
-    }
-}
