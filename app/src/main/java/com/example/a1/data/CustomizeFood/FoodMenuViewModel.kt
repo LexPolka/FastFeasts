@@ -1,19 +1,19 @@
 package com.example.test
 
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.a1.R
-import kotlinx.coroutines.flow.MutableStateFlow
 
-data class Stock(
-    val name : String = "",
-    var quantity : Int = 0,
-    val image: Int = 0
-)
+
 
 class FoodMenuViewModel : ViewModel() {
+
+
     //==DIALOG FOR BURGER BUNS SELECTION=====================================================
     var openDialogBun by mutableStateOf(false)
         private set
@@ -139,19 +139,23 @@ class FoodMenuViewModel : ViewModel() {
 
     //==============
     var TotalPrice by mutableStateOf(0.00)
-    inner class Burger(val Buns: Buns, val Patty: Patty, val Lettuce: Lettuce, val Sauce: Sauce, val Extra: Extra)
-    inner class BurgerDisplayInCart(val Name: String, val Price: Double, val Image: Int)
-    var emptySlotBurger = BurgerDisplayInCart("",TotalPrice, R.drawable.burgericon)
-    var addBurger by mutableStateOf<BurgerDisplayInCart>(emptySlotBurger)
-    private val _burgerState = MutableStateFlow(BurgerDisplayInCart("", TotalPrice, R.drawable.burgericon))
+    inner class Burger(val name: String, val Price: Double, val Image: Int,val Buns: Buns, val Patty: Patty, val Lettuce: Lettuce, val Sauce: Sauce, val Extra: Extra)
+
+    var emptySlotBurger = Burger("Customize Burger",TotalPrice, R.drawable.burgericon, addBun, addPatty, addLettuce, addSauce, addExtra)
+
+    private val addBurger = mutableStateListOf<Burger>()
+    val cartBurger: List<Burger> get() = addBurger
+
+
+    fun AddToCartBurger(newBurger: Burger){
+        addBurger.add(newBurger)
+    }
 
     fun CustomBurgertotalPrice(){
         TotalPrice = addBun.price + addPatty.price + addLettuce.price + addSauce.price + addExtra.price
 
     }
-    fun addedNewBurgerInCart(newBurger: BurgerDisplayInCart){
-        addBurger = newBurger
 
-    }
+
 }
 

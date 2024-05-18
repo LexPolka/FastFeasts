@@ -13,6 +13,7 @@ data class Food(
     val price : String = "", //use string cuz for int, just do .toInt()
 )
 
+
 class CartViewModel(cartRepository: CartRepository) : ViewModel() {
     private val items = mutableStateListOf<Food>()
     val cartItems: List<Food> get() = items

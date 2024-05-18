@@ -2,7 +2,7 @@ package com.example.a1.data
 
 import android.app.Application
 
-class Application : Application() {
+open class Application : Application() {
 
     /**
      * AppContainer instance used by the rest of classes to obtain dependencies

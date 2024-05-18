@@ -48,6 +48,7 @@ fun CartUi(viewModel: CartViewModel, navController : NavHostController, modifier
 // this is the page itself, including the buttons and cart label
     //Colours
 
+    val lightOrange = Color(0xFFFF9D7E)
     val darkOrange = Color(0xFF975743)
 
 
@@ -99,6 +100,7 @@ fun CartUi(viewModel: CartViewModel, navController : NavHostController, modifier
                         }
                         viewModel.onClearCartDismissClick()
                     },
+                    modifier = modifier
                 )
             }
         }
@@ -112,10 +114,7 @@ fun CartUi(viewModel: CartViewModel, navController : NavHostController, modifier
 
         Card {
 
-            Row(
-                Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
+            Row {
                 Column(
                     modifier = Modifier.weight(1f)
                     
@@ -146,10 +145,8 @@ fun CartUi(viewModel: CartViewModel, navController : NavHostController, modifier
                 )
                 {
                     Card {
-                        Row(
-                        Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
-                        horizontalArrangement = Arrangement.SpaceBetween
-                        )
+                        Row(horizontalArrangement = Arrangement.Center,
+                            verticalAlignment = Alignment.CenterVertically)
                         {
                             Text(
                                 text = "Total price",
@@ -208,12 +205,11 @@ fun CartUi(viewModel: CartViewModel, navController : NavHostController, modifier
 fun CartList(viewModel: CartViewModel, cartItems: List<Food>, modifier: Modifier = Modifier){
 
     LazyColumn(
-        modifier = Modifier
+        modifier = modifier
     ) {
         items(cartItems) { food ->
             Column {
                 CartItem(cartViewModel = viewModel, food = food )
-                Spacer(Modifier.height(10.dp))
                 }
         }
     }
@@ -234,10 +230,7 @@ fun CartItem(cartViewModel: CartViewModel, food: Food, modifier: Modifier = Modi
         modifier.size(width = 400.dp, height = 100.dp)
 
     ){
-        Row(
-            Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
+        Row {
 
             Column(
                 modifier = Modifier.weight(1f)
@@ -302,7 +295,8 @@ fun CartItem(cartViewModel: CartViewModel, food: Food, modifier: Modifier = Modi
 @Composable
 fun CartConfirmRemoveItemDialog(
     onDismiss: () -> Unit,
-    onConfirm: (Boolean) -> Unit
+    onConfirm: (Boolean) -> Unit,
+    modifier: Modifier = Modifier
 ){
 
     Dialog(
@@ -310,24 +304,15 @@ fun CartConfirmRemoveItemDialog(
         properties = DialogProperties(usePlatformDefaultWidth = false)
 
     ) {
-        Card(
-            modifier = Modifier
-                .padding(16.dp)
-        ) {
-            Column(
-                modifier = Modifier,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
+        Card {
+            Column {
                 Row {
-                    Text(text = "Warning !"
+                    Text(text = "Warning !",
+                        modifier = Modifier.fillMaxWidth()
                     )
                 }
                 Row {
-                    Text(" ",
-                        Modifier.fillMaxWidth())
-                }
-                Row {
-                    Text(text = "Do you wish to remove this item?")
+                    Text(text = "Do you really wish to remove this item from your cart?")
                 }
                 Row {
                     Button(onClick = { onConfirm(true) }) {
@@ -349,7 +334,8 @@ fun CartConfirmRemoveItemDialog(
 @Composable
 fun CartConfirmClearCartDialog(
     onDismiss: () -> Unit,
-    onConfirm: (Boolean) -> Unit
+    onConfirm: (Boolean) -> Unit,
+    modifier: Modifier = Modifier
 ){
     Dialog(
         onDismissRequest = { onDismiss() },
@@ -357,17 +343,12 @@ fun CartConfirmClearCartDialog(
 
     ) {
         Card {
-            Column(
-                modifier = Modifier,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
+            Column {
                 Row {
-                    Text(text = "Warning !"
+                    Text(text = "Warning !",
+                        modifier.fillMaxWidth()
+
                     )
-                }
-                Row {
-                    Text(" ",
-                        Modifier.fillMaxWidth())
                 }
                 Row {
                     Text(text = "Do you really wish to clear your cart?")

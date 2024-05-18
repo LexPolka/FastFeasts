@@ -86,9 +86,9 @@ import com.example.a1.ui.PayAtCounterUi
 import com.example.a1.ui.PaymentOptions
 import com.example.a1.ui.staffUI.StaffPage
 import com.example.a1.ui.login.LoginScreen
-import com.example.a1.ui.login.PrivacyPolicy
 import com.example.a1.ui.login.SignUpScreen
-import com.example.a1.ui.login.TermsAndConditions
+//import com.example.a1.ui.login.PrivacyScreen
+//import com.example.a1.ui.login.PolicyScreen
 import com.example.a1.ui.staffUI.StaffIndividualFood
 import com.example.a1.ui.staffUI.StaffStocks
 import kotlinx.coroutines.delay
@@ -149,7 +149,6 @@ fun FastFeastsApp(
 
     val uiState by profileViewModel.uiState.collectAsState()
     val globalVariables by globalViewModel.foodState.collectAsState()
-    val isLoggedIn by globalViewModel.variables.collectAsState()
 
     //NAVIGATION DRAWER NEEDS TO BE IN EVERY PAGE!!!!
     ModalNavigationDrawer(
@@ -308,20 +307,20 @@ fun FastFeastsApp(
                 }
             }
         },
-        gesturesEnabled = isLoggedIn.isLoggedIn,
+        gesturesEnabled = true,
     ) {
         //EDIT THIS PART TO IMPLEMENT YOUR PAGES/ACTIVITIES
         Scaffold(
             topBar = {
-                if (isLoggedIn.isLoggedIn){
-                    HeaderBar(globalViewModel, scope, drawerState)
-                }
+                HeaderBar(globalViewModel, scope, drawerState)
             }
         ) { innerPadding ->
+
+
             //NAV HOST IS HERE =============================
             NavHost(
                 navController = navController,
-                startDestination = "login_flow", //replace login_flow with FastFeastsScreen.MainPage.name
+                startDestination = FastFeastsScreen.MainPage.name, //replace login_flow with FastFeastsScreen.MainPage.name
                 modifier = Modifier.padding(innerPadding)
             ) {
                 composable(route = FastFeastsScreen.MainPage.name) {
@@ -416,10 +415,10 @@ fun FastFeastsApp(
                         )
                     }
                     composable(route = FastFeastsScreen.PrivacyScreen.name) {
-                        PrivacyPolicy ({ navController.navigateUp() })
+                       // PolicyScreen( {navController.navigateUp() })
                     }
                     composable(route = FastFeastsScreen.PolicyScreen.name) {
-                        TermsAndConditions( {navController.navigateUp() })
+                       // PrivacyScreen ({ navController.navigateUp() })
                     }
                 }
             }
@@ -592,6 +591,36 @@ fun Footer()
             horizontalArrangement = Arrangement.Center,
             modifier = Modifier.fillMaxSize()
         ) {
+            //LINKS COLUMN ========================
+            Column(horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier.padding(columnSpacing))
+            {
+                Text(text = "Links", color = Color.White, fontSize = bigTextSize)
+
+                Row (verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center,
+                    modifier = Modifier
+                        .clickable { }
+                        .padding(bottom = buttonPadding)) {
+                    Text(text = "Terms and Conditions", color = Color.White, fontSize = smallTextSize)
+                }
+                Row (verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center,
+                    modifier = Modifier
+                        .clickable { }
+                        .padding(bottom = buttonPadding)) {
+                    Text(text = "About Us", color = Color.White, fontSize = smallTextSize)
+                }
+                Row (verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center,
+                    modifier = Modifier
+                        .clickable { }
+                        .padding(bottom = buttonPadding)) {
+                    Text(text = "Feedback", color = Color.White, fontSize = smallTextSize)
+                }
+
+            }
+
             //CONTACT US COLUMN ========================
             Column(horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier.padding(columnSpacing))
