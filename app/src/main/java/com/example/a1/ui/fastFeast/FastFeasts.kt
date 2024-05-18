@@ -86,9 +86,9 @@ import com.example.a1.ui.PayAtCounterUi
 import com.example.a1.ui.PaymentOptions
 import com.example.a1.ui.staffUI.StaffPage
 import com.example.a1.ui.login.LoginScreen
+import com.example.a1.ui.login.PrivacyPolicy
 import com.example.a1.ui.login.SignUpScreen
-//import com.example.a1.ui.login.PrivacyScreen
-//import com.example.a1.ui.login.PolicyScreen
+import com.example.a1.ui.login.TermsAndConditions
 import com.example.a1.ui.staffUI.StaffIndividualFood
 import com.example.a1.ui.staffUI.StaffStocks
 import kotlinx.coroutines.delay
@@ -149,6 +149,7 @@ fun FastFeastsApp(
 
     val uiState by profileViewModel.uiState.collectAsState()
     val globalVariables by globalViewModel.foodState.collectAsState()
+    val isLoggedIn by globalViewModel.variables.collectAsState()
 
     //NAVIGATION DRAWER NEEDS TO BE IN EVERY PAGE!!!!
     ModalNavigationDrawer(
@@ -312,7 +313,9 @@ fun FastFeastsApp(
         //EDIT THIS PART TO IMPLEMENT YOUR PAGES/ACTIVITIES
         Scaffold(
             topBar = {
-                HeaderBar(globalViewModel, scope, drawerState)
+                if (isLoggedIn.isLoggedIn){
+                    HeaderBar(globalViewModel, scope, drawerState)
+                }
             }
         ) { innerPadding ->
 
@@ -415,10 +418,10 @@ fun FastFeastsApp(
                         )
                     }
                     composable(route = FastFeastsScreen.PrivacyScreen.name) {
-                       // PolicyScreen( {navController.navigateUp() })
+                        TermsAndConditions( {navController.navigateUp() })
                     }
                     composable(route = FastFeastsScreen.PolicyScreen.name) {
-                       // PrivacyScreen ({ navController.navigateUp() })
+                        PrivacyPolicy ({ navController.navigateUp() })
                     }
                 }
             }
@@ -591,36 +594,6 @@ fun Footer()
             horizontalArrangement = Arrangement.Center,
             modifier = Modifier.fillMaxSize()
         ) {
-            //LINKS COLUMN ========================
-            Column(horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.padding(columnSpacing))
-            {
-                Text(text = "Links", color = Color.White, fontSize = bigTextSize)
-
-                Row (verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.Center,
-                    modifier = Modifier
-                        .clickable { }
-                        .padding(bottom = buttonPadding)) {
-                    Text(text = "Terms and Conditions", color = Color.White, fontSize = smallTextSize)
-                }
-                Row (verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.Center,
-                    modifier = Modifier
-                        .clickable { }
-                        .padding(bottom = buttonPadding)) {
-                    Text(text = "About Us", color = Color.White, fontSize = smallTextSize)
-                }
-                Row (verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.Center,
-                    modifier = Modifier
-                        .clickable { }
-                        .padding(bottom = buttonPadding)) {
-                    Text(text = "Feedback", color = Color.White, fontSize = smallTextSize)
-                }
-
-            }
-
             //CONTACT US COLUMN ========================
             Column(horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier.padding(columnSpacing))
