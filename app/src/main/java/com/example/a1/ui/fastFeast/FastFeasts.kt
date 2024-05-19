@@ -235,33 +235,36 @@ fun FastFeastsApp(
                     }
                     Divider()
                     //3 STAFF (not visible if user is User and Not Staff)
-                    //if (uiState.isStaff)
-                    Row( modifier = Modifier
-                        .padding(vertical = verticalPadding)
-                        .clickable {
-                            scope.launch {
-                                if (drawerState.isOpen) drawerState.close() else drawerState.open()
+                    if (uiState.isStaff)
+                    {
+                        Row( modifier = Modifier
+                            .padding(vertical = verticalPadding)
+                            .clickable {
+                                scope.launch {
+                                    if (drawerState.isOpen) drawerState.close() else drawerState.open()
+                                }
+                                navController.navigate(FastFeastsScreen.Staff.name)
                             }
-                            navController.navigate(FastFeastsScreen.Staff.name)
+                            .background(
+                                if (currentScreen == FastFeastsScreen.Staff) Color.Gray
+                                else
+                                    Color.Transparent, shape = RoundedCornerShape(5.dp)
+                            )
+                            .fillMaxWidth()
+                        ) {
+                            Image(
+                                painter = painterResource(R.drawable.baseline_assignment_ind_24),
+                                contentDescription = "Staff",
+                                Modifier
+                                    .size(imageSize)
+                                    .padding(imagePadding)
+                                    .clip(shape = CircleShape)
+                                    .background(Color.White)
+                            )
+                            Text(text = "Staff", fontSize = 28.sp)
                         }
-                        .background(
-                            if (currentScreen == FastFeastsScreen.Staff) Color.Gray
-                            else
-                                Color.Transparent, shape = RoundedCornerShape(5.dp)
-                        )
-                        .fillMaxWidth()
-                    ) {
-                        Image(
-                            painter = painterResource(R.drawable.baseline_assignment_ind_24),
-                            contentDescription = "Staff",
-                            Modifier
-                                .size(imageSize)
-                                .padding(imagePadding)
-                                .clip(shape = CircleShape)
-                                .background(Color.White)
-                        )
-                        Text(text = "Staff", fontSize = 28.sp)
                     }
+
                     Divider()
                     //4 LE CART
                     Row( modifier = Modifier

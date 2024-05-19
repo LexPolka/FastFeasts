@@ -30,17 +30,20 @@ class ProfileViewModel(private val repository: ProfileRepository) : ViewModel() 
 
     fun register(email: String , password : String) {
         viewModelScope.launch {
-            val existingProfile = repository.getProfile(email).toList().firstOrNull()
-            if (existingProfile == null) {
-                val profile = ProfileEntity(
-                    email = email,
-                    password = password
-                )
-                repository.insertProfile(profile)
-                _uiState.value = profile
-                _loginState.value = LoginState.Success
-            } else {
-                _loginState.value = LoginState.Failure
+            repository.getProfile(email).collect { existingProfile ->
+                if (existingProfile == null) {
+                    val isStaff = email.contains("@fastfeasts.com")
+                    val profile = ProfileEntity(
+                        email = email,
+                        password = password,
+                        isStaff = isStaff
+                    )
+                    repository.insertProfile(profile)
+                    _uiState.value = profile
+                    _loginState.value = LoginState.Success
+                } else {
+                    _loginState.value = LoginState.Failure
+                }
             }
         }
     }
