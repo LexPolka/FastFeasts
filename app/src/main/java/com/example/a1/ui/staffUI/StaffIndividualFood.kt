@@ -153,6 +153,8 @@ fun IndividualFoodList(individualFoodList : List<IndividualFood>, viewModel : St
             modifier = Modifier.padding(16.dp),
         ) {
             items(individualFoodList.size) { index ->
+                var showDialog by remember { mutableStateOf(false) }
+
                 val food = individualFoodList[index]
                 val imageFromByteToBitmap = imageBitmapFromBytes(food.image)
 
@@ -184,7 +186,7 @@ fun IndividualFoodList(individualFoodList : List<IndividualFood>, viewModel : St
                     ) {
                         IconButton(
                             colors = IconButtonDefaults.iconButtonColors(Color.White),
-                            onClick = { viewModel.removeIndividualFood(food) },
+                            onClick = { showDialog = true },
                             modifier = Modifier
                                 .padding(universalPadding)
                                 .border(3.5.dp, Color(0xFFFF9D7E), shape = CircleShape)
@@ -199,6 +201,48 @@ fun IndividualFoodList(individualFoodList : List<IndividualFood>, viewModel : St
                         }
                     }
                 }
+
+                // Dialog to confirm completion of the order
+                if (showDialog) {
+                    Dialog(
+                        onDismissRequest = { showDialog = false },
+                        properties = DialogProperties(usePlatformDefaultWidth = false)
+                    ) {
+                        Column (verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally,
+                            modifier = Modifier.fillMaxWidth().padding(8.dp).background(Color.LightGray, RoundedCornerShape(30.dp)).border(3.dp, Color.Gray, RoundedCornerShape(30.dp))){
+
+                            Text("Confirm Order Completion", fontSize = 20.sp, fontWeight = FontWeight.Bold, modifier = Modifier.padding(top = 4.dp))
+                            Text("Are you sure you want to complete this order?", fontSize = 16.sp)
+
+                            Row {
+                                IconButton(
+                                    colors = IconButtonDefaults.iconButtonColors(Color.White),
+                                    onClick = { showDialog = false },
+                                    modifier = Modifier
+                                        .padding(8.dp)
+                                        .border(3.5.dp, Color(0xFFFF9D7E), shape = CircleShape)
+                                        .width(100.dp)
+                                ) {
+                                    Text("Cancel", color = Color(0xFFFF9D7E))
+                                }
+                                IconButton(
+                                    colors = IconButtonDefaults.iconButtonColors(Color(0xFFFF9D7E)),
+                                    onClick = {
+                                        viewModel.removeIndividualFood(food)
+                                        showDialog = false
+                                    },
+                                    modifier = Modifier
+                                        .padding(8.dp)
+                                        .border(3.5.dp, Color.White, shape = CircleShape)
+                                        .width(100.dp)
+                                ) {
+                                    Text("Remove", color = Color.White)
+                                }
+                            }
+                        }
+                    }
+                }
+
             }
         }
     }

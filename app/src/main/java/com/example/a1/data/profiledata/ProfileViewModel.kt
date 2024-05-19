@@ -22,7 +22,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewmodel.compose.viewModel
 
 class ProfileViewModel(private val repository: ProfileRepository) : ViewModel() {
-    private val _uiState = MutableStateFlow(ProfileEntity())
+    private var _uiState = MutableStateFlow(ProfileEntity())
     val uiState: StateFlow<ProfileEntity> = _uiState.asStateFlow()
 
     private val _loginState = MutableStateFlow<LoginState>(LoginState.Idle)
@@ -104,7 +104,9 @@ class ProfileViewModel(private val repository: ProfileRepository) : ViewModel() 
             ccNumber = _uiState.value.ccNumber,
             ccCode = _uiState.value.ccCode,
             ccMonth = _uiState.value.ccMonth,
-            ccYear = _uiState.value.ccYear
+            ccYear = _uiState.value.ccYear,
+
+            isStaff = _uiState.value.isStaff,
         )
 
         viewModelScope.launch {

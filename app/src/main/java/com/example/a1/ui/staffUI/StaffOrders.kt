@@ -88,9 +88,9 @@ fun OrderGroup(orderID : String, orders: List<OrderEntity>, viewModel : StaffVie
         modifier = Modifier
             .padding(8.dp)
             .fillMaxWidth()
-            .border(2.dp, color = Color.DarkGray, shape = RoundedCornerShape(20.dp))
+            .border(3.dp, color = Color.LightGray, shape = RoundedCornerShape(20.dp))
             .background(
-                color = Color.LightGray,
+                color = Color.DarkGray,
                 shape = RoundedCornerShape(20.dp)
             )
     ){
@@ -114,7 +114,7 @@ fun OrderGroup(orderID : String, orders: List<OrderEntity>, viewModel : StaffVie
                     .padding(8.dp)
                     .background(Color.White, shape = RoundedCornerShape(20.dp))
                     .border(3.5.dp, Color(0xFFFF9D7E), shape = RoundedCornerShape(20.dp)),
-                colors = IconButtonDefaults.iconButtonColors(contentColor = Color.Green)
+                colors = IconButtonDefaults.iconButtonColors(contentColor = Color.Black)
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Icon(
@@ -141,7 +141,7 @@ fun OrderGroup(orderID : String, orders: List<OrderEntity>, viewModel : StaffVie
             properties = DialogProperties(usePlatformDefaultWidth = false)
         ) {
             Column (verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.fillMaxWidth().padding(8.dp).background(Color.LightGray, RoundedCornerShape(30.dp)).border(3.dp, Color.Gray, RoundedCornerShape(30.dp))){
+                modifier = Modifier.fillMaxWidth().padding(8.dp).background(Color.DarkGray, RoundedCornerShape(30.dp)).border(3.dp, Color.LightGray, RoundedCornerShape(30.dp))){
 
                 Text("Confirm Order Completion", fontSize = 20.sp, fontWeight = Bold, modifier = Modifier.padding(top = 4.dp))
                 Text("Are you sure you want to complete this order?", fontSize = 16.sp)

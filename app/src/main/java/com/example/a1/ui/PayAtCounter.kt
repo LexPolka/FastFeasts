@@ -68,9 +68,9 @@ fun PayAtCounterUi(
 
     ) {
 
-        Column {
+        Column (horizontalAlignment = Alignment.CenterHorizontally) {
             Text("Thanks for Dining at")
-            Text("     FastFeasts !    ")
+            Text("FastFeasts !")
             Text("Restaurant: ${globalVar.value.location}")
         }
 

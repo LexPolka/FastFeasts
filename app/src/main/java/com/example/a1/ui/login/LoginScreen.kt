@@ -80,8 +80,8 @@ fun LoginScreen(viewModel : ProfileViewModel, onLoginClick: () -> Unit, onSignUp
         when (loginState) {
             is LoginState.Success -> {
                 Toast.makeText(context, "Login Successful.", Toast.LENGTH_SHORT).show()
-                viewModel.resetLoginState()
                 onLoginClick()
+                viewModel.resetLoginState()
             }
             is LoginState.Failure -> {
                 Toast.makeText(context, "Login Failed. No Account.", Toast.LENGTH_SHORT).show()
