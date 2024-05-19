@@ -32,6 +32,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -132,61 +133,66 @@ fun CustomizeMenu() {
         }
     }
 
-    Box(
-        modifier = Modifier
-            .background(color = Color(0xFFFFEEB1))
-            .fillMaxSize()
-            .padding(16.dp)
-    ) {
-        Column {
-            Row(Modifier.fillMaxWidth()) {
+    LazyColumn {
+        item {
+            Box(
+                modifier = Modifier
+                    .background(color = Color(0xFFFFEEB1))
+                    .fillMaxSize()
+                    .padding(16.dp)
+            ) {
+                Column {
+                    Row(Modifier.fillMaxWidth()) {
 
-                BurgerImageBox(viewModel = foodViewModel, modifier = Modifier.weight(3f))
-                Spacer(modifier = Modifier.width(6.dp))
-                BurgerContent(modifier = Modifier.weight(1f))
-            }
-
-                Button(onClick =
-                { val burger = foodViewModel.Burger(name,price,R.drawable.burgericon, foodViewModel.addBun, foodViewModel.addPatty, foodViewModel.addLettuce, foodViewModel.addSauce, foodViewModel.addExtra)
-                    foodViewModel.AddToCartBurger(burger)
-                    stockViewModel.updateQuantity(foodViewModel.idBun, 1)
-                    stockViewModel.updateQuantity(foodViewModel.idPatty, 1)
-                    stockViewModel.updateQuantity(foodViewModel.idLettuce, 1)
-                    stockViewModel.updateQuantity(foodViewModel.idSauce, 1)
-                    stockViewModel.updateQuantity(foodViewModel.idExtra, 1)
-                    foodViewModel.clearIDafterCart()
-                    foodViewModel.clearBurger()
-
-                    val food2 = Food2(name = name, price = foodViewModel.TotalPrice.toString(), image = R.drawable.burgericon)
-                    cartViewModel.addToCartBurger(food2)
-
-                    if (!isToastVisible)
-                    {
-                        Toast.makeText(context, "Added Custom Burger ${foodViewModel.TotalPrice} Cart.", Toast.LENGTH_SHORT).show()
-                        isToastVisible = true
+                        BurgerImageBox(viewModel = foodViewModel, modifier = Modifier.weight(3f))
+                        Spacer(modifier = Modifier.width(6.dp))
+                        BurgerContent(modifier = Modifier.weight(1f))
                     }
 
+                    Button(onClick =
+                    { val burger = foodViewModel.Burger(name,price,R.drawable.burgericon, foodViewModel.addBun, foodViewModel.addPatty, foodViewModel.addLettuce, foodViewModel.addSauce, foodViewModel.addExtra)
+                        foodViewModel.AddToCartBurger(burger)
+                        stockViewModel.updateQuantity(foodViewModel.idBun, 1)
+                        stockViewModel.updateQuantity(foodViewModel.idPatty, 1)
+                        stockViewModel.updateQuantity(foodViewModel.idLettuce, 1)
+                        stockViewModel.updateQuantity(foodViewModel.idSauce, 1)
+                        stockViewModel.updateQuantity(foodViewModel.idExtra, 1)
+                        foodViewModel.clearIDafterCart()
+                        foodViewModel.clearBurger()
 
-                },
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = Color(0xFF44FF8F) // Background color
-                    ),
-                    shape = RoundedCornerShape(16.dp),
-                    modifier = Modifier
-                        .align(Alignment.CenterHorizontally)
-                        .height(40.dp)
-                        .width(400.dp)
-                    ) {
-                    Text(text = "Add To Cart" ,
-                        style = TextStyle(
-                            color = Color.White,
-                            fontWeight = FontWeight.Bold
+                        val food2 = Food2(name = name, price = foodViewModel.TotalPrice.toString(), image = R.drawable.burgericon)
+                        cartViewModel.addToCartBurger(food2)
+
+                        if (!isToastVisible)
+                        {
+                            Toast.makeText(context, "Added Custom Burger ${foodViewModel.TotalPrice} Cart.", Toast.LENGTH_SHORT).show()
+                            isToastVisible = true
+                        }
+
+
+                    },
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = Color(0xFF44FF8F) // Background color
                         ),
-                        textAlign = TextAlign.Center)
+                        shape = RoundedCornerShape(16.dp),
+                        modifier = Modifier
+                            .align(Alignment.CenterHorizontally)
+                            .height(40.dp)
+                            .width(400.dp)
+                    ) {
+                        Text(text = "Add To Cart" ,
+                            style = TextStyle(
+                                color = Color.White,
+                                fontWeight = FontWeight.Bold
+                            ),
+                            textAlign = TextAlign.Center)
+                    }
                 }
-        }
 
+            }
+        }
     }
+
 }
 
 @Composable
