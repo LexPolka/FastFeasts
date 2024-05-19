@@ -341,6 +341,7 @@ fun FoodInputDialog(onConfirm: (String, String, Uri) -> Unit, onDismiss: () -> U
                 onValueChange = { foodName = it },
                 label = { Text(text = "Food Name") },
                 shape = RoundedCornerShape(20.dp),
+                maxLines = 1,
                 modifier = Modifier.fillMaxWidth()
             )
             //FOOD PRICE
@@ -349,6 +350,7 @@ fun FoodInputDialog(onConfirm: (String, String, Uri) -> Unit, onDismiss: () -> U
                 onValueChange = { foodPrice = it },
                 label = { Text(text = "Food Price") },
                 shape = RoundedCornerShape(20.dp),
+                maxLines = 1,
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                 modifier = Modifier.fillMaxWidth()
             )

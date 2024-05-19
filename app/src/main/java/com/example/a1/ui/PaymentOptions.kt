@@ -1,5 +1,6 @@
 package com.example.a1.ui
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -15,10 +16,15 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -30,6 +36,7 @@ import com.example.a1.ui.fastFeast.FastFeastsScreen
 import com.example.a1.R
 import com.example.a1.data.profiledata.ProfileViewModel
 import com.example.a1.ui.fastFeast.BackButton
+import kotlinx.coroutines.delay
 
 @Composable
 fun PaymentOptions(
@@ -37,6 +44,17 @@ fun PaymentOptions(
     navController: NavHostController,
     modifier: Modifier = Modifier
 ){
+    val context = LocalContext.current
+
+    //toast handler
+    var isToastVisible by remember { mutableStateOf(false) }
+    if (isToastVisible) {
+        LaunchedEffect(Unit) {
+            delay(1000) // Adjust the delay as needed
+            isToastVisible = false
+        }
+    }
+
     val lightOrange = Color(0xFFFF9D7E)
     val creditCardBindCheck = remember { viewModel.checkCreditCard() }
 
@@ -67,6 +85,12 @@ fun PaymentOptions(
                 onClick = {
                     if (creditCardBindCheck) {
                         navController.navigate(FastFeastsScreen.OnlineBanking.name)
+                    }
+                    else{
+                        if (!isToastVisible) {
+                            Toast.makeText(context, "No Credit Card in Profile!", Toast.LENGTH_SHORT).show()
+                            isToastVisible = true
+                        }
                     }
                 },
                 enabled = creditCardBindCheck,
