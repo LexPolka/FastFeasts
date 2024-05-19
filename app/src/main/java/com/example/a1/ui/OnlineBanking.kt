@@ -47,10 +47,12 @@ fun OnlineBankingUi(
 ){
     val globalVar = globalViewModel.variables.collectAsState()
 
-    val receiptItems = viewModel.cart
+    val foodList = viewModel.cartItems.collectAsState()
+    val receiptItems = viewModel.getExistingCartItemsFromDatabase(foodList.value )// cartItems = List<Food>
+
     val darkOrange = Color(0xFF975743)
     val referenceNumber by remember { mutableStateOf((0..0xFFFFFF).random().toString(16).padStart(6, '0')) }
-    val totalPrice = viewModel.getTotalCartPrice()
+    val totalPrice = viewModel.getTotalPrice()
 
     val addToOrderExecuted = remember { mutableStateOf(false) }
     if (!addToOrderExecuted.value) {

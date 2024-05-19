@@ -1,6 +1,7 @@
 package com.example.a1.data.cartData
 
 import android.graphics.BitmapFactory
+import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -25,22 +26,111 @@ data class Food(
 
 class CartViewModel(private val cartRepository: CartRepository) : ViewModel() {
 
-    private val _cartList = MutableStateFlow<List<FoodEntity>>(emptyList())
-    val cartList: StateFlow<List<FoodEntity>> = _cartList.asStateFlow()
+
+    //StateFlows
+    //for FoodEntity in the cart
+    private val _cartItems = MutableStateFlow<List<FoodEntity>>(emptyList())
+    val cartItems: StateFlow<List<FoodEntity>> = _cartItems.asStateFlow()
+
+    //food
+    private val _foods = MutableStateFlow<List<Food>>(emptyList())
+    val foods: StateFlow<List<Food>> = _foods.asStateFlow()
+
+    private val items = mutableStateListOf<Food>()
+    val cart: List<Food> get() = items
+
+    private val _isCartInitialized = mutableStateOf(false)
+    val isCartInitialized: State<Boolean> get() = _isCartInitialized
 
     init {
+        // Collecting FoodEntity items from the repository and updating the cart list
         viewModelScope.launch {
             cartRepository.getCart().collect { orders ->
-                _cartList.value = orders.filterNotNull()
+                _cartItems.value = orders.filterNotNull()
+                _foods.value = getExistingCartItemsFromDatabase(orders.filterNotNull())
+
+                // Check if cart is empty and initialize if necessary
+                if (cart.isEmpty()) {
+                    initializeCart() }
+
+                _isCartInitialized.value = true
             }
         }
     }
 
 
-    //Food
-    private val items = mutableStateListOf<Food>()
-    val cart: List<Food> get() = items
+    fun addToDatabase(food: Food) {
+        val foodEntity = FoodEntity(
+            name = food.name,
+            image = food.image,
+            price = food.price
+        )
+        viewModelScope.launch {
+            cartRepository.addItem(foodEntity)
+        }
+    }
 
+    fun removeFromDatabase(food: Food) {
+        viewModelScope.launch {
+            val foodEntity = FoodEntity(
+                name = food.name,
+                image = food.image,
+                price = food.price
+            )
+            viewModelScope.launch {
+                cartRepository.removeItem(foodEntity)
+            }
+        }
+
+    }
+
+    fun getTotalPrice(): Double {
+    return cartItems.value.sumOf { it.price.toDoubleOrNull() ?: 0.0 }
+    }
+
+    fun getTotalItems(): Int {
+        return cartItems.value.size
+    }
+
+    fun clearCart() {
+        viewModelScope.launch {
+            cartRepository.clearCart()
+        }
+    }
+
+
+    // Function to initialize the cart with items from the database
+    fun initializeCart() {
+        _cartItems.value = convertFoodListToFoodEntityList(foods.value)
+    }
+
+    //get from db
+    fun getExistingCartItemsFromDatabase(foodEntities: List<FoodEntity>): List<Food> {
+        return foodEntities.map { foodEntity ->
+            Food(
+                image = foodEntity.image,
+                name = foodEntity.name,
+                price = foodEntity.price
+            )
+        }
+    }
+
+    //convert to db
+    fun convertFoodListToFoodEntityList(foodList: List<Food>): List<FoodEntity> {
+        val foodEntityList = mutableListOf<FoodEntity>()
+        for (food in foodList) {
+            val foodEntity = FoodEntity(
+                id = 0, // Assuming you set the ID appropriately in the database
+                name = food.name,
+                image = food.image,
+                price = food.price
+            )
+            foodEntityList.add(foodEntity)
+        }
+        return foodEntityList
+    }
+
+    //both
     fun addToCart(foodItem: Food) {
         items.add(foodItem)
         addToDatabase(foodItem)
@@ -71,50 +161,7 @@ class CartViewModel(private val cartRepository: CartRepository) : ViewModel() {
     }
 
 
-    //FoodEntity
-    private val _cartItems = MutableStateFlow<List<FoodEntity>>(emptyList())
-    val cartItems: StateFlow<List<FoodEntity>> = _cartItems.asStateFlow()
-
-    fun addToDatabase(food: Food) {
-        val foodEntity = FoodEntity(
-            name = food.name,
-            image = food.image,
-            price = food.price
-        )
-        viewModelScope.launch {
-            cartRepository.addItem(foodEntity)
-        }
-    }
-
-    fun removeFromDatabase(food: Food) {
-        viewModelScope.launch {
-            val foodEntity = FoodEntity(
-                name = food.name,
-                image = food.image,
-                price = food.price
-            )
-            viewModelScope.launch {
-                cartRepository.removeItem(foodEntity)
-            }
-        }
-
-    }
-
-    fun getTotalPrice(): Double {
-        return cartItems.value.sumOf { it.price.toDoubleOrNull() ?: 0.0 }
-    }
-
-    fun getTotalItems(): Int {
-        return cartItems.value.size
-    }
-
-    fun clearCart() {
-        viewModelScope.launch {
-            cartRepository.clearCart()
-        }
-    }
-
-
+    // dialogs
     var isRemoveDialogShown by mutableStateOf(false)
         private set
 
@@ -137,7 +184,7 @@ class CartViewModel(private val cartRepository: CartRepository) : ViewModel() {
         isClearCartDialogShown = false
     }
 
-    fun intToByteArray(value: Int): ByteArray {
+/*    fun intToByteArray(value: Int): ByteArray {
         return ByteBuffer.allocate(4).putInt(value).array()
     }
 
@@ -154,6 +201,6 @@ class CartViewModel(private val cartRepository: CartRepository) : ViewModel() {
             buffer.order(java.nio.ByteOrder.BIG_ENDIAN)
         }
         return buffer.int
-    }
+    }*/
 
 }

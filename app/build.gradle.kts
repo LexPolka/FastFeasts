@@ -90,5 +90,4 @@ dependencies {
     kapt(libs.androidx.room.room.compiler)
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
-
 }
