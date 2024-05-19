@@ -88,13 +88,13 @@ fun SignUpScreen(
     LaunchedEffect(loginState) {
         when (loginState) {
             is LoginState.Success -> {
-                Toast.makeText(context, "Register Successful.", Toast.LENGTH_SHORT).show()
+                if (!isToastVisible) Toast.makeText(context, "Register Successful.", Toast.LENGTH_SHORT).show()
                 isToastVisible = true
                 onSignUpClick()
                 viewModel.resetLoginState()
             }
             is LoginState.Failure -> {
-                Toast.makeText(context, "Register Failed. Account Exists.", Toast.LENGTH_SHORT).show()
+                if (!isToastVisible) Toast.makeText(context, "Register Failed. Account Exists.", Toast.LENGTH_SHORT).show()
                 isToastVisible = true
                 viewModel.resetLoginState()
             }
