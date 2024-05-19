@@ -48,6 +48,7 @@ import com.example.a1.data.profiledata.LoginState
 import com.example.a1.data.profiledata.ProfileViewModel
 import com.example.a1.ui.components.HeaderText
 import com.example.a1.ui.components.LoginTextField
+import kotlinx.coroutines.delay
 
 @Composable
 fun SignUpScreen(
@@ -57,6 +58,15 @@ fun SignUpScreen(
     onPolicyClick:() -> Unit,
     onPrivacyClick:() -> Unit,
 ) {
+    //toast handler
+    var isToastVisible by remember { mutableStateOf(false) }
+    if (isToastVisible) {
+        LaunchedEffect(Unit) {
+            delay(2000) // Adjust the delay as needed
+            isToastVisible = false
+        }
+    }
+
     val (email, onEmailChange) = rememberSaveable { mutableStateOf("") }
     val (password, onPasswordChange) = rememberSaveable { mutableStateOf("") }
     val (confirmPassword, onConfirmPasswordChange) = rememberSaveable { mutableStateOf("") }
@@ -79,11 +89,13 @@ fun SignUpScreen(
         when (loginState) {
             is LoginState.Success -> {
                 Toast.makeText(context, "Register Successful.", Toast.LENGTH_SHORT).show()
+                isToastVisible = true
                 onSignUpClick()
                 viewModel.resetLoginState()
             }
             is LoginState.Failure -> {
                 Toast.makeText(context, "Register Failed. Account Exists.", Toast.LENGTH_SHORT).show()
+                isToastVisible = true
                 viewModel.resetLoginState()
             }
             else -> Unit

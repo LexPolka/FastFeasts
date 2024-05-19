@@ -47,6 +47,9 @@ import com.example.a1.data.profiledata.ProfileViewModel
 import com.example.a1.ui.components.HeaderText
 import com.example.a1.ui.components.LoginTextField
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import kotlinx.coroutines.delay
 
 val defaultPadding = 16.dp
 val itemSpacing = 8.dp
@@ -54,15 +57,24 @@ val itemSpacing = 8.dp
 @Composable
 fun LoginScreen(viewModel : ProfileViewModel, onLoginClick: () -> Unit, onSignUpClick: () -> Unit) {
 
+    //toast handler
+    var isToastVisible by remember { mutableStateOf(false) }
+    if (isToastVisible) {
+        LaunchedEffect(Unit) {
+            delay(2000) // Adjust the delay as needed
+            isToastVisible = false
+        }
+    }
+
     val (userName, setUsername) = rememberSaveable {
-    mutableStateOf("")
-}
+        mutableStateOf("")
+    }
     val (password, setPassword) = rememberSaveable {
-    mutableStateOf("")
-}
+        mutableStateOf("")
+    }
     val (checked, onCheckedChange) = rememberSaveable {
-    mutableStateOf(false)
-}
+        mutableStateOf(false)
+    }
     val isFieldsEmpty = userName.isNotEmpty() && password.isNotEmpty()
     val context = LocalContext.current
 
@@ -71,7 +83,7 @@ fun LoginScreen(viewModel : ProfileViewModel, onLoginClick: () -> Unit, onSignUp
     //Screen settings
     val configuration = LocalConfiguration.current
     val screenHeight = configuration.screenHeightDp.dp
-    var HeaderBarHeight = (screenHeight*7/100)
+    var HeaderBarHeight = (screenHeight * 7 / 100)
 
     val loginState by viewModel.loginState.collectAsState()
 
@@ -80,13 +92,17 @@ fun LoginScreen(viewModel : ProfileViewModel, onLoginClick: () -> Unit, onSignUp
         when (loginState) {
             is LoginState.Success -> {
                 Toast.makeText(context, "Login Successful.", Toast.LENGTH_SHORT).show()
+                isToastVisible = true
                 onLoginClick()
                 viewModel.resetLoginState()
             }
+
             is LoginState.Failure -> {
                 Toast.makeText(context, "Login Failed. No Account.", Toast.LENGTH_SHORT).show()
+                isToastVisible = true
                 viewModel.resetLoginState()
             }
+
             else -> Unit
         }
     }
@@ -104,7 +120,7 @@ fun LoginScreen(viewModel : ProfileViewModel, onLoginClick: () -> Unit, onSignUp
                 )
         ) {}
 
-        Column (
+        Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(defaultPadding),
@@ -117,7 +133,7 @@ fun LoginScreen(viewModel : ProfileViewModel, onLoginClick: () -> Unit, onSignUp
                     .align(alignment = Alignment.Start)
             )
             LoginTextField(
-                value = userName ,
+                value = userName,
                 onValueChange = setUsername,
                 labelText = "Username",
                 leadingIcon = Icons.Default.Person,
@@ -125,7 +141,7 @@ fun LoginScreen(viewModel : ProfileViewModel, onLoginClick: () -> Unit, onSignUp
             )
             Spacer(Modifier.height(itemSpacing))
             LoginTextField(
-                value = password ,
+                value = password,
                 onValueChange = setPassword,
                 labelText = "Password",
                 leadingIcon = Icons.Default.Lock,
@@ -143,48 +159,7 @@ fun LoginScreen(viewModel : ProfileViewModel, onLoginClick: () -> Unit, onSignUp
             ) {
                 Text("Login")
             }
-            AlternativeLoginOptions(
-                onIconClick = {index ->
-                    when(index){
-                        0 -> {
-                            Toast.makeText(context, "Instagram Login Click", Toast.LENGTH_SHORT).show()
-                        }
-                        1 -> {
-                            Toast.makeText(context, "GitHub Login Click", Toast.LENGTH_SHORT).show()
-                        }
-                        2 -> {
-                            Toast.makeText(context, "Google Login Click", Toast.LENGTH_SHORT).show()
-                        }
-                    }
-                },
-                onSignUpClick = onSignUpClick,
-                modifier = Modifier
-                    .fillMaxSize()
-                    .wrapContentSize(align = Alignment.BottomCenter)
-            )
         }
     }
-
-
-}
-
-@Composable
-fun AlternativeLoginOptions(
-    onIconClick:(index: Int) -> Unit,
-    onSignUpClick:() -> Unit,
-    modifier: Modifier = Modifier
-    ){
-    Spacer(Modifier.height(itemSpacing))
-    Row (
-        horizontalArrangement = Arrangement.Center,
-        verticalAlignment = Alignment.CenterVertically
-    ){
-        Text("Don't have an Account?")
-        Spacer(Modifier.height(itemSpacing))
-        TextButton(onClick = onSignUpClick) {
-            Text("Sign Up")
-        }
-    }
-
 }
 
