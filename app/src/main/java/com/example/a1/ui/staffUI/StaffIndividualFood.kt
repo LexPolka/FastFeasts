@@ -169,7 +169,7 @@ fun IndividualFoodList(individualFoodList : List<IndividualFood>, viewModel : St
                             bitmap = imageFromByteToBitmap,
                             contentDescription = "Food Image ${food.name}",
                             modifier = Modifier
-                                .size(componentHeight)
+                                .size(componentHeight/2)
                                 .clip(shape = RoundedCornerShape(20.dp))
                                 .aspectRatio(1f)
                         )
@@ -209,7 +209,7 @@ fun IndividualFoodList(individualFoodList : List<IndividualFood>, viewModel : St
                         properties = DialogProperties(usePlatformDefaultWidth = false)
                     ) {
                         Column (verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally,
-                            modifier = Modifier.fillMaxWidth().padding(8.dp).background(Color.LightGray, RoundedCornerShape(30.dp)).border(3.dp, Color.Gray, RoundedCornerShape(30.dp))){
+                            modifier = Modifier.fillMaxWidth().padding(8.dp).background(Color.DarkGray, RoundedCornerShape(30.dp)).border(3.dp, Color.LightGray, RoundedCornerShape(30.dp))){
 
                             Text("Confirm Order Completion", fontSize = 20.sp, fontWeight = FontWeight.Bold, modifier = Modifier.padding(top = 4.dp))
                             Text("Are you sure you want to complete this order?", fontSize = 16.sp)
