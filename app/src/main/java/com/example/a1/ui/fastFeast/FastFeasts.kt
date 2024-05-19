@@ -127,6 +127,7 @@ enum class FastFeastsScreen(@StringRes val title: Int) {
 fun FastFeastsApp(
     profileViewModel: ProfileViewModel = viewModel(factory = AppViewModelProvider.Factory),
     staffViewModel: StaffViewModel = viewModel(factory = AppViewModelProvider.Factory),
+    stockViewModel: StockViewModel = viewModel(factory = AppViewModelProvider.Factory),
     globalViewModel: GlobalViewModel = viewModel(),
     cartViewModel : CartViewModel = viewModel(factory = AppViewModelProvider.Factory),
     navController: NavHostController = rememberNavController()
@@ -371,7 +372,7 @@ fun FastFeastsApp(
                     StaffIndividualFood(staffViewModel, navController)
                 }
                 composable(route = FastFeastsScreen.StaffStocks.name) {
-                    StaffStocks(staffViewModel, navController)
+                    StaffStocks(staffViewModel,stockViewModel, navController)
                 }
                 composable(route = FastFeastsScreen.StaffOrders.name) {
                     StaffOrders(staffViewModel, navController)

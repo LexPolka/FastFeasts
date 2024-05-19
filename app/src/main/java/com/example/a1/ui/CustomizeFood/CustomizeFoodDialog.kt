@@ -21,7 +21,10 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CardColors
 import androidx.compose.material3.CardDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -29,6 +32,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -41,61 +45,64 @@ import androidx.wear.compose.material.Button
 import androidx.wear.compose.material.ButtonDefaults
 import androidx.wear.compose.material.Text
 import com.example.a1.R
+import com.example.a1.data.AppViewModelProvider
+import com.example.a1.data.CustomizeFood.StockViewModel
 import java.util.Locale
 
 
 //==============================================FUNCTIONS FOR DECORATING THE DIALOG SELECTION==========================================
 @Composable
-fun BunSelection(viewModel: FoodMenuViewModel,Name: String, Price: Double, Image: Int,onDismiss: () -> Unit, onConfirm: (Int) -> Unit ){
-    Box(modifier = Modifier
-        .background(color = Color(0xFFD9D9D9))
-        .border(1.5.dp, Color.Black)
-        .size(height = 150.dp, width = 150.dp),
-        contentAlignment = Alignment.TopCenter
-    ){
-        Column (horizontalAlignment = Alignment.CenterHorizontally){
-            Image(
-                painter = painterResource(id = Image),
-                contentDescription = Name,
-                modifier = Modifier
-                    .border(1.5.dp, Color.Black)
-                    .size(height = 70.dp, width = 150.dp)
-                    .background(color = Color.White)
-            )
+fun BunSelection(Id: Int, viewModel: FoodMenuViewModel,Name: String, Price: Double, Image1: Int, Image2: Int,onDismiss: () -> Unit, onConfirm: (Int) -> Unit ){
 
-            Text(text = String.format(
-                Locale.getDefault(),("%s\nRM %.2f"),Name,Price), style = TextStyle(
-                color = Color.Black,
-                fontWeight = FontWeight.Bold),
-                textAlign = TextAlign.Center)
-            Spacer(modifier = Modifier.padding(4.dp))
-            Button(onClick = {
-                val addedBuns = viewModel.Buns(
+             Box(modifier = Modifier
+                 .background(color = Color(0xFFD9D9D9))
+                 .border(1.5.dp, Color.Black)
+                 .size(height = 150.dp, width = 150.dp),
+                 contentAlignment = Alignment.TopCenter
+             ){
+               Column (horizontalAlignment = Alignment.CenterHorizontally){
+                    Image(
+                      painter = painterResource(id = Image1),
+                      contentDescription = Name,
+                       modifier = Modifier
+                           .border(1.5.dp, Color.Black)
+                           .size(height = 70.dp, width = 150.dp)
+                           .background(color = Color.White))
+
+                Text(text = String.format(
+                 Locale.getDefault(),("%s\nRM %.2f"),Name,Price), style = TextStyle(
+                   color = Color.Black,
+                   fontWeight = FontWeight.Bold),
+                   textAlign = TextAlign.Center)
+                   Spacer(modifier = Modifier.padding(4.dp))
+                Button(onClick = {
+                   val addedBuns = viewModel.Buns(
                     name = Name,
                     price = Price,
-                    image = Image
+                    image = Image2)
+                    viewModel.addedNewBun(newBun = addedBuns)
+                    onConfirm(Image2)
+                    viewModel.idBun = Id
+                    onDismiss() },
+                    colors = ButtonDefaults.buttonColors(backgroundColor = Color( 0xFFFF9D7E)),
+                    shape = RoundedCornerShape(16.dp),
+                    modifier = Modifier
+                        .align(Alignment.CenterHorizontally)
+                        .height(30.dp)
+                        .width(80.dp)
                 )
-                viewModel.addedNewBun(newBun = addedBuns)
-                onConfirm(Image)
-                onDismiss() },
-                colors = ButtonDefaults.buttonColors(backgroundColor = Color( 0xFFFF9D7E)),
-                shape = RoundedCornerShape(16.dp),
-                modifier = Modifier
-                    .align(Alignment.CenterHorizontally)
-                    .height(30.dp)
-                    .width(80.dp)
-            )
-            {
-                Text(text = "ORDER",style = TextStyle(
-                    color = Color.White,
-                    background = Color( 0xFFFF9D7E),
-                    fontWeight = FontWeight.Bold))
+                 {
+                    Text(text = "ORDER",style = TextStyle(
+                        color = Color.White,
+                        background = Color( 0xFFFF9D7E),
+                        fontWeight = FontWeight.Bold))
+                }
             }
         }
-    }
 }
+
 @Composable
-fun PattySelection(viewModel: FoodMenuViewModel,Name: String, Price: Double, Image: Int,onDismiss: () -> Unit, onConfirm: (Int) -> Unit ){
+fun PattySelection(Id: Int, viewModel: FoodMenuViewModel,Name: String, Price: Double, Image1: Int, Image2: Int,onDismiss: () -> Unit, onConfirm: (Int) -> Unit ){
     Box(modifier = Modifier
         .background(color = Color(0xFFD9D9D9))
         .border(1.5.dp, Color.Black)
@@ -104,7 +111,7 @@ fun PattySelection(viewModel: FoodMenuViewModel,Name: String, Price: Double, Ima
     ){
         Column (horizontalAlignment = Alignment.CenterHorizontally){
             Image(
-                painter = painterResource(id = Image),
+                painter = painterResource(id = Image1),
                 contentDescription = Name,
                 modifier = Modifier
                     .border(1.5.dp, Color.Black)
@@ -122,10 +129,11 @@ fun PattySelection(viewModel: FoodMenuViewModel,Name: String, Price: Double, Ima
                 val addedPatty = viewModel.Patty(
                     name = Name,
                     price = Price,
-                    image = Image
+                    image = Image2
                 )
                 viewModel.addedNewPatty(newPatty = addedPatty)
-                onConfirm(Image)
+                onConfirm(Image2)
+                viewModel.idPatty = Id
                 onDismiss() },
                 colors = ButtonDefaults.buttonColors(backgroundColor = Color( 0xFFFF9D7E)),
                 shape = RoundedCornerShape(16.dp),
@@ -144,7 +152,7 @@ fun PattySelection(viewModel: FoodMenuViewModel,Name: String, Price: Double, Ima
     }
 }
 @Composable
-fun LettuceSelection(viewModel: FoodMenuViewModel,Name: String, Price: Double, Image1: Int, Image2: Int,onDismiss: () -> Unit, onConfirm: (Int) -> Unit ){
+fun LettuceSelection(Id: Int, viewModel: FoodMenuViewModel,Name: String, Price: Double, Image1: Int, Image2: Int,onDismiss: () -> Unit, onConfirm: (Int) -> Unit ){
     Box(modifier = Modifier
         .background(color = Color(0xFFD9D9D9))
         .border(1.5.dp, Color.Black)
@@ -175,6 +183,7 @@ fun LettuceSelection(viewModel: FoodMenuViewModel,Name: String, Price: Double, I
                 )
                 viewModel.addedNewLettuce(newLettuce = addedLettuce)
                 onConfirm(Image2)
+                viewModel.idLettuce = Id
                 onDismiss() },
                 colors = ButtonDefaults.buttonColors(backgroundColor = Color( 0xFFFF9D7E)),
                 shape = RoundedCornerShape(16.dp),
@@ -193,7 +202,7 @@ fun LettuceSelection(viewModel: FoodMenuViewModel,Name: String, Price: Double, I
     }
 }
 @Composable
-fun SauceSelection(viewModel: FoodMenuViewModel,Name: String, Price: Double, Image1: Int, Image2: Int,onDismiss: () -> Unit, onConfirm: (Int) -> Unit ){
+fun SauceSelection(Id: Int,viewModel: FoodMenuViewModel,Name: String, Price: Double, Image1: Int, Image2: Int,onDismiss: () -> Unit, onConfirm: (Int) -> Unit ){
     Box(modifier = Modifier
         .background(color = Color(0xFFD9D9D9))
         .border(1.5.dp, Color.Black)
@@ -224,6 +233,7 @@ fun SauceSelection(viewModel: FoodMenuViewModel,Name: String, Price: Double, Ima
                 )
                 viewModel.addedNewSauce(newSauce = addedSauce)
                 onConfirm(Image2)
+                viewModel.idSauce = Id
                 onDismiss()},
                 colors = ButtonDefaults.buttonColors(backgroundColor = Color( 0xFFFF9D7E)),
                 shape = RoundedCornerShape(16.dp),
@@ -242,7 +252,7 @@ fun SauceSelection(viewModel: FoodMenuViewModel,Name: String, Price: Double, Ima
     }
 }
 @Composable
-fun ExtraSelection(viewModel: FoodMenuViewModel,Name: String, Price: Double, Image: Int,onDismiss: () -> Unit, onConfirm: (Int) -> Unit ){
+fun ExtraSelection(Id: Int, viewModel: FoodMenuViewModel,Name: String, Price: Double, Image1: Int, Image2: Int,onDismiss: () -> Unit, onConfirm: (Int) -> Unit){
     Box(modifier = Modifier
         .background(color = Color(0xFFD9D9D9))
         .border(1.5.dp, Color.Black)
@@ -250,8 +260,9 @@ fun ExtraSelection(viewModel: FoodMenuViewModel,Name: String, Price: Double, Ima
         contentAlignment = Alignment.TopCenter
     ){
         Column (horizontalAlignment = Alignment.CenterHorizontally){
+
             Image(
-                painter = painterResource(id = Image),
+                painter = painterResource(id = Image1),
                 contentDescription = Name,
                 modifier = Modifier
                     .border(1.5.dp, Color.Black)
@@ -266,14 +277,17 @@ fun ExtraSelection(viewModel: FoodMenuViewModel,Name: String, Price: Double, Ima
                 textAlign = TextAlign.Center)
             Spacer(modifier = Modifier.padding(4.dp))
             Button(onClick = {
+
                 val addedExtra = viewModel.Extra(
                     name = Name,
                     price = Price,
-                    image = Image
+                    image = Image2
                 )
                 viewModel.addedNewExtra(newExtra = addedExtra)
-                onConfirm(Image)
-                onDismiss() },
+                onConfirm(Image2)
+                viewModel.idExtra = Id
+                onDismiss()
+                },
                 colors = ButtonDefaults.buttonColors(backgroundColor = Color( 0xFFFF9D7E)),
                 shape = RoundedCornerShape(16.dp),
                 modifier = Modifier
@@ -337,6 +351,7 @@ fun CustomBunDialog(
     onDismiss: () -> Unit,
     onConfirm: (Int) -> Unit
 ){
+
     Dialog(
         onDismissRequest = { onDismiss() },
         properties = DialogProperties(usePlatformDefaultWidth = false)
@@ -361,9 +376,13 @@ fun CustomBunDialog(
             )
             {
 
-                BunSelection(viewModel(),"Regular Bun", 1.50, R.drawable.burger_buns,onDismiss, onConfirm)
+                BunSelection(1, viewModel(),"Regular Bun", 1.50, R.drawable.burger_buns,R.drawable.burger_buns, onDismiss, onConfirm)
                 Spacer(modifier = Modifier.padding(5.dp))
-                BunSelection(viewModel(),"Pretzel Bun", 1.80, R.drawable.pretzel_buns,onDismiss, onConfirm)
+                BunSelection(2, viewModel(),"Pretzel Bun", 1.80, R.drawable.pretzel_buns, R.drawable.pretzel_buns, onDismiss, onConfirm)
+                Spacer(modifier = Modifier.padding(5.dp))
+                BunSelection(3, viewModel(),"Wheat Bun", 1.80, R.drawable.wheat_bun,R.drawable.wheat_bun, onDismiss, onConfirm)
+                Spacer(modifier = Modifier.padding(5.dp))
+                BunSelection(15, viewModel(),"[EMPTY SLOT]", 0.00, R.drawable.cancelorder,R.drawable.emptyslot, onDismiss, onConfirm)
 
             }
         }
@@ -400,9 +419,12 @@ fun CustomPattyDialog(
                     .padding(top = 20.dp)
             )
             {
-                PattySelection(viewModel(),"Chicken Patty", 3.00, R.drawable.patty1,onDismiss, onConfirm)
+                PattySelection(4, viewModel(),"Chicken Patty", 3.00, R.drawable.patty1,R.drawable.patty1,onDismiss, onConfirm)
                 Spacer(modifier = Modifier.padding(5.dp))
-                PattySelection(viewModel(),"Beef Patty", 4.20, R.drawable.beefpatty,onDismiss, onConfirm)
+                PattySelection(5, viewModel(),"Beef Patty", 4.20, R.drawable.beefpatty,R.drawable.beefpatty,onDismiss, onConfirm)
+                PattySelection(6, viewModel(),"Bacon Patty", 4.00, R.drawable.baconpatty,R.drawable.baconpatty,onDismiss, onConfirm)
+                Spacer(modifier = Modifier.padding(5.dp))
+                PattySelection(15, viewModel(),"[EMPTY SLOT]", 0.00, R.drawable.cancelorder,R.drawable.emptyslot,onDismiss, onConfirm)
             }
         }
 
@@ -439,7 +461,11 @@ fun CustomLettuceDialog(
                     .padding(top = 20.dp)
             )
             {
-                LettuceSelection(viewModel(),"Iceberg Lettuce", 1.00, R.drawable.iceberg_lettuceinmenu, R.drawable.iceberg_lettuce,onDismiss, onConfirm)
+                LettuceSelection(7, viewModel(),"Iceberg Lettuce", 1.00, R.drawable.iceberg_lettuceinmenu, R.drawable.iceberg_lettuce,onDismiss, onConfirm)
+                Spacer(modifier = Modifier.padding(5.dp))
+                LettuceSelection(8, viewModel(),"Romaine Lettuce", 1.00, R.drawable.romaine_lettuceinmenu, R.drawable.iceberg_lettuce,onDismiss, onConfirm)
+                Spacer(modifier = Modifier.padding(5.dp))
+                LettuceSelection(15, viewModel(),"[EMPTY SLOT]", 0.00, R.drawable.cancelorder, R.drawable.emptyslot,onDismiss, onConfirm)
             }
         }
     }
@@ -475,9 +501,16 @@ fun CustomSauceDialog(
                     .padding(top = 20.dp)
             )
             {
-                SauceSelection(viewModel(),"Tomato Sauce", 0.20, R.drawable.tomatosauceinmenu, R.drawable.tomato_sauce, onDismiss, onConfirm)
+                SauceSelection(9, viewModel(),"Tomato Sauce", 0.20, R.drawable.tomatosauceinmenu, R.drawable.tomato_sauce, onDismiss, onConfirm)
                 Spacer(modifier = Modifier.padding(5.dp))
-                SauceSelection(viewModel(),"Mustard Sauce", 0.20, R.drawable.mustardsauceinmenu,R.drawable.mustard_sauce, onDismiss, onConfirm)
+                SauceSelection(10, viewModel(),"Chilli Sauce", 0.20, R.drawable.chillisauceinmenu, R.drawable.chilli_sauce, onDismiss, onConfirm)
+                Spacer(modifier = Modifier.padding(5.dp))
+                SauceSelection(11, viewModel(),"BBQ Sauce", 0.40, R.drawable.bbqsauceinmenu, R.drawable.bbq_sauce, onDismiss, onConfirm)
+                Spacer(modifier = Modifier.padding(5.dp))
+                SauceSelection(12, viewModel(),"Mustard Sauce", 0.20, R.drawable.mustardsauceinmenu,R.drawable.mustard_sauce, onDismiss, onConfirm)
+                Spacer(modifier = Modifier.padding(5.dp))
+                SauceSelection(15, viewModel(),"[EMPTY SLOT]", 0.00, R.drawable.cancelorder,R.drawable.emptyslot, onDismiss, onConfirm)
+
             }
         }
 
@@ -488,9 +521,8 @@ fun CustomSauceDialog(
 @Composable
 fun CustomExtraDialog(
     onDismiss: () -> Unit,
-    onConfirm: (Int) -> Unit
-
-){
+    onConfirm: (Int) -> Unit)
+{
     Dialog(
         onDismissRequest = { onDismiss() },
         properties = DialogProperties(usePlatformDefaultWidth = false)
@@ -514,9 +546,11 @@ fun CustomExtraDialog(
                     .padding(top = 20.dp)
             )
             {
-                ExtraSelection(viewModel(), "Egg", 1.00 , R.drawable.egg , onDismiss, onConfirm)
+                ExtraSelection(13,viewModel(), "Egg", 1.00 , R.drawable.egg ,R.drawable.egg, onDismiss, onConfirm )
                 Spacer(modifier = Modifier.padding(5.dp))
-                ExtraSelection(viewModel(), "Cheese", 1.00 , R.drawable.cheese , onDismiss, onConfirm)
+                ExtraSelection(14,viewModel(), "Cheese", 1.00 , R.drawable.cheese ,R.drawable.cheese , onDismiss, onConfirm)
+                Spacer(modifier = Modifier.padding(5.dp))
+                ExtraSelection(15, viewModel(),"[EMPTY SLOT]", 0.00, R.drawable.cancelorder,R.drawable.emptyslot,onDismiss, onConfirm)
             }
         }
 

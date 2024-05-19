@@ -1,10 +1,13 @@
 package com.example.a1.data
 
 import android.content.Context
+import com.example.a1.data.CustomizeFood.StockOfflineRepository
+import com.example.a1.data.CustomizeFood.StockRepository
 
 import com.example.a1.data.cartData.CartOfflineRepository
 import com.example.a1.data.cartData.CartRepository
 import com.example.a1.data.profiledata.ProfileOfflineRepository
+// com.example.a1.data.profiledata.ProfileOfflineRepository
 import com.example.a1.data.profiledata.ProfileRepository
 import com.example.a1.data.staffdata.StaffOfflineRepository
 import com.example.a1.data.staffdata.StaffRepository
@@ -18,6 +21,8 @@ interface AppContainer {
     val staffRepository : StaffRepository
 
     val cartRepository: CartRepository
+
+    val stockRepository: StockRepository
 
 }
 
@@ -35,6 +40,10 @@ class AppDataContainer(private val context: Context) : AppContainer {
 
     override val cartRepository: CartRepository by lazy {
         CartOfflineRepository(ApplicationDatabase.getDatabase(context).foodDao())
+    }
+
+    override val stockRepository: StockRepository by lazy {
+        StockOfflineRepository(ApplicationDatabase.getDatabase(context).stockDao())
     }
 
 

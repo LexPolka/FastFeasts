@@ -1,16 +1,19 @@
 package com.example.a1.data.cartData
 
-import androidx.compose.runtime.State
+import android.graphics.BitmapFactory
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import java.nio.ByteBuffer
 
 
 data class Food(
@@ -18,42 +21,76 @@ data class Food(
     val name : String = "",
     val price : String = "", //use string cuz for int, just do .toInt()
 )
-
+data class Food2(
+    val image: Int,
+    val name : String = "",
+    val price : String = "", //use string cuz for int, just do .toInt()
+)
 
 class CartViewModel(private val cartRepository: CartRepository) : ViewModel() {
 
-
-    //StateFlows
-    //for FoodEntity in the cart
-    private val _cartItems = MutableStateFlow<List<FoodEntity>>(emptyList())
-    val cartItems: StateFlow<List<FoodEntity>> = _cartItems.asStateFlow()
-
-    //food
-    private val _foods = MutableStateFlow<List<Food>>(emptyList())
-    val foods: StateFlow<List<Food>> = _foods.asStateFlow()
-
-    private val items = mutableStateListOf<Food>()
-    val cart: List<Food> get() = items
-
-    private val _isCartInitialized = mutableStateOf(false)
-    val isCartInitialized: State<Boolean> get() = _isCartInitialized
+    private val _cartList = MutableStateFlow<List<FoodEntity>>(emptyList())
+    val cartList: StateFlow<List<FoodEntity>> = _cartList.asStateFlow()
 
     init {
-        // Collecting FoodEntity items from the repository and updating the cart list
         viewModelScope.launch {
             cartRepository.getCart().collect { orders ->
-                _cartItems.value = orders.filterNotNull()
-                _foods.value = getExistingCartItemsFromDatabase(orders.filterNotNull())
-
-                // Check if cart is empty and initialize if necessary
-                if (cart.isEmpty()) {
-                    initializeCart() }
-
-                _isCartInitialized.value = true
+                _cartList.value = orders.filterNotNull()
             }
         }
     }
 
+
+    //Food
+    private val items = mutableStateListOf<Food>()
+    private val itemBurger = mutableStateListOf<Food2>()
+    val cart: List<Food> get() = items
+    val cartBurger: List<Food> get() = items
+
+    fun addToCart(foodItem: Food) {
+        items.add(foodItem)
+        addToDatabase(foodItem)
+    }
+
+    fun addToCartBurger(burgerItem: Food2) {
+        itemBurger.add(burgerItem)
+    }
+
+    fun removeFromCartBurger(burgerItem: Food2) {
+        itemBurger.remove(burgerItem)
+    }
+    fun removeFromCart(food: Food) {
+        items.remove(food)
+        removeFromDatabase(food)
+    }
+
+    fun getTotalCartPrice(): Double {
+        var sum =items.sumOf { it.price.toDoubleOrNull() ?: 0.0 } + itemBurger.sumOf { it.price.toDoubleOrNull() ?: 0.0 }
+        return sum
+    }
+
+    fun getTotalCartItems(): Int {
+        var counter = 0
+        for (x in cart) {
+            counter++
+        }
+        for (x in cartBurger) {
+            counter++
+        }
+
+        return counter
+
+    }
+
+    fun clearFoodCart() {
+        items.clear()
+        clearCart()
+    }
+
+
+    //FoodEntity
+    private val _cartItems = MutableStateFlow<List<FoodEntity>>(emptyList())
+    val cartItems: StateFlow<List<FoodEntity>> = _cartItems.asStateFlow()
 
     fun addToDatabase(food: Food) {
         val foodEntity = FoodEntity(
@@ -81,7 +118,7 @@ class CartViewModel(private val cartRepository: CartRepository) : ViewModel() {
     }
 
     fun getTotalPrice(): Double {
-    return cartItems.value.sumOf { it.price.toDoubleOrNull() ?: 0.0 }
+        return cartItems.value.sumOf { it.price.toDoubleOrNull() ?: 0.0 }
     }
 
     fun getTotalItems(): Int {
@@ -95,56 +132,6 @@ class CartViewModel(private val cartRepository: CartRepository) : ViewModel() {
     }
 
 
-    // Function to initialize the cart with items from the database
-    fun initializeCart() {
-        _cartItems.value = convertFoodListToFoodEntityList(foods.value)
-    }
-
-    //get from db
-    fun getExistingCartItemsFromDatabase(foodEntities: List<FoodEntity>): List<Food> {
-        return foodEntities.map { foodEntity ->
-            Food(
-                image = foodEntity.image,
-                name = foodEntity.name,
-                price = foodEntity.price
-            )
-        }
-    }
-
-    //convert to db
-    fun convertFoodListToFoodEntityList(foodList: List<Food>): List<FoodEntity> {
-        val foodEntityList = mutableListOf<FoodEntity>()
-        for (food in foodList) {
-            val foodEntity = FoodEntity(
-                id = 0, // Assuming you set the ID appropriately in the database
-                name = food.name,
-                image = food.image,
-                price = food.price
-            )
-            foodEntityList.add(foodEntity)
-        }
-        return foodEntityList
-    }
-
-    //both
-    fun addToCart(foodItem: Food) {
-        items.add(foodItem)
-        addToDatabase(foodItem)
-    }
-
-    fun removeFromCart(food: Food) {
-        items.remove(food)
-        removeFromDatabase(food)
-    }
-
-
-    fun clearFoodCart() {
-        items.clear()
-        clearCart()
-    }
-
-
-    // dialogs
     var isRemoveDialogShown by mutableStateOf(false)
         private set
 
@@ -167,6 +154,23 @@ class CartViewModel(private val cartRepository: CartRepository) : ViewModel() {
         isClearCartDialogShown = false
     }
 
+    fun intToByteArray(value: Int): ByteArray {
+        return ByteBuffer.allocate(4).putInt(value).array()
+    }
 
+    fun imageBitmapFromBytes(bytes: ByteArray): ImageBitmap {
+        val bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
+        return bitmap.asImageBitmap()
+    }
+
+    fun byteArrayToInt(byteArray: ByteArray, littleEndian: Boolean = false): Int {
+        val buffer = ByteBuffer.wrap(byteArray)
+        if (littleEndian) {
+            buffer.order(java.nio.ByteOrder.LITTLE_ENDIAN)
+        } else {
+            buffer.order(java.nio.ByteOrder.BIG_ENDIAN)
+        }
+        return buffer.int
+    }
 
 }

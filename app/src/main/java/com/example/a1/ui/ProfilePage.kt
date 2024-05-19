@@ -56,27 +56,20 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.window.Dialog
-import androidx.compose.ui.window.DialogProperties
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavHostController
 import com.example.a1.ui.fastFeast.Footer
 import com.example.a1.data.profiledata.ProfileViewModel
 import com.example.a1.data.profiledata.Profile
 import com.example.a1.data.AppViewModelProvider
-import com.example.a1.data.cartData.CartViewModel
-import com.example.a1.data.profiledata.GlobalViewModel
 import com.example.a1.data.profiledata.ProfileEntity
-import com.example.a1.ui.fastFeast.FastFeastsScreen
 import kotlinx.coroutines.delay
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfilePage(
-    viewModel: ProfileViewModel, navController : NavHostController, globalViewModel: GlobalViewModel, cartViewModel : CartViewModel
+    viewModel: ProfileViewModel
 ) {
     val uiState by viewModel.uiState.collectAsState()
 
@@ -85,16 +78,14 @@ fun ProfilePage(
         ProfileHeader(uiState) { uri ->
             viewModel.setProfilePictureUri(uri)
         }
-        ProfileDataModify(viewModel, navController, globalViewModel, cartViewModel)
+        ProfileDataModify(viewModel)
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ProfileDataModify(viewModel : ProfileViewModel, navController: NavHostController, globalViewModel : GlobalViewModel, cartViewModel : CartViewModel) {
+fun ProfileDataModify(viewModel : ProfileViewModel) {
     val context = LocalContext.current
-
-    var showDialog by remember { mutableStateOf(false) }
 
     //toast handler
     var isToastVisible by remember { mutableStateOf(false) }
@@ -442,7 +433,7 @@ fun ProfileDataModify(viewModel : ProfileViewModel, navController: NavHostContro
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.Center,
                     modifier = Modifier
-                        .height(componentHeight * 2.5f)
+                        .height(componentHeight * 2)
                         .padding(linePadding)
                 ) {
                     Image(
@@ -474,22 +465,7 @@ fun ProfileDataModify(viewModel : ProfileViewModel, navController: NavHostContro
 
                             TextField(
                                 value = newCCNumber,
-                                onValueChange = { newValue ->
-                                    if (newValue.all { it.isDigit() }) {
-                                        if (newValue.length <= 16) newCCNumber = newValue
-                                        else {
-                                            newCCNumber = uiState.ccNumber
-                                            if (!isToastVisible) {
-                                                Toast.makeText(
-                                                    context,
-                                                    "Invalid Credit Card Input",
-                                                    Toast.LENGTH_SHORT
-                                                ).show()
-                                                isToastVisible = true
-                                            }
-                                        }
-                                    }
-                                },
+                                onValueChange = { newCCNumber = it },
                                 label = { Text("Credit Card Number", color = Color(0xFFFF9D7E)) },
                                 maxLines = 1,
                                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
@@ -513,24 +489,7 @@ fun ProfileDataModify(viewModel : ProfileViewModel, navController: NavHostContro
                         ) {
                             TextField(
                                 value = newCCMonth,
-                                onValueChange = { newValue ->
-                                    if (newValue.all { it.isDigit() }) { //check if any chars
-                                        val intValue = newValue.toIntOrNull() //convert to int
-                                        if ((intValue != null && intValue in 1..12) || intValue == null) {
-                                            newCCMonth = newValue
-                                        } else {
-                                            newCCMonth = uiState.ccMonth
-                                            if (!isToastVisible) {
-                                                Toast.makeText(
-                                                    context,
-                                                    "Month out of range!",
-                                                    Toast.LENGTH_SHORT
-                                                ).show()
-                                                isToastVisible = true
-                                            }
-                                        }
-                                    }
-                                },
+                                onValueChange = { newCCMonth = it },
                                 label = { Text("MM", color = Color(0xFFFF9D7E)) },
                                 maxLines = 1,
                                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
@@ -553,27 +512,8 @@ fun ProfileDataModify(viewModel : ProfileViewModel, navController: NavHostContro
                             )
                             TextField(
                                 value = newCCYear,
-                                onValueChange = { newValue ->
-                                    if (newValue.all { it.isDigit() }) {
-                                        if (newValue.length < 4) newCCYear = newValue
-                                        if (newValue.length == 4) {
-                                            val intValue = newValue.toIntOrNull()
-                                            if (intValue != null && intValue >= 2024) newCCYear = newValue
-                                            else {
-                                                newCCYear = uiState.year
-                                                if (!isToastVisible) {
-                                                    Toast.makeText(
-                                                        context,
-                                                        "Year must be 2024 or later!",
-                                                        Toast.LENGTH_SHORT
-                                                    ).show()
-                                                    isToastVisible = true
-                                                }
-                                            }
-                                        }
-                                    }
-                                },
-                                label = { Text("YYYY", color = Color(0xFFFF9D7E)) },
+                                onValueChange = { newCCYear = it },
+                                label = { Text("YY", color = Color(0xFFFF9D7E)) },
                                 maxLines = 1,
                                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                                 shape = RoundedCornerShape(16.dp),
@@ -595,22 +535,7 @@ fun ProfileDataModify(viewModel : ProfileViewModel, navController: NavHostContro
                             )
                             TextField(
                                 value = newCCCode,
-                                onValueChange = { newValue ->
-                                    if (newValue.all { it.isDigit() }) {
-                                        if (newValue.length <= 3) newCCCode = newValue
-                                        else {
-                                            newCCCode = uiState.ccCode
-                                            if (!isToastVisible) {
-                                                Toast.makeText(
-                                                    context,
-                                                    "Invalid CCV Length!",
-                                                    Toast.LENGTH_SHORT
-                                                ).show()
-                                                isToastVisible = true
-                                            }
-                                        }
-                                    }
-                                },
+                                onValueChange = { newCCCode = it },
                                 label = { Text("CVV", color = Color(0xFFFF9D7E)) },
                                 maxLines = 1,
                                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
@@ -668,25 +593,6 @@ fun ProfileDataModify(viewModel : ProfileViewModel, navController: NavHostContro
                     IconButton(
                         colors = IconButtonDefaults.iconButtonColors(Color(0xFFFF9D7E)),
                         onClick = {
-                            val CCYear = newCCYear.toIntOrNull()
-                            if (newCCNumber.isNotBlank() && newCCNumber.length < 16) {
-                                if (!isToastVisible) {
-                                    Toast.makeText(context,"Invalid Credit Card!",Toast.LENGTH_SHORT).show()
-                                    isToastVisible = true
-                                }
-                            }
-                            if (CCYear != null && CCYear < 2024) {
-                                if (!isToastVisible) {
-                                    Toast.makeText(context,"Invalid Card Year!",Toast.LENGTH_SHORT).show()
-                                    isToastVisible = true
-                                }
-                            }
-                            if (newCCCode.isNotBlank() && newCCCode.length < 3) {
-                                if (!isToastVisible) {
-                                    Toast.makeText(context,"Invalid Card CVV!",Toast.LENGTH_SHORT).show()
-                                    isToastVisible = true
-                                }
-                            }
                             if (newYear.toIntOrNull() != null && newYear.toIntOrNull() !in 1934..2024) {
                                 if (!isToastVisible) {
                                     Toast.makeText(
@@ -734,109 +640,9 @@ fun ProfileDataModify(viewModel : ProfileViewModel, navController: NavHostContro
                         Text("Apply", color = Color.White)
                     }
                 }
-                Divider(thickness = 3.dp, color = if (isDarkTheme) Color.White else Color.Black)
-                Spacer(Modifier.weight(0.3f))
-
-                //Logout Account
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.Center,
-                    modifier = Modifier
-                        .height(componentHeight)
-                        .padding(linePadding)
-                        .clickable {
-                            cartViewModel.clearFoodCart()
-                            navController.navigate(FastFeastsScreen.LoginScreen.name)
-                            globalViewModel.loggedIn(false)
-                        }
-                ) {
-                    Image(
-                        painter = painterResource(R.drawable.baseline_person_remove_24), contentDescription = "Name",
-                        Modifier
-                            .size(imageSize)
-                            .padding(6.dp)
-                            .clip(shape = CircleShape)
-                            .background(Color.White)
-                    )
-                    Text(text = "Log Out of Account", color = Color.Red, modifier = Modifier.background(color = Color.LightGray))
-                    Spacer(modifier = Modifier.weight(1f))
-                }
-                Divider(
-                    thickness = 2.dp,
-                    color = Color(0xFFFC8803),
-                    modifier = Modifier.padding(horizontal = linePadding)
-                )
-                //Delete Account
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.Center,
-                    modifier = Modifier
-                        .height(componentHeight)
-                        .padding(linePadding)
-                        .clickable {
-                            showDialog = true
-                        }
-                ) {
-                    Image(
-                        painter = painterResource(R.drawable.baseline_delete_forever_24), contentDescription = "Name",
-                        Modifier
-                            .size(imageSize)
-                            .padding(6.dp)
-                            .clip(shape = CircleShape)
-                            .background(Color.White)
-                    )
-                    Text(text = "DELETE Account", color = Color.Red, modifier = Modifier.background(color = Color.LightGray))
-                    Spacer(modifier = Modifier.weight(1f))
-                }
-
-                Spacer(Modifier.weight(0.3f))
+                Spacer(Modifier.weight(1f))
                 Divider(thickness = 3.dp, color = if (isDarkTheme) Color.White else Color.Black)
                 Footer()
-            }
-        }
-    }
-
-    // Dialog to confirm completion of the order
-    if (showDialog) {
-        Dialog(
-            onDismissRequest = { showDialog = false },
-            properties = DialogProperties(usePlatformDefaultWidth = false)
-        ) {
-            Column (verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.fillMaxWidth().padding(8.dp).background(Color.LightGray, RoundedCornerShape(30.dp)).border(3.dp, Color.DarkGray, RoundedCornerShape(30.dp))){
-
-                Text("Delete Account?", fontSize = 20.sp, fontWeight = FontWeight.Bold, modifier = Modifier.padding(top = 4.dp))
-                Text("Account Deletion is Permanent.", fontSize = 16.sp)
-                Text("All personal data is wiped.", fontSize = 16.sp)
-
-                Row {
-                    IconButton(
-                        colors = IconButtonDefaults.iconButtonColors(Color.White),
-                        onClick = { showDialog = false },
-                        modifier = Modifier
-                            .padding(8.dp)
-                            .border(3.5.dp, Color(0xFFFF9D7E), shape = CircleShape)
-                            .width(100.dp)
-                    ) {
-                        Text("Cancel", color = Color(0xFFFF9D7E))
-                    }
-                    IconButton(
-                        colors = IconButtonDefaults.iconButtonColors(Color(0xFFFF9D7E)),
-                        onClick = {
-                            cartViewModel.clearFoodCart()
-                            viewModel.deleteProfile(email)
-                            navController.navigate(FastFeastsScreen.LoginScreen.name)
-                            globalViewModel.loggedIn(false)
-                            showDialog = false
-                        },
-                        modifier = Modifier
-                            .padding(8.dp)
-                            .border(3.5.dp, Color.White, shape = CircleShape)
-                            .width(100.dp)
-                    ) {
-                        Text("Delete", color = Color.White)
-                    }
-                }
             }
         }
     }

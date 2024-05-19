@@ -11,7 +11,23 @@ import com.example.a1.R
 
 
 
+
 class FoodMenuViewModel : ViewModel() {
+
+    //===GET THE ID OF EACH CATEGORY===============
+    var idBun: Int = 15
+    var idPatty: Int = 15
+    var idLettuce: Int = 15
+    var idSauce: Int = 15
+    var idExtra: Int = 15
+
+    fun clearIDafterCart(){
+        idBun = 15
+        idPatty= 15
+        idLettuce = 15
+        idSauce = 15
+        idExtra = 15
+    }
 
 
     //==DIALOG FOR BURGER BUNS SELECTION=====================================================
@@ -146,7 +162,14 @@ class FoodMenuViewModel : ViewModel() {
     private val addBurger = mutableStateListOf<Burger>()
     val cartBurger: List<Burger> get() = addBurger
 
+    fun clearBurger(){
+        addBun = emptySlot1
+        addPatty = emptySlot2
+        addLettuce = emptySlot3
+        addSauce = emptySlot4
+        addExtra = emptySlot5
 
+    }
     fun AddToCartBurger(newBurger: Burger){
         addBurger.add(newBurger)
     }
@@ -158,4 +181,6 @@ class FoodMenuViewModel : ViewModel() {
 
 
 }
+
+
 

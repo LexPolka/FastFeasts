@@ -4,7 +4,6 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.TypeConverter
 import androidx.room.TypeConverters
-import com.example.a1.data.cartData.Food
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 

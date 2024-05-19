@@ -35,7 +35,6 @@ import com.example.a1.data.cartData.FoodEntity
 import com.example.a1.data.staffdata.StaffViewModel
 import java.util.Locale
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.text.font.FontWeight
 import com.example.a1.data.profiledata.GlobalViewModel
 
 @Composable
@@ -47,12 +46,10 @@ fun OnlineBankingUi(
 ){
     val globalVar = globalViewModel.variables.collectAsState()
 
-    val foodList = viewModel.cartItems.collectAsState()
-    val receiptItems = viewModel.getExistingCartItemsFromDatabase(foodList.value )// cartItems = List<Food>
-
+    val receiptItems = viewModel.cart
     val darkOrange = Color(0xFF975743)
     val referenceNumber by remember { mutableStateOf((0..0xFFFFFF).random().toString(16).padStart(6, '0')) }
-    val totalPrice = viewModel.getTotalPrice()
+    val totalPrice = viewModel.getTotalCartPrice()
 
     val addToOrderExecuted = remember { mutableStateOf(false) }
     if (!addToOrderExecuted.value) {
@@ -75,14 +72,14 @@ fun OnlineBankingUi(
 
     ) {
 
-        Column (horizontalAlignment = Alignment.CenterHorizontally) {
+        Column {
             Text("Thanks for Dining at")
-            Text("FastFeasts !")
+            Text("    FastFeasts !    ")
             Text("Restaurant: ${globalVar.value.location}")
         }
 
         Text("Please proceed to the counter to pickup your food")
-        Text("Reference Number: $referenceNumber", fontWeight = FontWeight.Bold)
+        Text("Reference Number: $referenceNumber")
         Spacer(Modifier.height(15.dp))
 
         Row(
@@ -121,19 +118,13 @@ fun OnlineBankingUi(
                 }
 
                 Button(
-                    onClick = {
-                        viewModel.clearCart()
-                        navController.navigate(FastFeastsScreen.MainPage.name)
-                              },
+                    onClick = { navController.navigate(FastFeastsScreen.MainPage.name) },
                     elevation = ButtonDefaults.buttonElevation(
                         defaultElevation = 10.dp,
                         pressedElevation = 6.dp
                     ),
-                    colors = ButtonDefaults.buttonColors(darkOrange),
-
-
+                    colors = ButtonDefaults.buttonColors(darkOrange)
                 ) {
-
 
                     Text(
                         text = "Return to Main Menu",

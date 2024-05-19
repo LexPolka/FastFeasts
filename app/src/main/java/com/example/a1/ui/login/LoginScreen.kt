@@ -67,14 +67,14 @@ fun LoginScreen(viewModel : ProfileViewModel, onLoginClick: () -> Unit, onSignUp
     }
 
     val (userName, setUsername) = rememberSaveable {
-    mutableStateOf("")
-}
+        mutableStateOf("")
+    }
     val (password, setPassword) = rememberSaveable {
-    mutableStateOf("")
-}
+        mutableStateOf("")
+    }
     val (checked, onCheckedChange) = rememberSaveable {
-    mutableStateOf(false)
-}
+        mutableStateOf(false)
+    }
     val isFieldsEmpty = userName.isNotEmpty() && password.isNotEmpty()
     val context = LocalContext.current
 
@@ -187,7 +187,7 @@ fun AlternativeLoginOptions(
     onIconClick:(index: Int) -> Unit,
     onSignUpClick:() -> Unit,
     modifier: Modifier = Modifier
-    ){
+){
     Spacer(Modifier.height(itemSpacing))
     Row (
         horizontalArrangement = Arrangement.Center,
@@ -201,4 +201,3 @@ fun AlternativeLoginOptions(
     }
 
 }
-

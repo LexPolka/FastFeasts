@@ -1,5 +1,6 @@
 package com.example.a1.ui.CustomizeFood
 
+import android.graphics.drawable.BitmapDrawable
 import android.widget.Toast
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
@@ -48,17 +49,18 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
-import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Text
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
+import com.example.a1.data.AppViewModelProvider
+import com.example.a1.data.CustomizeFood.StockViewModel
 import com.example.a1.data.cartData.CartViewModel
 import com.example.a1.data.cartData.Food
+import com.example.a1.data.cartData.Food2
 import kotlinx.coroutines.delay
 
 
@@ -116,9 +118,11 @@ fun CustomizationScreen(navController: NavHostController){
 }
 @Composable
 fun CustomizeMenu() {
-    val viewModel: FoodMenuViewModel = viewModel()
+    val foodViewModel: FoodMenuViewModel = viewModel()
+    val stockViewModel: StockViewModel = viewModel(factory = AppViewModelProvider.Factory)
+    val cartViewModel: CartViewModel = viewModel(factory = AppViewModelProvider.Factory)
     val name = "Custom Burger"
-    val price = viewModel.TotalPrice
+    val price = foodViewModel.TotalPrice
     val context = LocalContext.current
     var isToastVisible by remember { mutableStateOf(false) }
     if (isToastVisible) {
@@ -137,19 +141,32 @@ fun CustomizeMenu() {
         Column {
             Row(Modifier.fillMaxWidth()) {
 
-                BurgerImageBox(viewModel = viewModel, modifier = Modifier.weight(3f))
+                BurgerImageBox(viewModel = foodViewModel, modifier = Modifier.weight(3f))
                 Spacer(modifier = Modifier.width(6.dp))
                 BurgerContent(modifier = Modifier.weight(1f))
             }
+
                 Button(onClick =
-                { val burger = viewModel.Burger(name,price,R.drawable.burgericon, viewModel.addBun, viewModel.addPatty, viewModel.addLettuce, viewModel.addSauce, viewModel.addExtra)
-                    viewModel.AddToCartBurger(burger)
+                { val burger = foodViewModel.Burger(name,price,R.drawable.burgericon, foodViewModel.addBun, foodViewModel.addPatty, foodViewModel.addLettuce, foodViewModel.addSauce, foodViewModel.addExtra)
+                    foodViewModel.AddToCartBurger(burger)
+                    stockViewModel.updateQuantity(foodViewModel.idBun, 1)
+                    stockViewModel.updateQuantity(foodViewModel.idPatty, 1)
+                    stockViewModel.updateQuantity(foodViewModel.idLettuce, 1)
+                    stockViewModel.updateQuantity(foodViewModel.idSauce, 1)
+                    stockViewModel.updateQuantity(foodViewModel.idExtra, 1)
+                    foodViewModel.clearIDafterCart()
+                    foodViewModel.clearBurger()
+
+                    val food2 = Food2(name = name, price = foodViewModel.TotalPrice.toString(), image = R.drawable.burgericon)
+                    cartViewModel.addToCartBurger(food2)
 
                     if (!isToastVisible)
                     {
-                        Toast.makeText(context, "Added ${viewModel.TotalPrice} ${name} Cart.", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, "Added Custom Burger ${foodViewModel.TotalPrice} Cart.", Toast.LENGTH_SHORT).show()
                         isToastVisible = true
                     }
+
+
                 },
                     colors = ButtonDefaults.buttonColors(
                         containerColor = Color(0xFF44FF8F) // Background color
@@ -160,7 +177,12 @@ fun CustomizeMenu() {
                         .height(40.dp)
                         .width(400.dp)
                     ) {
-                    Text(text = "Add To Cart")
+                    Text(text = "Add To Cart" ,
+                        style = TextStyle(
+                            color = Color.White,
+                            fontWeight = FontWeight.Bold
+                        ),
+                        textAlign = TextAlign.Center)
                 }
         }
 
@@ -201,6 +223,7 @@ fun BurgerImageBox(viewModel: FoodMenuViewModel, modifier: Modifier = Modifier){
                     onConfirm = {BurgerImage ->
                         selection1 = BurgerImage
                         viewModel.onBunDismissClick()
+
                     })
             }
 
@@ -216,7 +239,7 @@ fun BurgerImageBox(viewModel: FoodMenuViewModel, modifier: Modifier = Modifier){
                 CustomPattyDialog(onDismiss = {viewModel.onPattyDismissClick()},
                     onConfirm = {BurgerImage ->
                         selection2 = BurgerImage
-                        viewModel.onBunDismissClick()})
+                        viewModel.onPattyDismissClick()})
             }
 
             Image(
@@ -231,7 +254,7 @@ fun BurgerImageBox(viewModel: FoodMenuViewModel, modifier: Modifier = Modifier){
                 CustomLettuceDialog(onDismiss = {viewModel.onLettuceDismissClick()},
                     onConfirm = {BurgerImage ->
                         selection3 = BurgerImage
-                        viewModel.onBunDismissClick()})
+                        viewModel.onLettuceDismissClick()})
             }
 
             Image(
@@ -246,7 +269,7 @@ fun BurgerImageBox(viewModel: FoodMenuViewModel, modifier: Modifier = Modifier){
                 CustomSauceDialog(onDismiss = {viewModel.onSauceDismissClick()},
                     onConfirm = {BurgerImage ->
                         selection4 = BurgerImage
-                        viewModel.onBunDismissClick()})
+                        viewModel.onSauceDismissClick()})
             }
 
             Image(
@@ -259,9 +282,9 @@ fun BurgerImageBox(viewModel: FoodMenuViewModel, modifier: Modifier = Modifier){
             )
             if(viewModel.openDialogExtra){
                 CustomExtraDialog(onDismiss = {viewModel.onExtraDismissClick()},
-                    onConfirm = {BurgerImage ->
-                        selection5 = BurgerImage
-                        viewModel.onBunDismissClick()})
+                    onConfirm = {burgerImage ->
+                        selection5 = burgerImage
+                        viewModel.onExtraDismissClick()})
             }
             Image(
                 painter = painterResource(R.drawable.bottombun),

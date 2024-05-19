@@ -204,12 +204,9 @@ fun SignUpScreen(
 
             Spacer(Modifier.height(defaultPadding + 8.dp))
             Button(onClick = {
-                isPasswordSame = if (password == confirmPassword) false else true
+                isPasswordSame = password != confirmPassword
                 if (!isPasswordSame){
                     viewModel.register(email, password)
-                }
-                else {
-                    Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show()
                 }
             },
                 modifier = Modifier.fillMaxWidth(),

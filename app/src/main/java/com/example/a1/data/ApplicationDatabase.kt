@@ -20,7 +20,7 @@ abstract class ApplicationDatabase : RoomDatabase() {
     abstract fun profileDao(): ProfileDao
     abstract fun staffDao(): StaffDao
     abstract fun foodDao(): FoodDao
-    abstract fun StockDao(): StockDao
+    abstract fun stockDao(): StockDao
 
 
     companion object {

@@ -50,91 +50,130 @@ import com.example.a1.ui.fastFeast.BackButton
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.text.font.FontStyle
 import com.example.a1.data.CustomizeFood.StockViewModel
-import com.example.a1.data.staffdata.Stock
-import androidx.lifecycle.viewmodel.compose.viewModel
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun StaffStocks(viewModel: StaffViewModel, navController: NavHostController) {
+fun StaffStocks(viewModel: StaffViewModel, stockViewModel: StockViewModel, navController: NavHostController) {
     val isDarkTheme = isSystemInDarkTheme()
     //Screen settings
     val configuration = LocalConfiguration.current
     val screenWidth = configuration.screenWidthDp.dp
     val screenHeight = configuration.screenHeightDp.dp
     val componentHeight = screenHeight / 9
-
+    var name by remember { mutableStateOf("") }
+    var quantity by remember { mutableStateOf(0) }
     val universalPadding = 6.dp
 
-    //TEMPORARY!! ALLOY PLS REMOVE THIS AND REPLACE WITH ACTUAL DATA \/
-    var burgerList = mutableListOf<Stock>()
-    burgerList.addAll(
-        listOf(
-            Stock(name = "Bun", quantity = 10, image = R.drawable.burger_buns),
-            Stock(name = "Patty", quantity = 5, image = R.drawable.pattyicon),
-            Stock(name = "Lettuce", quantity = 20, R.drawable.lettuceicon)
-        )
-    )
-    //TEMPORARY!! ALLOY PLS REMOVE THIS AND REPLACE WITH ACTUAL DATA /\
+    //ALL THE INGREDIENTS ARE STORED IN THIS DATABASE
+    val allIngredients by stockViewModel.allIngredients.collectAsState()
+    //
 
+        Column {
+            BackButton(navController = navController)
 
-    Column {
-        BackButton(navController = navController)
+            Text(
+                text = "Stock Manager",
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(universalPadding)
+            )
 
-        Text(
-            text = "Stock Manager",
-            fontSize = 20.sp,
-            fontWeight = FontWeight.Bold,
-            modifier = Modifier.padding(universalPadding)
-        )
-        LazyColumn(modifier = Modifier.padding(16.dp))
-        {
-            //FOR EVERY ITEM ON BURGER LIST
-            items(burgerList.size) { index ->
-                var stockQuantity by remember { mutableStateOf(burgerList[index].quantity)}
+            LazyColumn(modifier = Modifier.padding(16.dp))
+            {
 
-                Card (modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(universalPadding)) {
-                    Text(text = burgerList[index].name, fontSize = 18.sp, modifier = Modifier.padding(universalPadding))
+                //FOR EVERY ITEM ON BURGER LIST
+                items(allIngredients.size) { index ->
+                    var stockQuantity by remember { mutableStateOf(allIngredients[index].quantity) }
 
-                    Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Center) {
-                        Column (modifier = Modifier
-                            .fillMaxHeight()
-                            .width(100.dp)) {
-                            Image(painter = painterResource(id = burgerList[index].image), contentDescription = "${burgerList[index].name} Image", modifier = Modifier.fillMaxWidth())
-                        }
-                        Column {
-                            //button row and textfield
-                            Row (modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Center){
-                                TextField(
-                                    value = stockQuantity.toString(),
-                                    onValueChange = { newValue ->
-                                        stockQuantity = if (newValue.isBlank()) 0 else newValue.toInt()
-                                        // REMEMBER TO UPDATE /SAVE data
-                                        burgerList[index].quantity = stockQuantity
-                                    },
-                                    label = { Text(text = "Quantity") } ,
-                                    maxLines = 1,
-                                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                                    colors = TextFieldDefaults.textFieldColors(
-                                        focusedIndicatorColor = Color(0xFFFDA6900), // Color when the TextField is focused
-                                        unfocusedIndicatorColor = Color(0xFFFDA6900), // Color when the TextField is not focused
-                                        cursorColor = Color(0xFFFF9D7E), // Color of the cursor
-                                        containerColor = if (isDarkTheme) Color.DarkGray else Color.White,
-                                    ),
-                                    modifier = Modifier
-                                        .fillParentMaxWidth(0.3f)
-                                        .padding(2.dp)
-                                        .border(
-                                            1.5.dp,
-                                            color = Color.DarkGray,
-                                            shape = RoundedCornerShape(16.dp)
-                                        )
-                                        .background(Color.Transparent, shape = RoundedCornerShape(16.dp))
+                    Card(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(universalPadding)
+                    ) {
+                        Text(
+                            text = allIngredients[index].name,
+                            fontSize = 18.sp,
+                            modifier = Modifier.padding(universalPadding)
+                        )
+
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.Center
+                        ) {
+                            Column(
+                                modifier = Modifier
+                                    .fillMaxHeight()
+                                    .width(100.dp)
+                            ) {
+                                Image(
+                                    painter = painterResource(id = when(index){
+                                            0 -> R.drawable.burger_buns
+                                            1 -> R.drawable.pretzel_buns
+                                            2 -> R.drawable.wheat_bun
+                                            3 -> R.drawable.patty1
+                                            4 -> R.drawable.beefpatty
+                                            5 -> R.drawable.baconpatty
+                                            6 -> R.drawable.iceberg_lettuceinmenu
+                                            7 -> R.drawable.romaine_lettuceinmenu
+                                            8 -> R.drawable.tomatosauceinmenu
+                                            9 -> R.drawable.chillisauceinmenu
+                                            10 -> R.drawable.bbqsauceinmenu
+                                            11 -> R.drawable.mustardsauceinmenu
+                                            12 -> R.drawable.egg
+                                            13 -> R.drawable.cheese
+                                            else -> R.drawable.emptyslot
+                                    }),
+                                    contentDescription = "${allIngredients[index].name} Image",
+                                    modifier = Modifier.fillMaxWidth()
                                 )
+                            }
+                            Column {
+                                //button row and textfield
+                                Row(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.Center
+                                ) {
+                                    TextField(
+                                        value = stockQuantity.toString(),
+                                        onValueChange = { newValue ->
+                                            stockQuantity =
+                                                if (newValue.isBlank()) 0 else newValue.toInt()
+                                            // REMEMBER TO UPDATE /SAVE data
+                                            allIngredients[index].quantity = stockQuantity
+                                        },
+                                        label = { Text(text = "Quantity") },
+                                        maxLines = 1,
+                                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                                        colors = TextFieldDefaults.textFieldColors(
+                                            focusedIndicatorColor = Color(0xFFFDA6900), // Color when the TextField is focused
+                                            unfocusedIndicatorColor = Color(0xFFFDA6900), // Color when the TextField is not focused
+                                            cursorColor = Color(0xFFFF9D7E), // Color of the cursor
+                                            containerColor = if (isDarkTheme) Color.DarkGray else Color.White,
+                                        ),
+                                        modifier = Modifier
+                                            .fillParentMaxWidth(0.3f)
+                                            .padding(2.dp)
+                                            .border(
+                                                1.5.dp,
+                                                color = Color.DarkGray,
+                                                shape = RoundedCornerShape(16.dp)
+                                            )
+                                            .background(
+                                                Color.Transparent,
+                                                shape = RoundedCornerShape(16.dp)
+                                            )
+                                    )
+
+                                    Button(onClick = { stockViewModel.SetQuantity(allIngredients[index].id, stockQuantity)
+                                    }){
+                                        Text(text = "Apply Changes")
+                                    }
+                                }
                             }
                         }
                     }
@@ -142,4 +181,4 @@ fun StaffStocks(viewModel: StaffViewModel, navController: NavHostController) {
             }
         }
     }
-}
+
