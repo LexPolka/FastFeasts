@@ -141,7 +141,7 @@ fun OrderGroup(orderID : String, orders: List<OrderEntity>, viewModel : StaffVie
             properties = DialogProperties(usePlatformDefaultWidth = false)
         ) {
             Column (verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.fillMaxWidth().padding(8.dp).background(Color.DarkGray, RoundedCornerShape(30.dp)).border(3.dp, Color.LightGray, RoundedCornerShape(30.dp))){
+                modifier = Modifier.fillMaxWidth().padding(8.dp).background(Color.LightGray, RoundedCornerShape(30.dp)).border(3.dp, Color.DarkGray, RoundedCornerShape(30.dp))){
 
                 Text("Confirm Order Completion", fontSize = 20.sp, fontWeight = Bold, modifier = Modifier.padding(top = 4.dp))
                 Text("Are you sure you want to complete this order?", fontSize = 16.sp)

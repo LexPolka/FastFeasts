@@ -801,7 +801,7 @@ fun ProfileDataModify(viewModel : ProfileViewModel, navController: NavHostContro
             properties = DialogProperties(usePlatformDefaultWidth = false)
         ) {
             Column (verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.fillMaxWidth().padding(8.dp).background(Color.DarkGray, RoundedCornerShape(30.dp)).border(3.dp, Color.LightGray, RoundedCornerShape(30.dp))){
+                modifier = Modifier.fillMaxWidth().padding(8.dp).background(Color.LightGray, RoundedCornerShape(30.dp)).border(3.dp, Color.DarkGray, RoundedCornerShape(30.dp))){
 
                 Text("Delete Account?", fontSize = 20.sp, fontWeight = FontWeight.Bold, modifier = Modifier.padding(top = 4.dp))
                 Text("Account Deletion is Permanent.", fontSize = 16.sp)
