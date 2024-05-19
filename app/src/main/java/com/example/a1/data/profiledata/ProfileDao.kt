@@ -20,8 +20,8 @@ interface ProfileDao {
 
     //if user wants to delete account
     //should also clear cart and other databases
-    @Delete
-    suspend fun deleteProfiles(profile: ProfileEntity)
+    @Query("DELETE FROM profiles WHERE email = :email")
+    suspend fun deleteProfiles(email : String)
 
     @Query ("DELETE FROM profiles")
     suspend fun deleteAllProfiles()

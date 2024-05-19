@@ -61,6 +61,16 @@ class ProfileViewModel(private val repository: ProfileRepository) : ViewModel() 
         }
     }
 
+    fun deleteProfile(email: String) {
+        viewModelScope.launch {
+            try {
+                repository.deleteProfile(email)
+                _uiState.value = ProfileEntity() // Clear current profile
+                _loginState.value = LoginState.Idle // Reset login state
+            } catch (e: Exception) {
+            }
+        }
+    }
 
     //Setters
     fun setProfilePictureUri(uri: Uri?) {
@@ -87,6 +97,18 @@ class ProfileViewModel(private val repository: ProfileRepository) : ViewModel() 
     fun setCreditCard(ccNumber : String, ccCode : String, ccMonth : String, ccYear: String){
         _uiState.update { currentState ->
             currentState.copy(ccNumber = ccNumber, ccCode= ccCode, ccMonth=ccMonth, ccYear=ccYear)
+        }
+    }
+
+    fun checkCreditCard() : Boolean {
+        if (_uiState.value.ccNumber.isBlank() &&
+            _uiState.value.ccMonth.isBlank() &&
+            _uiState.value.ccYear.isBlank() &&
+            _uiState.value.ccCode.isBlank()
+        ) {
+            return false
+        } else {
+            return true
         }
     }
 

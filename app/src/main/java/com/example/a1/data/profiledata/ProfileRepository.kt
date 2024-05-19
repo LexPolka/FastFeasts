@@ -8,5 +8,5 @@
 
         suspend fun insertProfile(profile: ProfileEntity)
 
-        suspend fun deleteProfile(profile: ProfileEntity)
+        suspend fun deleteProfile(email : String)
     }
