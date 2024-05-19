@@ -21,12 +21,14 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily.Companion.SansSerif
 import androidx.compose.ui.text.font.FontWeight.Companion.Bold
 import androidx.compose.ui.unit.dp
@@ -43,6 +45,9 @@ import com.example.a1.data.cartData.Food
 import com.example.a1.ui.fastFeast.imageBitmapFromBytes
 import java.util.Locale
 import androidx.compose.ui.text.TextStyle
+import com.example.a1.R
+import com.example.a1.data.cartData.Food2
+import com.example.test.FoodMenuViewModel
 
 
 @Composable
@@ -59,7 +64,10 @@ fun CartUi(
     //val cartItems = foodList.value // cartItems = List<Food>
 
     //overall cart variable
-    val cartItems by remember { derivedStateOf { viewModel.cart } }
+    val foodList = viewModel.cartItems.collectAsState()
+    val cartItems = viewModel.getExistingCartItemsFromDatabase(foodList.value )// cartItems = List<Food
+    val cartBurger by remember { derivedStateOf { viewModel.cartBurger } }
+
     //derived state that recomputes only when its dependencies change, optimize recomposition and ensure that derived values are updated correctly.
 
     Column(
@@ -133,7 +141,7 @@ fun CartUi(
 
         Box {
 
-            if (cartItems.isEmpty()) {
+            if (cartItems.isEmpty() && cartBurger.isEmpty()) {
                 Column(horizontalAlignment = Alignment.CenterHorizontally)
                 {
                     Text(text = "Your cart is empty",
@@ -146,6 +154,7 @@ fun CartUi(
                 }
             } else {
                 CartList(viewModel = viewModel, cartItems = cartItems)
+                CartBurger(viewModel = viewModel, cartBurger = cartBurger)
             }
 
             Box(modifier = Modifier.fillMaxSize()) {
@@ -194,6 +203,90 @@ fun CartUi(
         }
     }
 }
+@Composable
+fun CartBurger(viewModel: CartViewModel, cartBurger: List<Food2>){
+    LazyColumn{
+        items(cartBurger) { food ->
+            Column {
+                CartItemBurger(cartViewModel = viewModel, food = food )
+            }
+        }
+    }
+}
+@Composable
+fun CartItemBurger(cartViewModel: CartViewModel, food: Food2){
+    val darkOrange = Color(0xFF975743)
+
+    //Convert ByteArray to Bitmap
+
+    Card(
+        modifier = Modifier.size(width = 400.dp, height = 100.dp)
+
+    ){
+        Row {
+
+            Column(
+                modifier = Modifier.weight(1f)
+            ) {
+
+                Text(
+                    text = food.name,
+                    fontSize = 30.sp
+                )
+
+                Image(painter = painterResource(food.image), contentDescription = "BURGER")
+
+
+            }
+
+            Spacer(modifier = Modifier.width(70.dp))
+
+            Column {
+
+                Text(
+                    text = food.price,
+                    fontSize = 30.sp
+                )
+
+                val isRemoveDialogShown = cartViewModel.isRemoveDialogShown
+
+                Button(
+                    onClick = {
+                        cartViewModel.onRemoveFromCartClick()
+                    },
+                    elevation = ButtonDefaults.buttonElevation(
+                        defaultElevation = 10.dp,
+                        pressedElevation = 6.dp
+                    ),
+                    shape = CircleShape,
+                    colors = ButtonDefaults.buttonColors(darkOrange),
+                    modifier = Modifier
+                        .align(Alignment.End)
+                        .padding(16.dp)
+                        .size(35.dp)
+                ) { Text(text = "-") }
+
+                if (isRemoveDialogShown){
+                    CartConfirmRemoveItemDialog(
+                        onDismiss = { cartViewModel.onRemoveFromCartDismissClick() },
+                        onConfirm =
+                        {confirmed ->
+                            if (confirmed) {
+                                cartViewModel.removeFromCartBurger(food)
+                            }
+                            cartViewModel.onRemoveFromCartDismissClick()
+                        }
+                    )
+                }
+
+            }
+        }
+    }
+    Spacer(modifier = Modifier.height(10.dp))
+
+}
+
+
 
 @Composable
 fun CartList(viewModel: CartViewModel, cartItems: List<Food>, modifier: Modifier = Modifier){

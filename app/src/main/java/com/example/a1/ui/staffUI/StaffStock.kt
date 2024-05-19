@@ -8,6 +8,7 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -29,6 +30,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -51,7 +53,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.ui.Alignment
+import com.example.a1.data.CustomizeFood.StockEntity
 import com.example.a1.data.CustomizeFood.StockViewModel
 
 
@@ -64,13 +68,49 @@ fun StaffStocks(viewModel: StaffViewModel, stockViewModel: StockViewModel, navCo
     val screenWidth = configuration.screenWidthDp.dp
     val screenHeight = configuration.screenHeightDp.dp
     val componentHeight = screenHeight / 9
-    var name by remember { mutableStateOf("") }
-    var quantity by remember { mutableStateOf(0) }
+
     val universalPadding = 6.dp
 
     //ALL THE INGREDIENTS ARE STORED IN THIS DATABASE
     val allIngredients by stockViewModel.allIngredients.collectAsState()
     //
+
+    var name by remember { mutableStateOf("") }
+    var quantity by remember { mutableStateOf("") }
+
+    Column(modifier = Modifier.padding(16.dp)) {
+        OutlinedTextField(
+            value = name,
+            onValueChange = { name = it },
+            label = { Text("Name") },
+            modifier = Modifier.fillMaxWidth()
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        OutlinedTextField(
+            value = quantity,
+            onValueChange = { quantity = it },
+            label = { Text("Quantity") },
+            keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
+            modifier = Modifier.fillMaxWidth()
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Button(
+            onClick = {
+                val quantityInt = quantity.toIntOrNull()
+                if (quantityInt != null) {
+                    stockViewModel.SaveIngredient(name = name, quantity = quantityInt)
+                }
+            },
+            modifier = Modifier.align(Alignment.CenterHorizontally)
+        ) {
+            Text("Insert Data")
+        }
+    }
+
 
         Column {
             BackButton(navController = navController)

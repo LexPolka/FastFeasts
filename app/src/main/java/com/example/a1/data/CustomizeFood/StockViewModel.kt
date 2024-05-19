@@ -62,10 +62,10 @@ class StockViewModel(private val stockRepository: StockRepository) : ViewModel()
         }
     }
 
-    fun SaveIngredient(){
+    fun SaveIngredient(name: String, quantity: Int){
         val ingredient = StockEntity(
-            name = _uiState.value.name,
-            quantity = _uiState.value.quantity,
+            name = name,
+            quantity = quantity,
         )
 
         viewModelScope.launch {
