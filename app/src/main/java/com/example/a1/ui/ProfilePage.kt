@@ -66,6 +66,7 @@ import com.example.a1.ui.fastFeast.Footer
 import com.example.a1.data.profiledata.ProfileViewModel
 import com.example.a1.data.profiledata.Profile
 import com.example.a1.data.AppViewModelProvider
+import com.example.a1.data.cartData.CartViewModel
 import com.example.a1.data.profiledata.GlobalViewModel
 import com.example.a1.data.profiledata.ProfileEntity
 import com.example.a1.ui.fastFeast.FastFeastsScreen
@@ -75,7 +76,7 @@ import kotlinx.coroutines.delay
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfilePage(
-    viewModel: ProfileViewModel, navController : NavHostController, globalViewModel: GlobalViewModel
+    viewModel: ProfileViewModel, navController : NavHostController, globalViewModel: GlobalViewModel, cartViewModel : CartViewModel
 ) {
     val uiState by viewModel.uiState.collectAsState()
 
@@ -84,13 +85,13 @@ fun ProfilePage(
         ProfileHeader(uiState) { uri ->
             viewModel.setProfilePictureUri(uri)
         }
-        ProfileDataModify(viewModel, navController, globalViewModel)
+        ProfileDataModify(viewModel, navController, globalViewModel, cartViewModel)
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ProfileDataModify(viewModel : ProfileViewModel, navController: NavHostController, globalViewModel : GlobalViewModel) {
+fun ProfileDataModify(viewModel : ProfileViewModel, navController: NavHostController, globalViewModel : GlobalViewModel, cartViewModel : CartViewModel) {
     val context = LocalContext.current
 
     var showDialog by remember { mutableStateOf(false) }
@@ -744,6 +745,7 @@ fun ProfileDataModify(viewModel : ProfileViewModel, navController: NavHostContro
                         .height(componentHeight)
                         .padding(linePadding)
                         .clickable {
+                            cartViewModel.clearFoodCart()
                             navController.navigate(FastFeastsScreen.LoginScreen.name)
                             globalViewModel.loggedIn(false)
                         }
@@ -821,6 +823,7 @@ fun ProfileDataModify(viewModel : ProfileViewModel, navController: NavHostContro
                     IconButton(
                         colors = IconButtonDefaults.iconButtonColors(Color(0xFFFF9D7E)),
                         onClick = {
+                            cartViewModel.clearFoodCart()
                             viewModel.deleteProfile(email)
                             navController.navigate(FastFeastsScreen.LoginScreen.name)
                             globalViewModel.loggedIn(false)
