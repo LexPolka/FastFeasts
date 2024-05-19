@@ -211,8 +211,8 @@ fun IndividualFoodList(individualFoodList : List<IndividualFood>, viewModel : St
                         Column (verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally,
                             modifier = Modifier.fillMaxWidth().padding(8.dp).background(Color.LightGray, RoundedCornerShape(30.dp)).border(3.dp, Color.DarkGray, RoundedCornerShape(30.dp))){
 
-                            Text("Confirm Order Completion", fontSize = 20.sp, fontWeight = FontWeight.Bold, modifier = Modifier.padding(top = 4.dp))
-                            Text("Are you sure you want to complete this order?", fontSize = 16.sp)
+                            Text("Delete From Menu?", fontSize = 20.sp, fontWeight = FontWeight.Bold, modifier = Modifier.padding(top = 4.dp))
+                            Text("This will delete a food item permanently.", fontSize = 16.sp)
 
                             Row {
                                 IconButton(

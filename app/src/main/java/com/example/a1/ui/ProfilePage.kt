@@ -24,7 +24,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
@@ -56,6 +55,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.window.Dialog
@@ -71,7 +71,8 @@ import com.example.a1.data.profiledata.GlobalViewModel
 import com.example.a1.data.profiledata.ProfileEntity
 import com.example.a1.ui.fastFeast.FastFeastsScreen
 import kotlinx.coroutines.delay
-
+import androidx.compose.ui.platform.LocalContext
+import com.example.a1.ui.fastFeast.imageBitmapFromBytes
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -79,11 +80,29 @@ fun ProfilePage(
     viewModel: ProfileViewModel, navController : NavHostController, globalViewModel: GlobalViewModel, cartViewModel : CartViewModel
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    val context = LocalContext.current
+
+    //toast handler
+    var isToastVisible by remember { mutableStateOf(false) }
+    if (isToastVisible) {
+        LaunchedEffect(Unit) {
+            delay(1000) // Adjust the delay as needed
+            isToastVisible = false
+        }
+    }
 
     Column {
         //profile setter
-        ProfileHeader(uiState) { uri ->
-            viewModel.setProfilePictureUri(uri)
+        ProfileHeader(uiState) { image ->
+            val imageInputStream = context.contentResolver.openInputStream(image)
+            val imageData = imageInputStream?.readBytes()
+
+            if (imageData != null && imageData.size <= 8000) {
+                viewModel.setProfilePictureUri(imageData)
+            } else {
+                Toast.makeText(context, "Image too Large!", Toast.LENGTH_SHORT).show()
+                isToastVisible = true
+            }
         }
         ProfileDataModify(viewModel, navController, globalViewModel, cartViewModel)
     }
@@ -889,16 +908,27 @@ fun ProfileHeader(
 
 @Composable
 fun ProfileIcon(
-    profilePictureUri: String
+    profilePicture: ByteArray?
 ) {
     val painter: Painter = rememberImagePainter(
-        data = profilePictureUri,
+        data = profilePicture,
         builder = {
             transformations(CircleCropTransformation()) // Crop the image into a circle
         }
     )
 
-    if (!profilePictureUri.isBlank()) {
+    val context = LocalContext.current
+
+    //toast handler
+    var isToastVisible by remember { mutableStateOf(false) }
+    if (isToastVisible) {
+        LaunchedEffect(Unit) {
+            delay(1000) // Adjust the delay as needed
+            isToastVisible = false
+        }
+    }
+
+    if (profilePicture != null && profilePicture.isNotEmpty()) {
         Image(
             painter = painter,
             contentDescription = "Profile Picture",
