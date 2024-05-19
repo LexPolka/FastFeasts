@@ -169,7 +169,7 @@ fun IndividualFoodList(individualFoodList : List<IndividualFood>, viewModel : St
                             bitmap = imageFromByteToBitmap,
                             contentDescription = "Food Image ${food.name}",
                             modifier = Modifier
-                                .size(componentHeight/2)
+                                .size(componentHeight)
                                 .clip(shape = RoundedCornerShape(20.dp))
                                 .aspectRatio(1f)
                         )

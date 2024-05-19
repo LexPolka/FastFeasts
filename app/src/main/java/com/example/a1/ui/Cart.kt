@@ -199,7 +199,7 @@ fun CartUi(
 fun CartList(viewModel: CartViewModel, cartItems: List<Food>, modifier: Modifier = Modifier){
 
     LazyColumn(
-        modifier = modifier
+        modifier = Modifier.padding(bottom=80.dp)
     ) {
         items(cartItems) { food ->
             Column {

@@ -106,8 +106,8 @@ fun IndividualFoodPage(cartViewModel : CartViewModel, globalViewModel: GlobalVie
             Image(bitmap = imageFromByteToBitmap, contentDescription = "Test",
                 Modifier
                     .aspectRatio(1f)
-                    .width(screenWidth)
-                    .height(screenWidth)
+                    .width(screenWidth/2)
+                    .height(screenWidth/2)
             )
 
             //PRICE
