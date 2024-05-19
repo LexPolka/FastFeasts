@@ -13,6 +13,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -27,6 +28,7 @@ import androidx.navigation.NavController
 import com.example.a1.data.AppViewModelProvider
 import com.example.a1.ui.fastFeast.FastFeastsScreen
 import com.example.a1.data.cartData.CartViewModel
+import com.example.a1.data.profiledata.GlobalViewModel
 import com.example.a1.data.staffdata.StaffViewModel
 import java.util.Locale
 
@@ -34,8 +36,10 @@ import java.util.Locale
 fun PayAtCounterUi(
     staffViewModel: StaffViewModel,
     viewModel: CartViewModel,
-    navController: NavController
+    navController: NavController,
+    globalViewModel : GlobalViewModel,
 ){
+    val globalVar = globalViewModel.variables.collectAsState()
 
     val receiptItems = viewModel.cart
     //val foodList = viewModel.cartItems.collectAsState()
@@ -67,6 +71,7 @@ fun PayAtCounterUi(
         Column {
             Text("Thanks for Dining at")
             Text("     FastFeasts !    ")
+            Text("Restaurant: ${globalVar.value.location}")
         }
 
         Text("Please proceed to the counter to pay for your food")

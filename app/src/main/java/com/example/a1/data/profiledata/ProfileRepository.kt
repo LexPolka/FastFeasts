@@ -4,11 +4,9 @@
 
     interface ProfileRepository {
 
-        fun getProfile(email: String): List<ProfileEntity?>
+        fun getProfile(email: String): Flow<ProfileEntity?>
 
         suspend fun insertProfile(profile: ProfileEntity)
 
         suspend fun deleteProfile(profile: ProfileEntity)
-
-        suspend fun login(email: String, password: String): Boolean
     }

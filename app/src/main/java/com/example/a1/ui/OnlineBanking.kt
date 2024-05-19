@@ -16,6 +16,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -34,13 +35,17 @@ import com.example.a1.data.cartData.FoodEntity
 import com.example.a1.data.staffdata.StaffViewModel
 import java.util.Locale
 import androidx.compose.runtime.getValue
+import com.example.a1.data.profiledata.GlobalViewModel
 
 @Composable
 fun OnlineBankingUi(
     staffViewModel: StaffViewModel,
     viewModel: CartViewModel,
-    navController: NavController
+    navController: NavController,
+    globalViewModel : GlobalViewModel
 ){
+    val globalVar = globalViewModel.variables.collectAsState()
+
     val receiptItems = viewModel.cart
     val darkOrange = Color(0xFF975743)
     val referenceNumber by remember { mutableStateOf((0..0xFFFFFF).random().toString(16).padStart(6, '0')) }
@@ -59,6 +64,7 @@ fun OnlineBankingUi(
         addToOrderExecuted.value = true
     }
 
+
     Column(
         modifier = Modifier
             .fillMaxSize(),
@@ -69,6 +75,7 @@ fun OnlineBankingUi(
         Column {
             Text("Thanks for Dining at")
             Text("    FastFeasts !    ")
+            Text("Restaurant: ${globalVar.value.location}")
         }
 
         Text("Please proceed to the counter to pickup your food")

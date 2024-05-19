@@ -31,6 +31,8 @@ import androidx.compose.material3.Checkbox
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -42,27 +44,26 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
+import com.example.a1.data.profiledata.LoginState
+import com.example.a1.data.profiledata.ProfileViewModel
 import com.example.a1.ui.components.HeaderText
 import com.example.a1.ui.components.LoginTextField
 
 @Composable
 fun SignUpScreen(
+    viewModel : ProfileViewModel,
     onSignUpClick:() -> Unit,
     onLoginClick:() -> Unit,
     onPolicyClick:() -> Unit,
     onPrivacyClick:() -> Unit,
 ) {
-    val (firstName, onFirstNameChange) = rememberSaveable {
-        mutableStateOf("")
-    }
     val (email, onEmailChange) = rememberSaveable { mutableStateOf("") }
     val (password, onPasswordChange) = rememberSaveable { mutableStateOf("") }
     val (confirmPassword, onConfirmPasswordChange) = rememberSaveable { mutableStateOf("") }
     val (agree, onAgreeChange) = rememberSaveable { mutableStateOf(false) }
     val context = LocalContext.current
     var isPasswordSame by remember { mutableStateOf(false) }
-    val isFieldsNotEmpty = firstName.isNotEmpty() &&
-            email.isNotEmpty() && password.isNotEmpty() && confirmPassword.isNotEmpty() && agree
+    val isFieldsNotEmpty = email.isNotEmpty() && password.isNotEmpty() && confirmPassword.isNotEmpty() && agree
 
     val startColor = Color(0xFFFF9D7E)
     val endColor = Color(0xFF975743)
@@ -70,6 +71,24 @@ fun SignUpScreen(
     val configuration = LocalConfiguration.current
     val screenHeight = configuration.screenHeightDp.dp
     var HeaderBarHeight = (screenHeight*7/100)
+
+    val loginState by viewModel.loginState.collectAsState()
+
+    // Handle login state changes
+    LaunchedEffect(loginState) {
+        when (loginState) {
+            is LoginState.Success -> {
+                Toast.makeText(context, "Register Successful.", Toast.LENGTH_SHORT).show()
+                viewModel.resetLoginState()
+                onSignUpClick()
+            }
+            is LoginState.Failure -> {
+                Toast.makeText(context, "Register Failed. Account Exists.", Toast.LENGTH_SHORT).show()
+                viewModel.resetLoginState()
+            }
+            else -> Unit
+        }
+    }
 
     Column {
         Surface(
@@ -100,14 +119,6 @@ fun SignUpScreen(
                     .padding(vertical = defaultPadding)
                     .align(alignment = Alignment.Start)
             )
-            LoginTextField(
-                value = firstName,
-                onValueChange = onFirstNameChange,
-                labelText = "Username",
-                leadingIcon = Icons.Default.Person,
-                modifier = Modifier.fillMaxWidth()
-            )
-            Spacer(Modifier.height(defaultPadding))
             LoginTextField(
                 value = email,
                 onValueChange = onEmailChange,
@@ -183,7 +194,7 @@ fun SignUpScreen(
             Button(onClick = {
                 isPasswordSame = password != confirmPassword
                 if (!isPasswordSame){
-                    onSignUpClick()
+                    viewModel.register(email, password)
                 }
             },
                 modifier = Modifier.fillMaxWidth(),

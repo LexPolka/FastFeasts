@@ -62,6 +62,7 @@ import com.example.a1.ui.fastFeast.Footer
 import com.example.a1.data.profiledata.ProfileViewModel
 import com.example.a1.data.profiledata.Profile
 import com.example.a1.data.AppViewModelProvider
+import com.example.a1.data.profiledata.ProfileEntity
 import kotlinx.coroutines.delay
 
 
@@ -71,6 +72,7 @@ fun ProfilePage(
     viewModel: ProfileViewModel
 ) {
     val uiState by viewModel.uiState.collectAsState()
+
     Column {
         //profile setter
         ProfileHeader(uiState) { uri ->
@@ -109,6 +111,7 @@ fun ProfileDataModify(viewModel : ProfileViewModel) {
     val componentHeight = screenHeight / 9
 
     //before saving
+    val email = uiState.email
     var newName by remember { mutableStateOf(uiState.name) }
     var newDay by remember { mutableStateOf(uiState.day) }
     var newMonth by remember { mutableStateOf(uiState.month) }
@@ -195,7 +198,7 @@ fun ProfileDataModify(viewModel : ProfileViewModel) {
                             .background(Color.White)
                     )
                     Text(
-                        text = "FastFeasts@gmail.com",
+                        text = email,
                         color = if (isDarkTheme) Color.White else Color.Black,
                         fontSize = textSize
                     )
@@ -665,7 +668,7 @@ fun ProfileDataModify(viewModel : ProfileViewModel) {
 
 @Composable
 fun ProfileHeader(
-    uiState: Profile,
+    uiState: ProfileEntity,
     onProfilePictureSelected: (Uri) -> Unit
 ) {
     val startColor = Color(0xFFFF9D7E)

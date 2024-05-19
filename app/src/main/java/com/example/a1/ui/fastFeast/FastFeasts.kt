@@ -336,7 +336,7 @@ fun FastFeastsApp(
             //NAV HOST IS HERE =============================
             NavHost(
                 navController = navController,
-                startDestination = FastFeastsScreen.MainPage.name, //replace login_flow with FastFeastsScreen.MainPage.name
+                startDestination = "login_flow", //replace login_flow with FastFeastsScreen.MainPage.name
                 modifier = Modifier.padding(innerPadding)
             ) {
                 composable(route = FastFeastsScreen.MainPage.name) {
@@ -376,21 +376,24 @@ fun FastFeastsApp(
 
                 //depending on userInput from paymentOptions , to be implemented
                 composable(route = FastFeastsScreen.OnlineBanking.name) {
-                    OnlineBankingUi(staffViewModel, cartViewModel, navController)
+                    OnlineBankingUi(staffViewModel, cartViewModel, navController, globalViewModel)
                 }
                 composable(route = FastFeastsScreen.PayAtCounter.name) {
-                    PayAtCounterUi(staffViewModel, cartViewModel, navController)
+                    PayAtCounterUi(staffViewModel, cartViewModel, navController, globalViewModel)
                 }
 
                 navigation(startDestination = FastFeastsScreen.LoginScreen.name , route = "login_flow" ) {
                     composable(route = FastFeastsScreen.LoginScreen.name) {
                         LoginScreen(
+                            profileViewModel,
                             onLoginClick = {
                                 navController.navigate(
                                     FastFeastsScreen.MainPage.name
                                 ){
                                     popUpTo(route = "login_flow")
                                 }
+
+                                globalViewModel.loggedIn(true)
                             },
                             onSignUpClick = {
                                 navController.navigateToSingleTop(
@@ -401,12 +404,14 @@ fun FastFeastsApp(
                     }
                     composable(route = FastFeastsScreen.SignUpScreen.name) {
                         SignUpScreen(
+                            profileViewModel,
                             onSignUpClick = {
                                 navController.navigate(
                                     FastFeastsScreen.MainPage.name
                                 ){
                                     popUpTo("login_flow")
                                 }
+                                globalViewModel.loggedIn(true)
                             },
                             onLoginClick = {
                                 navController.navigateToSingleTop(
@@ -458,9 +463,6 @@ fun HeaderBar(globalViewModel : GlobalViewModel ,scope : CoroutineScope, drawerS
     var expanded by remember { mutableStateOf(false) }
     var selectedIndex by remember { mutableIntStateOf(0) }
     val options = listOf("EkoCheras Mall, Jln Cheras", "Setapak Central, Jln Genting Klang", "VivaCity Mall, Jln Kuching", "1Utama, Lebuh Bandar Utama")
-
-    //SET RESTAURANT LOCATIONS
-    globalViewModel.setLocation(options[selectedIndex])
 
     val startColor = Color(0xFFFF9D7E)
     val endColor = Color(0xFF975743)
@@ -566,6 +568,7 @@ fun HeaderBar(globalViewModel : GlobalViewModel ,scope : CoroutineScope, drawerS
                             DropdownMenuItem(
                                 text = { Text(option, fontSize = 14.sp) },
                                 onClick = {
+                                    globalViewModel.setLocation(options[selectedIndex])
                                     selectedIndex = index
                                     expanded = false })
                         }

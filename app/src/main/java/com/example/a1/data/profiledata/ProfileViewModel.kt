@@ -3,6 +3,7 @@ package com.example.a1.data.profiledata
 import android.net.Uri
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -21,12 +22,39 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewmodel.compose.viewModel
 
 class ProfileViewModel(private val repository: ProfileRepository) : ViewModel() {
-    private val _uiState = MutableStateFlow(Profile())
-    val uiState: StateFlow<Profile> = _uiState.asStateFlow()
+    private val _uiState = MutableStateFlow(ProfileEntity())
+    val uiState: StateFlow<ProfileEntity> = _uiState.asStateFlow()
 
-    fun register(profile: ProfileEntity) {
+    private val _loginState = MutableStateFlow<LoginState>(LoginState.Idle)
+    val loginState: StateFlow<LoginState> = _loginState.asStateFlow()
+
+    fun register(email: String , password : String) {
         viewModelScope.launch {
-            repository.insertProfile(profile)
+            val existingProfile = repository.getProfile(email).toList().firstOrNull()
+            if (existingProfile == null) {
+                val profile = ProfileEntity(
+                    email = email,
+                    password = password
+                )
+                repository.insertProfile(profile)
+                _uiState.value = profile
+                _loginState.value = LoginState.Success
+            } else {
+                _loginState.value = LoginState.Failure
+            }
+        }
+    }
+
+    fun login(email: String, password: String) {
+        viewModelScope.launch {
+            repository.getProfile(email).collect { profile ->
+                if (profile != null && profile.password == password) {
+                    _uiState.value = profile
+                    _loginState.value = LoginState.Success
+                } else {
+                    _loginState.value = LoginState.Failure
+                }
+            }
         }
     }
 
@@ -86,12 +114,15 @@ class ProfileViewModel(private val repository: ProfileRepository) : ViewModel() 
         }
     }
 
-    fun deleteAllProfiles(){
-        viewModelScope.launch {
-            repository.deleteAllProfile()
-        }
+    fun resetLoginState() {
+        _loginState.value = LoginState.Idle
     }
 
+}
+sealed class LoginState {
+    object Idle : LoginState()
+    object Success : LoginState()
+    object Failure : LoginState()
 }
 
 data class Profile(

@@ -25,6 +25,8 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
@@ -40,14 +42,17 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.a1.R
+import com.example.a1.data.profiledata.LoginState
+import com.example.a1.data.profiledata.ProfileViewModel
 import com.example.a1.ui.components.HeaderText
 import com.example.a1.ui.components.LoginTextField
+import androidx.compose.runtime.getValue
 
 val defaultPadding = 16.dp
 val itemSpacing = 8.dp
 
 @Composable
-fun LoginScreen(onLoginClick: () -> Unit, onSignUpClick: () -> Unit) {
+fun LoginScreen(viewModel : ProfileViewModel, onLoginClick: () -> Unit, onSignUpClick: () -> Unit) {
 
     val (userName, setUsername) = rememberSaveable {
     mutableStateOf("")
@@ -67,6 +72,24 @@ fun LoginScreen(onLoginClick: () -> Unit, onSignUpClick: () -> Unit) {
     val configuration = LocalConfiguration.current
     val screenHeight = configuration.screenHeightDp.dp
     var HeaderBarHeight = (screenHeight*7/100)
+
+    val loginState by viewModel.loginState.collectAsState()
+
+    // Handle login state changes
+    LaunchedEffect(loginState) {
+        when (loginState) {
+            is LoginState.Success -> {
+                Toast.makeText(context, "Login Successful.", Toast.LENGTH_SHORT).show()
+                viewModel.resetLoginState()
+                onLoginClick()
+            }
+            is LoginState.Failure -> {
+                Toast.makeText(context, "Login Failed. No Account.", Toast.LENGTH_SHORT).show()
+                viewModel.resetLoginState()
+            }
+            else -> Unit
+        }
+    }
 
     Column {
         Surface(
@@ -112,7 +135,9 @@ fun LoginScreen(onLoginClick: () -> Unit, onSignUpClick: () -> Unit) {
             )
             Spacer(Modifier.height(itemSpacing))
             Button(
-                onClick = onLoginClick,
+                onClick = {
+                    viewModel.login(email = userName, password = password)
+                },
                 modifier = Modifier.fillMaxWidth(),
                 enabled = isFieldsEmpty
             ) {
