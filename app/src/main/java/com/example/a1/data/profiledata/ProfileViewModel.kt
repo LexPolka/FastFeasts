@@ -72,9 +72,9 @@ class ProfileViewModel(private val repository: ProfileRepository) : ViewModel() 
     }
 
     //Setters
-    fun setProfilePictureUri(uri: Uri?) {
+    fun setProfilePictureUri(image : ByteArray) {
         _uiState.update { currentState ->
-            currentState.copy(profilePictureUri = uri.toString())
+            currentState.copy(profilePictureUri = image)
         }
     }
     fun setName(name: String) {
@@ -153,7 +153,7 @@ sealed class LoginState {
 
 data class Profile(
     //profile picture
-    val profilePictureUri: String = "",
+    val profilePictureUri: ByteArray = byteArrayOf(),
     val name: String = "",
     val email: String ="",
     val password: String = "",

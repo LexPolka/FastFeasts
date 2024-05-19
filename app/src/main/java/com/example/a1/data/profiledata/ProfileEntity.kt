@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "profiles")
 data class ProfileEntity(
     //profile picture
-    val profilePictureUri: String = "",
+    val profilePictureUri: ByteArray = byteArrayOf(),
     val name: String = "",
     val password: String = "",
     val day : String = "",
