@@ -78,38 +78,9 @@ fun StaffStocks(viewModel: StaffViewModel, stockViewModel: StockViewModel, navCo
     var name by remember { mutableStateOf("") }
     var quantity by remember { mutableStateOf("") }
 
-    Column(modifier = Modifier.padding(16.dp)) {
-        OutlinedTextField(
-            value = name,
-            onValueChange = { name = it },
-            label = { Text("Name") },
-            modifier = Modifier.fillMaxWidth()
-        )
 
-        Spacer(modifier = Modifier.height(16.dp))
 
-        OutlinedTextField(
-            value = quantity,
-            onValueChange = { quantity = it },
-            label = { Text("Quantity") },
-            keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
-            modifier = Modifier.fillMaxWidth()
-        )
 
-        Spacer(modifier = Modifier.height(16.dp))
-
-        Button(
-            onClick = {
-                val quantityInt = quantity.toIntOrNull()
-                if (quantityInt != null) {
-                    stockViewModel.SaveIngredient(name = name, quantity = quantityInt)
-                }
-            },
-            modifier = Modifier.align(Alignment.CenterHorizontally)
-        ) {
-            Text("Insert Data")
-        }
-    }
 
 
         Column {
@@ -121,7 +92,36 @@ fun StaffStocks(viewModel: StaffViewModel, stockViewModel: StockViewModel, navCo
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.padding(universalPadding)
             )
+            OutlinedTextField(
+                value = name,
+                onValueChange = { name = it },
+                label = { Text("Name") },
+                modifier = Modifier.fillMaxWidth()
+            )
 
+            Spacer(modifier = Modifier.height(16.dp))
+
+            OutlinedTextField(
+                value = quantity,
+                onValueChange = { quantity = it },
+                label = { Text("Quantity") },
+                keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
+                modifier = Modifier.fillMaxWidth()
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Button(
+                onClick = {
+                    val quantityInt = quantity.toIntOrNull()
+                    if (quantityInt != null) {
+                        stockViewModel.SaveIngredient(name = name, quantity = quantityInt)
+                    }
+                },
+                modifier = Modifier.align(Alignment.CenterHorizontally)
+            ) {
+                Text("Insert Data")
+            }
             LazyColumn(modifier = Modifier.padding(16.dp))
             {
 
