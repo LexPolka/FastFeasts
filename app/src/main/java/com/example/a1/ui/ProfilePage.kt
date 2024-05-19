@@ -68,7 +68,7 @@ import kotlinx.coroutines.delay
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfilePage(
-    viewModel: ProfileViewModel = viewModel(factory = AppViewModelProvider.Factory)
+    viewModel: ProfileViewModel
 ) {
     val uiState by viewModel.uiState.collectAsState()
     Column {
@@ -76,10 +76,8 @@ fun ProfilePage(
         ProfileHeader(uiState) { uri ->
             viewModel.setProfilePictureUri(uri)
         }
-
         ProfileDataModify(viewModel)
     }
-
 }
 
 @OptIn(ExperimentalMaterial3Api::class)

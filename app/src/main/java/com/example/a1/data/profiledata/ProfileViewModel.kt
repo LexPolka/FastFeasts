@@ -24,6 +24,13 @@ class ProfileViewModel(private val repository: ProfileRepository) : ViewModel() 
     private val _uiState = MutableStateFlow(Profile())
     val uiState: StateFlow<Profile> = _uiState.asStateFlow()
 
+    fun register(profile: ProfileEntity) {
+        viewModelScope.launch {
+            repository.insertProfile(profile)
+        }
+    }
+
+
     //Setters
     fun setProfilePictureUri(uri: Uri?) {
         _uiState.update { currentState ->

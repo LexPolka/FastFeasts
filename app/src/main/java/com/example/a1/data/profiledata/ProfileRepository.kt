@@ -1,12 +1,14 @@
-package com.example.a1.data.profiledata
+    package com.example.a1.data.profiledata
 
-import kotlinx.coroutines.flow.Flow
+    import kotlinx.coroutines.flow.Flow
 
-interface ProfileRepository {
+    interface ProfileRepository {
 
-    fun getProfile(email: String): List<ProfileEntity?>
+        fun getProfile(email: String): List<ProfileEntity?>
 
-    suspend fun insertProfile(profile: ProfileEntity)
+        suspend fun insertProfile(profile: ProfileEntity)
 
-    suspend fun deleteProfile(profile: ProfileEntity)
-}
+        suspend fun deleteProfile(profile: ProfileEntity)
+
+        suspend fun login(email: String, password: String): Boolean
+    }

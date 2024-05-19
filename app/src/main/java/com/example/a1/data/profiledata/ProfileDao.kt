@@ -10,8 +10,8 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface ProfileDao {
     //use getProfile to get profile when LOGIN
-    @Query("SELECT * FROM profiles WHERE email = :email")
-    fun getProfile(email: String): List<ProfileEntity?>
+    @Query("SELECT * FROM profiles WHERE email = :email LIMIT 1")
+    fun getProfile(email: String): ProfileEntity?
 
     //use insertProfile when registering
     @Insert(onConflict = OnConflictStrategy.REPLACE)
