@@ -38,9 +38,9 @@ class ProfileViewModel(private val repository: ProfileRepository) : ViewModel() 
                         password = password,
                         isStaff = isStaff
                     )
-                    repository.insertProfile(profile)
                     _uiState.value = profile
                     _loginState.value = LoginState.Success
+                    repository.insertProfile(profile)
                 } else {
                     _loginState.value = LoginState.Failure
                 }
