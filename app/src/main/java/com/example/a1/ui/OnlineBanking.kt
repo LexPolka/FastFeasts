@@ -35,6 +35,7 @@ import com.example.a1.data.cartData.FoodEntity
 import com.example.a1.data.staffdata.StaffViewModel
 import java.util.Locale
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.text.font.FontWeight
 import com.example.a1.data.profiledata.GlobalViewModel
 
 @Composable
@@ -79,7 +80,7 @@ fun OnlineBankingUi(
         }
 
         Text("Please proceed to the counter to pickup your food")
-        Text("Reference Number: $referenceNumber")
+        Text("Reference Number: $referenceNumber", fontWeight = FontWeight.Bold)
         Spacer(Modifier.height(15.dp))
 
         Row(

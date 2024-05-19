@@ -21,32 +21,21 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import com.example.a1.ui.fastFeast.FastFeastsScreen
 import com.example.a1.R
+import com.example.a1.ui.fastFeast.BackButton
 
 @Composable
 fun PaymentOptions(
-    navController: NavController,
+    navController: NavHostController,
     modifier: Modifier = Modifier
 ){
     val lightOrange = Color(0xFFFF9D7E)
 
     Column {
 
-        Button(
-            onClick = { navController.popBackStack() },
-            elevation = ButtonDefaults.buttonElevation(
-                defaultElevation = 10.dp,
-                pressedElevation = 6.dp
-            ),
-            colors = ButtonDefaults.buttonColors(lightOrange)
-        ) {
-            Text(
-                text = "< Back ",
-                fontSize = 20.sp,
-                fontFamily = FontFamily.SansSerif
-            )
-        }
+        BackButton(navController)
 
         Column(
 

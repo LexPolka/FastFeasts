@@ -21,6 +21,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -75,7 +76,7 @@ fun PayAtCounterUi(
         }
 
         Text("Please proceed to the counter to pay for your food")
-        Text("Reference Number: $referenceNumber")
+        Text("Reference Number: $referenceNumber", fontWeight = FontWeight.Bold)
         Spacer(Modifier.height(15.dp))
 
         Row(
