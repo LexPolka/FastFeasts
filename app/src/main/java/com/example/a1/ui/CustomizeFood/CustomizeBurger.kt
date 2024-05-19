@@ -32,6 +32,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -72,49 +73,54 @@ fun CustomizationScreen(navController: NavHostController){
 
     val isDarkTheme = isSystemInDarkTheme()
 
-
-    Box(
-        modifier = Modifier
-            .background(color = Color(0xFFFFFFFF))
-            .fillMaxSize()
-            .padding(top = 5.dp, start = 16.dp, end = 16.dp, bottom = 8.dp)
-    ) {
-        Column {
-            Row {
-                IconButton(
-                    colors = IconButtonDefaults.iconButtonColors(Color(0xFFFF9D7E)),
-                    onClick = { navController.popBackStack() },
-                    modifier = Modifier
-                        .border(
-                            3.5.dp,
-                            color = if (isDarkTheme) Color.White else Color(0xFF975743),
-                            shape = CircleShape
-                        )
-                        .width(300.dp)
-                        .height(40.dp)
-                ) {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Icon(
-                            tint = if (isDarkTheme) Color.White else Color.Black,
-                            imageVector = Icons.Filled.ArrowBack,
-                            contentDescription = "Back Button",
+    LazyColumn {
+        item {
+            Box(
+                modifier = Modifier
+                    .background(color = Color(0xFFFFFFFF))
+                    .fillMaxSize()
+                    .padding(top = 5.dp, start = 16.dp, end = 16.dp, bottom = 8.dp)
+            ) {
+                Column {
+                    Row {
+                        IconButton(
+                            colors = IconButtonDefaults.iconButtonColors(Color(0xFFFF9D7E)),
+                            onClick = { navController.popBackStack() },
                             modifier = Modifier
-                                .fillMaxHeight()
-                                .padding(8.dp)
-                        )
-                        Spacer(modifier = Modifier.weight(0.1f))
-                        Text("Cancel Order/Back to Main Page",color = if (isDarkTheme) Color.White else Color.Black,
-                            fontSize = 15.sp,
-                            fontWeight = FontWeight.Bold,
-                            modifier = Modifier.padding(8.dp)
-                        )
-                        Spacer(modifier = Modifier.weight(0.1f))
+                                .border(
+                                    3.5.dp,
+                                    color = if (isDarkTheme) Color.White else Color(0xFF975743),
+                                    shape = CircleShape
+                                )
+                                .width(300.dp)
+                                .height(40.dp)
+                        ) {
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                Icon(
+                                    tint = if (isDarkTheme) Color.White else Color.Black,
+                                    imageVector = Icons.Filled.ArrowBack,
+                                    contentDescription = "Back Button",
+                                    modifier = Modifier
+                                        .fillMaxHeight()
+                                        .padding(8.dp)
+                                )
+                                Spacer(modifier = Modifier.weight(0.1f))
+                                Text("Cancel Order/Back to Main Page",color = if (isDarkTheme) Color.White else Color.Black,
+                                    fontSize = 15.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    modifier = Modifier.padding(8.dp)
+                                )
+                                Spacer(modifier = Modifier.weight(0.1f))
+                            }
+                        }
                     }
+                    CustomizeMenu()
                 }
             }
-            CustomizeMenu()
         }
+
     }
+
 }
 @Composable
 fun CustomizeMenu() {
