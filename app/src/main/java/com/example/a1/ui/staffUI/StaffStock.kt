@@ -52,13 +52,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.text.font.FontStyle
+import com.example.a1.data.CustomizeFood.StockViewModel
 import com.example.a1.data.staffdata.Stock
+import androidx.lifecycle.viewmodel.compose.viewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun StaffStocks(viewModel: StaffViewModel, navController: NavHostController) {
     val isDarkTheme = isSystemInDarkTheme()
-
     //Screen settings
     val configuration = LocalConfiguration.current
     val screenWidth = configuration.screenWidthDp.dp
