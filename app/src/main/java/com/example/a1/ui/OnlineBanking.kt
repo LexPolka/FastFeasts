@@ -121,13 +121,19 @@ fun OnlineBankingUi(
                 }
 
                 Button(
-                    onClick = { navController.navigate(FastFeastsScreen.MainPage.name) },
+                    onClick = {
+                        viewModel.clearCart()
+                        navController.navigate(FastFeastsScreen.MainPage.name)
+                              },
                     elevation = ButtonDefaults.buttonElevation(
                         defaultElevation = 10.dp,
                         pressedElevation = 6.dp
                     ),
-                    colors = ButtonDefaults.buttonColors(darkOrange)
+                    colors = ButtonDefaults.buttonColors(darkOrange),
+
+
                 ) {
+
 
                     Text(
                         text = "Return to Main Menu",

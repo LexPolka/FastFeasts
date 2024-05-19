@@ -358,7 +358,7 @@ fun FastFeastsApp(
                     DiningOptions(navController)
                 }
                 composable(route = FastFeastsScreen.PaymentOptions.name) {
-                    PaymentOptions(navController)
+                    PaymentOptions(profileViewModel, navController)
                 }
                 composable(route = FastFeastsScreen.CustomizeBurger.name) {
                     CustomizationScreen(navController)
