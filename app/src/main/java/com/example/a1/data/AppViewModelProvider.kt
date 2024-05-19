@@ -7,6 +7,7 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.a1.data.cartData.CartViewModel
 import com.example.a1.data.profiledata.ProfileViewModel
 import com.example.a1.data.staffdata.StaffViewModel
+import com.example.test.FoodMenuViewModel
 
 /**
  * Provides Factory to create instance of ViewModel for the entire Inventory app
@@ -26,6 +27,7 @@ object AppViewModelProvider {
         initializer {
             CartViewModel(FastFeastsApplication().container.cartRepository)
         }
+
     }
 }
 

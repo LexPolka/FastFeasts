@@ -21,4 +21,7 @@ interface ProfileDao {
     //should also clear cart and other databases
     @Delete
     suspend fun deleteProfiles(profile: ProfileEntity)
+
+    @Query ("DELETE FROM profiles")
+    suspend fun deleteAllProfiles()
 }

@@ -1,15 +1,16 @@
 package com.example.a1.data.cartData
 
-import kotlinx.coroutines.flow.Flow
+import com.example.a1.data.staffdata.OrderEntity
+import java.util.concurrent.Flow
+
 
 interface CartRepository {
 
-    fun getCart(id: Int): Flow<FoodEntity>
+    suspend fun addItem(food: FoodEntity)
+    suspend fun removeItem(food: FoodEntity)
+    fun getCart(): kotlinx.coroutines.flow.Flow<List<FoodEntity>>
 
-    suspend fun insert(food: FoodEntity)
-
-    suspend fun delete(food: FoodEntity)
-
+    suspend fun clearCart()
 
 
 }

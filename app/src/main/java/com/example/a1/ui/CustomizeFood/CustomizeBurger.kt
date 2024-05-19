@@ -1,5 +1,6 @@
 package com.example.a1.ui.CustomizeFood
 
+import android.widget.Toast
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.ui.text.TextStyle
@@ -50,6 +51,16 @@ import androidx.navigation.NavHostController
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.LocalContext
+import com.example.a1.data.cartData.CartViewModel
+import com.example.a1.data.cartData.Food
+import kotlinx.coroutines.delay
+
 
 @Composable
 fun CustomizationScreen(navController: NavHostController){
@@ -106,6 +117,16 @@ fun CustomizationScreen(navController: NavHostController){
 @Composable
 fun CustomizeMenu() {
     val viewModel: FoodMenuViewModel = viewModel()
+    val name = "Custom Burger"
+    val price = viewModel.TotalPrice
+    val context = LocalContext.current
+    var isToastVisible by remember { mutableStateOf(false) }
+    if (isToastVisible) {
+        LaunchedEffect(Unit) {
+            delay(500) // Adjust the delay as needed
+            isToastVisible = false
+        }
+    }
 
     Box(
         modifier = Modifier
@@ -120,7 +141,16 @@ fun CustomizeMenu() {
                 Spacer(modifier = Modifier.width(6.dp))
                 BurgerContent(modifier = Modifier.weight(1f))
             }
-                Button(onClick = { /*TODO*/ },
+                Button(onClick =
+                { val burger = viewModel.Burger(name,price,R.drawable.burgericon, viewModel.addBun, viewModel.addPatty, viewModel.addLettuce, viewModel.addSauce, viewModel.addExtra)
+                    viewModel.AddToCartBurger(burger)
+
+                    if (!isToastVisible)
+                    {
+                        Toast.makeText(context, "Added ${viewModel.TotalPrice} ${name} Cart.", Toast.LENGTH_SHORT).show()
+                        isToastVisible = true
+                    }
+                },
                     colors = ButtonDefaults.buttonColors(
                         containerColor = Color(0xFF44FF8F) // Background color
                     ),

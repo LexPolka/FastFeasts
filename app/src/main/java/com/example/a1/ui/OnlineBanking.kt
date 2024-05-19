@@ -16,6 +16,8 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -24,22 +26,38 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.example.a1.data.AppViewModelProvider
 import com.example.a1.ui.fastFeast.FastFeastsScreen
 import com.example.a1.data.cartData.CartViewModel
 import com.example.a1.data.cartData.Food
+import com.example.a1.data.cartData.FoodEntity
+import com.example.a1.data.staffdata.StaffViewModel
 import java.util.Locale
+import androidx.compose.runtime.getValue
 
 @Composable
 fun OnlineBankingUi(
+    staffViewModel: StaffViewModel,
     viewModel: CartViewModel,
     navController: NavController
 ){
-
+    val receiptItems = viewModel.cart
     val darkOrange = Color(0xFF975743)
+    val referenceNumber by remember { mutableStateOf((0..0xFFFFFF).random().toString(16).padStart(6, '0')) }
+    val totalPrice = viewModel.getTotalCartPrice()
 
-    val referenceNumber = (1..200).random()
-    val receiptItems = viewModel.cartItems
-    val totalPrice = viewModel.getTotalPrice()
+    val addToOrderExecuted = remember { mutableStateOf(false) }
+    if (!addToOrderExecuted.value) {
+        receiptItems.forEach { food ->
+            staffViewModel.addToOrder(
+                orderID = referenceNumber,
+                name = food.name,
+                image = food.image,
+                price = food.price,
+            )
+        }
+        addToOrderExecuted.value = true
+    }
 
     Column(
         modifier = Modifier
@@ -141,19 +159,19 @@ fun ReceiptList(
 
 @Composable
 fun ReceiptItem(
-food: Food,
-modifier: Modifier = Modifier
+    food: Food,
+    modifier: Modifier = Modifier
 ){
     Row(
         Modifier
-        .fillMaxWidth()
-        .padding(horizontal = 16.dp, vertical = 8.dp), // Add padding to the Row
-    horizontalArrangement = Arrangement.SpaceBetween
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp, vertical = 8.dp), // Add padding to the Row
+        horizontalArrangement = Arrangement.SpaceBetween
 
     ) {
         Text(text = food.name,
             modifier = Modifier.weight(1f)
-            )
+        )
         Text(text = food.price )
     }
 

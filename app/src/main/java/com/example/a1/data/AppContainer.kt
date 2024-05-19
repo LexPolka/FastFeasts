@@ -1,6 +1,7 @@
 package com.example.a1.data
 
 import android.content.Context
+
 import com.example.a1.data.cartData.CartOfflineRepository
 import com.example.a1.data.cartData.CartRepository
 import com.example.a1.data.profiledata.ProfileOfflineRepository
@@ -17,6 +18,7 @@ interface AppContainer {
     val staffRepository : StaffRepository
 
     val cartRepository: CartRepository
+
 }
 
 class AppDataContainer(private val context: Context) : AppContainer {
@@ -34,6 +36,8 @@ class AppDataContainer(private val context: Context) : AppContainer {
     override val cartRepository: CartRepository by lazy {
         CartOfflineRepository(ApplicationDatabase.getDatabase(context).foodDao())
     }
+
+
 
 
 }

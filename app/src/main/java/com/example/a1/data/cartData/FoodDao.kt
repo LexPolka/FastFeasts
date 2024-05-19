@@ -1,6 +1,7 @@
 package com.example.a1.data.cartData
 
 import android.content.ClipData.Item
+import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
@@ -11,14 +12,18 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface FoodDao {
+
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insert(food: FoodEntity)
+    suspend fun addFood(food: FoodEntity)
 
     @Delete
-    suspend fun delete(food: FoodEntity)
+    suspend fun removeFood(food: FoodEntity)
 
-    @Query("SELECT * FROM food WHERE id = :id")
-    fun getCart(id: Int): Flow<FoodEntity>
+    @Query("SELECT * FROM food")
+    fun getCart(): Flow<List<FoodEntity>>
+
+    @Query("DELETE FROM food")
+    suspend fun clearCart()
 
 
 

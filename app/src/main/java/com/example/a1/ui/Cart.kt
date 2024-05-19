@@ -33,32 +33,38 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import com.example.a1.data.AppViewModelProvider
 import com.example.a1.ui.fastFeast.BackButton
 import com.example.a1.ui.fastFeast.FastFeastsScreen
 import com.example.a1.data.cartData.CartViewModel
 import com.example.a1.data.cartData.Food
 import com.example.a1.ui.fastFeast.imageBitmapFromBytes
 import java.util.Locale
-
+import androidx.compose.ui.text.TextStyle
 
 
 @Composable
-fun CartUi(viewModel: CartViewModel, navController : NavHostController, modifier: Modifier = Modifier){
-// this is the page itself, including the buttons and cart label
-    //Colours
-
+fun CartUi(
+    navController: NavHostController,
+    modifier: Modifier = Modifier,
+    viewModel: CartViewModel = viewModel(factory = AppViewModelProvider.Factory)
+) {
     val darkOrange = Color(0xFF975743)
+    val darkGrey = Color(0xFF444444)
 
+    //val foodList = viewModel.cartItems.collectAsState()
+
+    //val cartItems = foodList.value // cartItems = List<Food>
 
     //overall cart variable
-    val cartItems by remember { derivedStateOf { viewModel.cartItems } }
+    val cartItems by remember { derivedStateOf { viewModel.cart } }
     //derived state that recomputes only when its dependencies change, optimize recomposition and ensure that derived values are updated correctly.
-
 
     Column(
         modifier.fillMaxSize(),
-        ){
+    ) {
         BackButton(navController)
 
         Spacer(modifier = Modifier.height(20.dp))
@@ -68,7 +74,6 @@ fun CartUi(viewModel: CartViewModel, navController : NavHostController, modifier
                 text = "Cart",
                 fontSize = 50.sp,
                 fontWeight = Bold
-
             )
 
             Spacer(modifier = Modifier.weight(1f))
@@ -76,26 +81,26 @@ fun CartUi(viewModel: CartViewModel, navController : NavHostController, modifier
             val isClearDialogShown by remember { derivedStateOf { viewModel.isClearCartDialogShown } }
 
             Button(
-                onClick = {
-                    viewModel.onClearCartClick()
-                },
+                onClick = { viewModel.onClearCartClick() },
                 elevation = ButtonDefaults.buttonElevation(
                     defaultElevation = 10.dp,
                     pressedElevation = 6.dp
                 ),
                 colors = ButtonDefaults.buttonColors(darkOrange),
-            ) { Text(text = "Clear Cart",
-                fontSize = 20.sp,
-                fontFamily = SansSerif
-            ) }
+            ) {
+                Text(
+                    text = "Clear Cart",
+                    fontSize = 20.sp,
+                    fontFamily = SansSerif
+                )
+            }
 
-            if (isClearDialogShown){
+            if (isClearDialogShown) {
                 CartConfirmClearCartDialog(
                     onDismiss = { viewModel.onClearCartDismissClick() },
-                    onConfirm =
-                    {confirmed ->
+                    onConfirm = { confirmed ->
                         if (confirmed) {
-                            viewModel.clearCart()
+                            viewModel.clearFoodCart()
                         }
                         viewModel.onClearCartDismissClick()
                     },
@@ -103,65 +108,64 @@ fun CartUi(viewModel: CartViewModel, navController : NavHostController, modifier
             }
         }
 
-        var amountOfItemsInCart = 0
-
-        for (x in cartItems){
-            amountOfItemsInCart++
-        }
-
+        val amountOfItemsInCart = viewModel.getTotalCartItems()
 
         Card {
-
             Row(
-                Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+                modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Column(
-                    modifier = Modifier.weight(1f)
-                    
-                ) {
-                    Text(text = "Items in Cart: $amountOfItemsInCart ")
+                Column(modifier = Modifier.weight(1f)) {
+                    Text(text = "Items in Cart: $amountOfItemsInCart")
                 }
-                Column{
-                    Text(text = "Price",
+                Column {
+                    Text(
+                        text = "Price",
                         fontSize = 20.sp,
                         fontFamily = SansSerif,
                         fontWeight = Bold
                     )
                 }
-
             }
-
-
         }
+
         Spacer(modifier = modifier.height(20.dp))
 
-        Box{//pass the list of food details ( also a list )
-            CartList(viewModel = viewModel, cartItems = cartItems, modifier = Modifier )
+        Box {
 
-            Box(modifier = Modifier.fillMaxSize()){
-                Column(
-                    modifier = Modifier
-                    .align(Alignment.BottomCenter)
-                )
+            if (cartItems.isEmpty()) {
+                Column(horizontalAlignment = Alignment.CenterHorizontally)
                 {
+                    Text(text = "Your cart is empty",
+                        modifier = Modifier.padding(16.dp),
+                        style = TextStyle(
+                            color = darkGrey
+
+                        )
+                    )
+                }
+            } else {
+                CartList(viewModel = viewModel, cartItems = cartItems)
+            }
+
+            Box(modifier = Modifier.fillMaxSize()) {
+                Column(
+                    modifier = Modifier.align(Alignment.BottomCenter)
+                ) {
                     Card {
                         Row(
-                        Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
-                        horizontalArrangement = Arrangement.SpaceBetween
-                        )
-                        {
+                            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ) {
                             Text(
                                 text = "Total price",
                                 fontSize = 30.sp,
                                 fontWeight = Bold
-
                             )
                             Spacer(modifier = Modifier.weight(1f))
-                            val totalPrice by remember { derivedStateOf { viewModel.getTotalPrice() } }
+                            val totalPrice by remember { derivedStateOf { viewModel.getTotalCartPrice() } }
                             Text(
-                                //String.format = "%.2f" to format the ,totalPrice to be displayed by the text
-                                text = String.format(Locale.getDefault(), "%.2f", totalPrice ),
+                                text = String.format(Locale.getDefault(), "%.2f", totalPrice),
                                 fontSize = 30.sp,
                                 fontWeight = Bold
                             )
@@ -169,56 +173,41 @@ fun CartUi(viewModel: CartViewModel, navController : NavHostController, modifier
                     }
 
                     Spacer(modifier = Modifier.height(10.dp))
-                    // dining option page first, then to payment options
+
                     Button(
                         onClick = { navController.navigate(FastFeastsScreen.DiningOptions.name) },
                         elevation = ButtonDefaults.buttonElevation(
-
                             defaultElevation = 10.dp,
                             pressedElevation = 6.dp
-
-
                         ),
-                        colors = ButtonDefaults.buttonColors(darkOrange)
+                        colors = ButtonDefaults.buttonColors(darkOrange),
+                        enabled = cartItems.isNotEmpty()
                     ) {
-
                         Text(
                             text = "Proceed To Payment",
                             fontSize = 20.sp,
                             fontFamily = SansSerif
-
                         )
-
                     }
-
-
-
-
                 }
             }
         }
-
     }
-
-
-
 }
 
 @Composable
 fun CartList(viewModel: CartViewModel, cartItems: List<Food>, modifier: Modifier = Modifier){
 
     LazyColumn(
-        modifier = Modifier
+        modifier = modifier
     ) {
         items(cartItems) { food ->
             Column {
                 CartItem(cartViewModel = viewModel, food = food )
-                Spacer(Modifier.height(10.dp))
-                }
+            }
         }
     }
 }
-
 
 
 
@@ -234,10 +223,7 @@ fun CartItem(cartViewModel: CartViewModel, food: Food, modifier: Modifier = Modi
         modifier.size(width = 400.dp, height = 100.dp)
 
     ){
-        Row(
-            Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
+        Row {
 
             Column(
                 modifier = Modifier.weight(1f)

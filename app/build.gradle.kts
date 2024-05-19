@@ -80,11 +80,15 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
     implementation(libs.gson)
 
+    implementation("androidx.compose.runtime:runtime-livedata:$1.6.7")
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:$2.8.0")
+
+
     //Room
-    val room_version = "2.6.1"
     implementation(libs.androidx.room.runtime)
     annotationProcessor(libs.androidx.room.compiler)
     kapt(libs.androidx.room.room.compiler)
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
+
 }

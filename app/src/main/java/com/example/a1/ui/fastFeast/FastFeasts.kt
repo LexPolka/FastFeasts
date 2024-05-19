@@ -76,6 +76,7 @@ import androidx.navigation.navigation
 import com.example.a1.R
 import com.example.a1.data.cartData.CartViewModel
 import com.example.a1.data.AppViewModelProvider
+import com.example.a1.data.CustomizeFood.StockViewModel
 import com.example.a1.data.profiledata.GlobalViewModel
 import com.example.a1.data.staffdata.StaffViewModel
 import com.example.a1.ui.CartUi
@@ -86,12 +87,16 @@ import com.example.a1.ui.PayAtCounterUi
 import com.example.a1.ui.PaymentOptions
 import com.example.a1.ui.staffUI.StaffPage
 import com.example.a1.ui.login.LoginScreen
+import com.example.a1.ui.login.PrivacyPolicy
 import com.example.a1.ui.login.SignUpScreen
-import com.example.a1.ui.login.PrivacyScreen
-import com.example.a1.ui.login.PolicyScreen
+import com.example.a1.ui.login.TermsAndConditions
 import com.example.a1.ui.staffUI.StaffIndividualFood
+import com.example.a1.ui.staffUI.StaffOrders
 import com.example.a1.ui.staffUI.StaffStocks
 import kotlinx.coroutines.delay
+import java.io.ByteArrayOutputStream
+import java.util.zip.Deflater
+import java.util.zip.Inflater
 
 //enum classes for navigation
 enum class FastFeastsScreen(@StringRes val title: Int) {
@@ -121,7 +126,7 @@ enum class FastFeastsScreen(@StringRes val title: Int) {
 @Composable
 fun FastFeastsApp(
     profileViewModel: ProfileViewModel = viewModel(factory = AppViewModelProvider.Factory),
-    staffViewModel: StaffViewModel  =viewModel(factory = AppViewModelProvider.Factory),
+    staffViewModel: StaffViewModel = viewModel(factory = AppViewModelProvider.Factory),
     globalViewModel: GlobalViewModel = viewModel(),
     cartViewModel : CartViewModel = viewModel(factory = AppViewModelProvider.Factory),
     navController: NavHostController = rememberNavController()
@@ -131,9 +136,6 @@ fun FastFeastsApp(
     val currentScreen = FastFeastsScreen.valueOf(
         backStackEntry?.destination?.route ?: FastFeastsScreen.MainPage.name
     )
-
-    val isDarkTheme = isSystemInDarkTheme()
-    var darkMode by remember { mutableStateOf( isDarkTheme )}
 
     //Side bar variables
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
@@ -149,6 +151,20 @@ fun FastFeastsApp(
 
     val uiState by profileViewModel.uiState.collectAsState()
     val globalVariables by globalViewModel.foodState.collectAsState()
+    val isLoggedIn by globalViewModel.variables.collectAsState()
+
+    val isDarkTheme = isSystemInDarkTheme()
+    var darkMode by remember { mutableStateOf(isDarkTheme) }
+
+    fun toggleDarkMode() {
+        darkMode = !darkMode
+        val mode = if (isDarkTheme) {
+            AppCompatDelegate.MODE_NIGHT_YES // Enable dark mode
+        } else {
+            AppCompatDelegate.MODE_NIGHT_NO // Enable light mode
+        }
+        AppCompatDelegate.setDefaultNightMode(mode)
+    }
 
     //NAVIGATION DRAWER NEEDS TO BE IN EVERY PAGE!!!!
     ModalNavigationDrawer(
@@ -282,14 +298,12 @@ fun FastFeastsApp(
                     Row( modifier = Modifier
                         .padding(bottom = 8.dp)
                         .clickable {
-                            toggleDarkMode(darkMode)
-                            darkMode = !darkMode
+                            toggleDarkMode()
                         }
                         .background(
                             if (isDarkTheme) Color.Gray
                             else
-                                Color.Transparent
-                            , shape = RoundedCornerShape(5.dp)
+                                Color.Transparent, shape = RoundedCornerShape(5.dp)
                         )
                         .fillMaxWidth()
                     ) {
@@ -307,12 +321,14 @@ fun FastFeastsApp(
                 }
             }
         },
-        gesturesEnabled = true,
+        gesturesEnabled = isLoggedIn.isLoggedIn,
     ) {
         //EDIT THIS PART TO IMPLEMENT YOUR PAGES/ACTIVITIES
         Scaffold(
             topBar = {
-                HeaderBar(globalViewModel, scope, drawerState)
+                if (isLoggedIn.isLoggedIn){
+                    HeaderBar(globalViewModel, scope, drawerState)
+                }
             }
         ) { innerPadding ->
 
@@ -330,7 +346,7 @@ fun FastFeastsApp(
                     ProfilePage(profileViewModel)
                 }
                 composable(route = FastFeastsScreen.Cart.name) {
-                    CartUi(cartViewModel, navController)
+                    CartUi(navController, modifier = Modifier, cartViewModel)
                 }
                 composable(route = FastFeastsScreen.IndividualFood.name) {
                     IndividualFoodPage(cartViewModel, globalViewModel, navController)
@@ -354,18 +370,17 @@ fun FastFeastsApp(
                 composable(route = FastFeastsScreen.StaffStocks.name) {
                     StaffStocks(staffViewModel, navController)
                 }
+                composable(route = FastFeastsScreen.StaffOrders.name) {
+                    StaffOrders(staffViewModel, navController)
+                }
 
                 //depending on userInput from paymentOptions , to be implemented
                 composable(route = FastFeastsScreen.OnlineBanking.name) {
-                    OnlineBankingUi(cartViewModel, navController)
+                    OnlineBankingUi(staffViewModel, cartViewModel, navController)
                 }
                 composable(route = FastFeastsScreen.PayAtCounter.name) {
-                    PayAtCounterUi(cartViewModel, navController)
+                    PayAtCounterUi(staffViewModel, cartViewModel, navController)
                 }
-
-
-
-
 
                 navigation(startDestination = FastFeastsScreen.LoginScreen.name , route = "login_flow" ) {
                     composable(route = FastFeastsScreen.LoginScreen.name) {
@@ -415,10 +430,10 @@ fun FastFeastsApp(
                         )
                     }
                     composable(route = FastFeastsScreen.PrivacyScreen.name) {
-                        PolicyScreen( {navController.navigateUp() })
+                        TermsAndConditions( {navController.navigateUp() })
                     }
                     composable(route = FastFeastsScreen.PolicyScreen.name) {
-                        PrivacyScreen ({ navController.navigateUp() })
+                        PrivacyPolicy ({ navController.navigateUp() })
                     }
                 }
             }
@@ -591,36 +606,6 @@ fun Footer()
             horizontalArrangement = Arrangement.Center,
             modifier = Modifier.fillMaxSize()
         ) {
-            //LINKS COLUMN ========================
-            Column(horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.padding(columnSpacing))
-            {
-                Text(text = "Links", color = Color.White, fontSize = bigTextSize)
-
-                Row (verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.Center,
-                    modifier = Modifier
-                        .clickable { }
-                        .padding(bottom = buttonPadding)) {
-                    Text(text = "Terms and Conditions", color = Color.White, fontSize = smallTextSize)
-                }
-                Row (verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.Center,
-                    modifier = Modifier
-                        .clickable { }
-                        .padding(bottom = buttonPadding)) {
-                    Text(text = "About Us", color = Color.White, fontSize = smallTextSize)
-                }
-                Row (verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.Center,
-                    modifier = Modifier
-                        .clickable { }
-                        .padding(bottom = buttonPadding)) {
-                    Text(text = "Feedback", color = Color.White, fontSize = smallTextSize)
-                }
-
-            }
-
             //CONTACT US COLUMN ========================
             Column(horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier.padding(columnSpacing))
@@ -786,15 +771,6 @@ private fun openInstagramProfile(context: Context) {
         data = Uri.parse("https://www.instagram.com/$instagramUsername")
     }
     context.startActivity(intent)
-}
-
-fun toggleDarkMode(isDarkTheme: Boolean) {
-    val mode = if (isDarkTheme) {
-        AppCompatDelegate.MODE_NIGHT_NO // Enable light mode
-    } else {
-        AppCompatDelegate.MODE_NIGHT_YES // Enable dark mode
-    }
-    AppCompatDelegate.setDefaultNightMode(mode)
 }
 
 //Image(bitmap = yourBitMap)

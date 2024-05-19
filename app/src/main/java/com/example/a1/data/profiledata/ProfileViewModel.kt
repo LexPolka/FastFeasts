@@ -18,7 +18,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
-import com.example.a1.data.staffdata.Order
+import androidx.lifecycle.viewmodel.compose.viewModel
 
 class ProfileViewModel(private val repository: ProfileRepository) : ViewModel() {
     private val _uiState = MutableStateFlow(Profile())
@@ -83,6 +83,12 @@ class ProfileViewModel(private val repository: ProfileRepository) : ViewModel() 
             } catch (e: Exception) {
                 // Handle error (e.g., log, show error message)
             }
+        }
+    }
+
+    fun deleteAllProfiles(){
+        viewModelScope.launch {
+            repository.deleteAllProfile()
         }
     }
 

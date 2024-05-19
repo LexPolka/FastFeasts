@@ -1,6 +1,7 @@
 package com.example.a1.ui.login
 
 import android.widget.Toast
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -20,6 +21,7 @@ import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Button
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Icon
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -28,6 +30,9 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
@@ -43,6 +48,7 @@ val itemSpacing = 8.dp
 
 @Composable
 fun LoginScreen(onLoginClick: () -> Unit, onSignUpClick: () -> Unit) {
+
     val (userName, setUsername) = rememberSaveable {
     mutableStateOf("")
 }
@@ -55,80 +61,86 @@ fun LoginScreen(onLoginClick: () -> Unit, onSignUpClick: () -> Unit) {
     val isFieldsEmpty = userName.isNotEmpty() && password.isNotEmpty()
     val context = LocalContext.current
 
+    val startColor = Color(0xFFFF9D7E)
+    val endColor = Color(0xFF975743)
+    //Screen settings
+    val configuration = LocalConfiguration.current
+    val screenHeight = configuration.screenHeightDp.dp
+    var HeaderBarHeight = (screenHeight*7/100)
 
-    Column (
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(defaultPadding),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-    HeaderText(
-        text = "Login",
-        modifier = Modifier
-            .padding(vertical = defaultPadding)
-            .align(alignment = Alignment.Start)
-    )
-        LoginTextField(
-            value = userName ,
-            onValueChange = setUsername,
-            labelText = "Username",
-            leadingIcon = Icons.Default.Person,
-            modifier = Modifier.fillMaxWidth()
-        )
-        Spacer(Modifier.height(itemSpacing))
-        LoginTextField(
-            value = password ,
-            onValueChange = setPassword,
-            labelText = "Password",
-            leadingIcon = Icons.Default.Lock,
-            modifier = Modifier.fillMaxWidth(),
-            keyboardType = KeyboardType.Password,
-            visualTransformation = PasswordVisualTransformation()
-        )
-        Spacer(Modifier.height(itemSpacing))
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween
-        ){
-            Row(
-                horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Checkbox(checked = checked, onCheckedChange = onCheckedChange )
-                Text("Remember me")
-            }
-            TextButton(onClick = {}) {
-                Text("Forgot Password?")
-            }
-        }
-        Spacer(Modifier.height(itemSpacing))
-        Button(
-            onClick = onLoginClick,
-            modifier = Modifier.fillMaxWidth(),
-            enabled = isFieldsEmpty
-            ) {
-            Text("Login")
-        }
-        AlternativeLoginOptions(
-            onIconClick = {index ->
-                when(index){
-                    0 -> {
-                        Toast.makeText(context, "Instagram Login Click", Toast.LENGTH_SHORT).show()
-                    }
-                    1 -> {
-                        Toast.makeText(context, "GitHub Login Click", Toast.LENGTH_SHORT).show()
-                    }
-                    2 -> {
-                        Toast.makeText(context, "Google Login Click", Toast.LENGTH_SHORT).show()
-                    }
-                }
-            },
-            onSignUpClick = onSignUpClick,
+    Column {
+        Surface(
+            color = Color.Transparent,
+            modifier = Modifier
+                .height(HeaderBarHeight)
+                .fillMaxWidth()
+                .background(
+                    brush = Brush.horizontalGradient(
+                        colors = listOf(startColor, endColor)
+                    )
+                )
+        ) {}
+
+        Column (
             modifier = Modifier
                 .fillMaxSize()
-                .wrapContentSize(align = Alignment.BottomCenter)
-        )
+                .padding(defaultPadding),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            HeaderText(
+                text = "Login",
+                modifier = Modifier
+                    .padding(vertical = defaultPadding)
+                    .align(alignment = Alignment.Start)
+            )
+            LoginTextField(
+                value = userName ,
+                onValueChange = setUsername,
+                labelText = "Username",
+                leadingIcon = Icons.Default.Person,
+                modifier = Modifier.fillMaxWidth()
+            )
+            Spacer(Modifier.height(itemSpacing))
+            LoginTextField(
+                value = password ,
+                onValueChange = setPassword,
+                labelText = "Password",
+                leadingIcon = Icons.Default.Lock,
+                modifier = Modifier.fillMaxWidth(),
+                keyboardType = KeyboardType.Password,
+                visualTransformation = PasswordVisualTransformation()
+            )
+            Spacer(Modifier.height(itemSpacing))
+            Button(
+                onClick = onLoginClick,
+                modifier = Modifier.fillMaxWidth(),
+                enabled = isFieldsEmpty
+            ) {
+                Text("Login")
+            }
+            AlternativeLoginOptions(
+                onIconClick = {index ->
+                    when(index){
+                        0 -> {
+                            Toast.makeText(context, "Instagram Login Click", Toast.LENGTH_SHORT).show()
+                        }
+                        1 -> {
+                            Toast.makeText(context, "GitHub Login Click", Toast.LENGTH_SHORT).show()
+                        }
+                        2 -> {
+                            Toast.makeText(context, "Google Login Click", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                },
+                onSignUpClick = onSignUpClick,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .wrapContentSize(align = Alignment.BottomCenter)
+            )
+        }
     }
+
+
 }
 
 @Composable
