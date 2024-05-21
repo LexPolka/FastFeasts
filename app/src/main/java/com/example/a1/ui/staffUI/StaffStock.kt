@@ -83,6 +83,7 @@ fun StaffStocks(viewModel: StaffViewModel, stockViewModel: StockViewModel, navCo
 
 
 
+
         Column {
             BackButton(navController = navController)
 
