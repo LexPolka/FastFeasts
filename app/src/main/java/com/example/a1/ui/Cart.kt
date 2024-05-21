@@ -310,7 +310,7 @@ fun CartItem(cartViewModel: CartViewModel, food: Food, modifier: Modifier = Modi
     val darkOrange = Color(0xFF975743)
 
     //Convert ByteArray to Bitmap
-    val imageFromByteToBitmap = imageBitmapFromBytes(food.image)
+
 
     Card(
         modifier.size(width = 400.dp, height = 100.dp)
@@ -327,7 +327,7 @@ fun CartItem(cartViewModel: CartViewModel, food: Food, modifier: Modifier = Modi
                     fontSize = 30.sp
                 )
 
-                Image(bitmap = imageFromByteToBitmap, contentDescription = "Image of Food")
+
 
             }
 

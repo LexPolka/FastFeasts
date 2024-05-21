@@ -13,5 +13,7 @@ interface StockRepository {
 
     suspend fun getIngredientById(id: Int): StockEntity?
 
-    suspend fun deleteAllStock()
+    suspend fun deleteAllIngredients()
+
+    suspend fun resetAutoIncrement()
 }

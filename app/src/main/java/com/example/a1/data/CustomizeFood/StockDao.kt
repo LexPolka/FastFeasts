@@ -22,10 +22,12 @@ interface StockDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertIngredient(stockEntity: StockEntity)
 
-    @Query("DELETE FROM StockEntity")
-    suspend fun deleteAllStock()
-
     @Query("UPDATE StockEntity SET quantity = :quantity WHERE id = :id")
     suspend fun updateIngredientQuantity(id: Int, quantity: Int)
 
+    @Query("DELETE FROM StockEntity")
+    suspend fun deleteAllIngredients()
+
+    @Query("DELETE FROM sqlite_sequence WHERE name = 'StockEntity'")
+    suspend fun resetAutoIncrement()
 }

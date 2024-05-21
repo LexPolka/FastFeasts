@@ -18,8 +18,12 @@ class StockOfflineRepository(private val stockDao: StockDao) : StockRepository {
         return stockDao.getIngredientById(id)
     }
 
-    override suspend fun deleteAllStock() {
-        stockDao.deleteAllStock()
+    override suspend fun deleteAllIngredients() {
+        stockDao.deleteAllIngredients()
+    }
+
+    override suspend fun resetAutoIncrement() {
+        stockDao.resetAutoIncrement()
     }
 
 }

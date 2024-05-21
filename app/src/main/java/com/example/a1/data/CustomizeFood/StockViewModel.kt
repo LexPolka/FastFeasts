@@ -36,6 +36,12 @@ class StockViewModel(private val stockRepository: StockRepository) : ViewModel()
         }
     }
 
+    fun deleteAllIngredients() {
+        viewModelScope.launch {
+            stockRepository.deleteAllIngredients()
+            stockRepository.resetAutoIncrement()
+        }
+    }
     fun updateQuantity(id: Int, quantity: Int) {
         viewModelScope.launch {
             val currentIngredient = stockRepository.getIngredientById(id)
