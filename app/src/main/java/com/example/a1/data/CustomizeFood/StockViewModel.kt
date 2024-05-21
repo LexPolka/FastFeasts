@@ -76,6 +76,13 @@ class StockViewModel(private val stockRepository: StockRepository) : ViewModel()
             }
         }
     }
+
+    fun deleteAllStock() {
+        viewModelScope.launch{
+            stockRepository.deleteAllStock()
+        }
+
+    }
 }
 
 

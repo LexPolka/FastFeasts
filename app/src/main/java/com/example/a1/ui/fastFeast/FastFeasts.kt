@@ -388,6 +388,11 @@ fun FastFeastsApp(
 
                 navigation(startDestination = FastFeastsScreen.LoginScreen.name , route = "login_flow" ) {
                     composable(route = FastFeastsScreen.LoginScreen.name) {
+                        staffViewModel.clearAllOrders()
+                        staffViewModel.deleteAllIndividualFood()
+                        stockViewModel.deleteAllStock()
+
+
                         LoginScreen(
                             profileViewModel,
                             onLoginClick = {

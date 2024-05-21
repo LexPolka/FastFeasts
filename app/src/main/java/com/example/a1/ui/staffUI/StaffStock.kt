@@ -75,16 +75,34 @@ fun StaffStocks(viewModel: StaffViewModel, stockViewModel: StockViewModel, navCo
     val allIngredients by stockViewModel.allIngredients.collectAsState()
     //
 
+    val addToOrderExecuted = remember { mutableStateOf(false) }
+
     var name by remember { mutableStateOf("") }
     var quantity by remember { mutableStateOf("") }
 
-
-
-
-
-
         Column {
             BackButton(navController = navController)
+
+            if (!addToOrderExecuted.value )
+            {
+                stockViewModel.SaveIngredient(name = "Classic Bun", quantity = 10)
+                stockViewModel.SaveIngredient(name = "Pretzel Bun", quantity = 10)
+                stockViewModel.SaveIngredient(name = "Wheat Bun", quantity = 10)
+                stockViewModel.SaveIngredient(name = "Chicken Patty", quantity = 10)
+                stockViewModel.SaveIngredient(name = "Beef Patty", quantity = 10)
+                stockViewModel.SaveIngredient(name = "Bacon Patty", quantity = 10)
+                stockViewModel.SaveIngredient(name = "Iceberg Lettuce", quantity = 10)
+                stockViewModel.SaveIngredient(name = "Romaine Lettuce", quantity = 10)
+                stockViewModel.SaveIngredient(name = "Tomato Sauce", quantity = 10)
+                stockViewModel.SaveIngredient(name = "Chilli Sauce", quantity = 10)
+                stockViewModel.SaveIngredient(name = "BBQ Sauce", quantity = 10)
+                stockViewModel.SaveIngredient(name = "Mustard Sauce", quantity = 10)
+                stockViewModel.SaveIngredient(name = "Egg", quantity = 10)
+                stockViewModel.SaveIngredient(name = "Cheese", quantity = 10)
+
+                addToOrderExecuted.value  = true
+            }
+
 
             Text(
                 text = "Stock Manager",
