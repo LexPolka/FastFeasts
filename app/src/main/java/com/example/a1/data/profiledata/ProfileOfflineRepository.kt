@@ -10,4 +10,6 @@ class ProfileOfflineRepository(private val profileDao: ProfileDao) : ProfileRepo
     override suspend fun insertProfile(profile: ProfileEntity) = profileDao.insertProfile(profile)
 
     override suspend fun deleteProfile(email : String) = profileDao.deleteProfiles(email)
+
+    override suspend fun deleteAllProfile() = profileDao.deleteAllProfiles()
 }

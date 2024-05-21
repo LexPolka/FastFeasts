@@ -71,6 +71,12 @@ class ProfileViewModel(private val repository: ProfileRepository) : ViewModel() 
         }
     }
 
+    fun deleteAllProfile() {
+        viewModelScope.launch {
+            repository.deleteAllProfile()
+        }
+    }
+
     //Setters
     fun setProfilePictureUri(image : ByteArray) {
         _uiState.update { currentState ->

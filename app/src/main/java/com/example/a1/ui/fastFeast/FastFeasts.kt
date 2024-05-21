@@ -388,11 +388,6 @@ fun FastFeastsApp(
 
                 navigation(startDestination = FastFeastsScreen.LoginScreen.name , route = "login_flow" ) {
                     composable(route = FastFeastsScreen.LoginScreen.name) {
-                        staffViewModel.clearAllOrders()
-                        staffViewModel.deleteAllIndividualFood()
-                        stockViewModel.deleteAllStock()
-
-
                         LoginScreen(
                             profileViewModel,
                             onLoginClick = {
@@ -702,8 +697,10 @@ fun BackButton(navController : NavHostController){
                 isBackPressed = true } },
             modifier = Modifier
                 .padding(universalPadding)
-                .background(color = if (isDarkTheme) Color.White else Color(0xFFFDA6900),
-                    shape = RoundedCornerShape(24.dp))
+                .background(
+                    color = if (isDarkTheme) Color.White else Color(0xFFFDA6900),
+                    shape = RoundedCornerShape(24.dp)
+                )
                 .border(
                     3.dp,
                     color = if (isDarkTheme) Color.White else Color(0xFFFDA6900),
@@ -737,8 +734,10 @@ fun BackButton(navController : NavHostController){
                 isBackPressed = true } },
             modifier = Modifier
                 .padding(universalPadding)
-                .background(color = if (isDarkTheme) Color.White else Color(0xFFFDA6900),
-                    shape = RoundedCornerShape(24.dp))
+                .background(
+                    color = if (isDarkTheme) Color.White else Color(0xFFFDA6900),
+                    shape = RoundedCornerShape(24.dp)
+                )
                 .border(
                     3.dp,
                     color = if (isDarkTheme) Color.White else Color(0xFFFDA6900),
